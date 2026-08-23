@@ -39,10 +39,19 @@ Repository authority:
 - `tools/extract_verified_custom_dual_t1_v1_0_1.py`
 
 ## PosePair timing causality
-`v17.2.5 WAIT45` is the latest recorded causal timing result:
-- before this line: ~`92 exact / 776 miss` (~10.6%)
-- WAIT45: `269 exact_pair_consumes`, `269 host_submits`, `53 misses`
+P4 exact-stale-drain baseline:
+- `92` exact consumes
+- `776` misses
+- `386` stale drains
+- exact ratio about `10.6%`
+
+`v17.2.5 WAIT45`:
+- `269 exact_pair_consumes`
+- `269 host_submits`
+- `53 misses`
 - exact ratio `83.5404%`
+- `31` stale drains
+- `pair_wait_ms_last = 31`
 - `pair_wait_ms_max = 47`
 - completed/copies `354/354`
 - visual flashes/dropouts remained
@@ -50,11 +59,18 @@ Repository authority:
 Changing only the bounded wait materially increased exact-pair acceptance (~7.9x). Therefore deadline/watchdog timing is a PROVEN contributor to projection-layer misses. This does **not** yet prove timely prediction or final visual stability.
 
 `v17.2.6 EXACT_BLOCK120 P6` is statically verified but **not LIVE-proven**:
-- only intended policy delta vs P5: watchdog ceiling `45 ms -> 120 ms`
+- only runtime policy delta vs P5: watchdog ceiling `45 ms -> 120 ms`
 - game-side camera/FOV/weapon/shadow/temporal/RC33 unchanged
 - static `130/130 PASS`
 - independent `98/98 PASS`
 - package SHA256 `8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`
+
+## Frame/presentation facts
+- raw DXGI Present count is not a logical game-frame count
+- `xrEndFrame` frame count is not the same as visible projection-layer submission count; `layerCount=0` may occur while XR remains active
+- game-side completed pair is not visible cross-process until the Present publication/copy gate
+- a fresh game render is not fundamentally required for every XR submit; a later last-good fallback is valid only if the complete L/R pixels retain the exact pose/FOV that rendered them
+- old pixels relabelled with a newer pose are forbidden
 
 ## Canonical render transaction
 - one prepared render-list executes twice
@@ -63,37 +79,69 @@ Changing only the bounded wait materially increased exact-pair acceptance (~7.9x
 - `RT_RenderScene` contains shadows, HDR/deferred, ordered lists, temporal state and postprocess, not only draws
 - RT transaction: `RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`
 
+Canonical per-eye sequence:
+`SetCamera(EYE) -> fill-side camera/view/projection/CameraZero -> RC_SetCamera 0x36 -> EF_Scene3D -> RC_RenderScene 0x33 -> render-thread eRC_SetCamera(EYE) -> eRC_RenderScene(TI_EYE, same RLD)`.
+
 ## Corrected retail anchors
 Crysis2.exe:
-- `CSystem::m_ViewCamera = +0x3F0`
-- `C3DEngine::RenderWorld = +0x005E2360`
-- `RenderInternal = +0x005DEF10`
+- `CSystem::GetViewCamera +0x0006AE50`
+- `CSystem::m_ViewCamera +0x3F0`
+- `CSystem::Render +0x00096A40`
+- `C3DEngine::RenderWorld +0x005E2360`
+- `RenderInternal +0x005DEF10`
 - direct RenderWorld call seam `+0x005E2476`
-- `SetupCamera candidate = +0x0057A730`
+- `C3DEngine::SetupCamera +0x0057A730`
 - once/frame camera propagation landmark `+0x0057AC76`
 
 CryRenderD3D11.dll:
+- `EF_RenderScene +0x00101270`
+- `EF_Scene3D +0x00101370`
+- `EF_EndEf3D +0x001019A0`
+- `RT_RenderScene +0x00107370`
+- `PrepareDepthMaps +0x0011D390`
+- `ProcessScene +0x00123EA0`
+- LEFT SetCamera return `+0x0012412A`
+- LEFT EF_Scene3D `+0x0012413C`
+- RIGHT SetCamera return `+0x00124304`
+- RIGHT EF_Scene3D `+0x0012430F`
+- SetCamera vslot `+0xB8`
+- `Renderer::SetCamera +0x00148340`
+- `RC_SetCamera +0x001C38F0`
+- `RC_PushRT +0x001C4190`
+- `RC_PopRT +0x001C4200`
+- `RC_RenderScene +0x001C48D0`
 - NEAR owner region `+0x000FF340`
 - NEAR SetCamera return `+0x000FF456`
 - NEAR restore `+0x000FF4A3`
-- object-owner landmark `+0x00102100`
-- `EF_RenderScene ~ +0x00101270`
-- `EF_Scene3D = +0x00101370`
-- `EF_EndEf3D = +0x001019A0`
-- `RT_RenderScene = +0x00107370`
-- `PrepareDepthMaps = +0x0011D390`
-- `Renderer::SetCamera = +0x00148340`
-- `RC_SetCamera = +0x001C38F0`
-- `RC_PushRT = +0x001C4190`
-- `RC_PopRT = +0x001C4200`
-- `RC_RenderScene = +0x001C48D0`
+- near-enriched shader-camera path `+0x0007AEB0`
+- late camera CB producer `+0x0006AE2A`
+- temporal/previous-matrix anchor `+0x000F95A0`
+- `RT_SetCameraInfo` candidate `+0x000FB2E0`
+- `mfSetCamera` candidate `+0x0008AF30`
 
-## Camera / basis facts
+## Camera ownership facts
 - applying HMD transform at every `Renderer::SetCamera` creates cumulative feedback (`G -> G*HMD -> G*HMD^2 ...`)
 - real game-owned CCamera + bounded mutation/restore preserved stereo better than fake partial CCamera shadows
 - HEAD must be upstream of visibility; eye execution remains downstream
-- the global rule `OpenXR +X -> Cry -X` is not valid authority; the primary proper right-handed basis is `(x,y,z) -> (+x,-z,+y)`. Historical `-X` behavior is path-specific evidence, not a universal basis rule
 - per-eye LEFT/RIGHT must share one immutable contract identity
+
+## Coordinate basis: CONFLICT, not PROVEN
+Do not cite either `XR +X -> Cry +X` or `XR +X -> Cry -X` as a closed project fact.
+
+Evidence path A, historical runtime `RESULT 20260817_003329`:
+- `1722` complete applied L/R pairs
+- median stock separation `0.02220543`
+- median exact Quest separation `0.06677189`
+- median dot(`stock R-L`,`exact R-L`) `-0.9999997`
+- historical interpretation: stock `R-L` aligns with `-CCamera column0`, motivating `XR (x,y,z)->Cry (-x,-z,+y)`
+
+Evidence path B, retail/static + later lineage:
+- exact retail LEFT/RIGHT ProcessScene callsites are known
+- retail LEFT path visibly constructs a negative local-X eye offset before SetCamera
+- Cry stereo source semantics are LEFT `-halfIPD`, RIGHT `+halfIPD`
+- v10 frame-contract code uses `XR (x,y,z)->Cry (+x,-z,+y)` and belongs to a later visually improved projection-coherence line
+
+The conflict has not been causally resolved. Possible causes include old stock-eye label reversal, row/column/basis interpretation error, or a later compensation elsewhere. Resolve COLD from the exact `003329` writer/classifier or retail eye-transform helper before final HEAD/position work. See `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
 
 ## Weapon / NEAR facts preserved for later gate
 - `FOB_NEAREST` is a distinct camera-space/near family, not ordinary WORLD depth
@@ -101,8 +149,7 @@ CryRenderD3D11.dll:
 - later historical GOLD `021239`: controller-driven gameplay aim servo + trigger produced user-confirmed firing following weapon/muzzle direction. This is a proven fallback behavior path, not proof of direct ballistic owner
 - v10 / `20260818_034749`: synchronizing WORLD/NEAR projection removed the observed weapon counter-motion symptom, proving projection mismatch can masquerade as bad weapon pose
 - current controller action family: RIGHT aim pose is canonical; grip is not a separate required pose-family hunt
-- fholger donor architecture uses `WeaponWorld = ControllerWorld * InverseGrip`
-- equivalent calibration candidate for C2: `G = inverse(C_bind) * W_bind`; then `W_now = C_now * G`
+- rigid future candidate: `GripBind = inverse(C_bind) * W_bind`; `W_now = C_now * GripBind`
 - source-level upstream topology is known: `CPlayer::PostUpdateView -> FPWeaponPos/Angles -> CItem::UpdateFPPosition -> weapon entity SetWorldTM`, followed by `CItem::UpdateFPCharacter` / skeleton preprocessing
 - exact retail RVAs for those GameDll functions are not yet proven
 
