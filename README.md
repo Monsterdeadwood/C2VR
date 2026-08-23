@@ -7,25 +7,35 @@ Native VR integration research for **Crysis 2 retail 1.9 / CryEngine DX11**.
 
 Main renderer parent: `CUSTOM_DUAL_T1 v1.0.1`.
 
-True private LEFT/RIGHT retail rendering is PROVEN. The active project gate is now **PosePair / projection-layer exact-pair cadence**, not stereo discovery and not weapon reverse.
+True private LEFT/RIGHT retail rendering is PROVEN. The active project gate is **PosePair / projection-layer exact-pair cadence**, not stereo discovery, HEAD reverse, weapon reverse, temporal work or shadow work.
 
-Latest causal timing result: `v17.2.5 WAIT45` reached `269 exact_pair_consumes / 269 host_submits`, `53 misses`, exact ratio `83.5404%`, `pair_wait_ms_max=47`, with flashes/dropouts still visible. The next untested finalist is `v17.2.6 EXACT_BLOCK120 P6`, changing only the bounded exact-pair watchdog `45 ms -> 120 ms`.
+Latest completed causal timing result: `v17.2.5 WAIT45` reached `269 exact_pair_consumes / 269 host_submits`, `53 misses`, exact ratio `83.5404%`, `pair_wait_ms_max=47`, with flashes/dropouts still visible.
+
+The authorized next LIVE is already built and untested:
+`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
+SHA256 `8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`.
+
+P6 changes only the bounded exact-pair watchdog `45 ms -> 120 ms`; it is not a forced sleep.
 
 Current finish ladder:
-
 `POSEPAIR -> HEAD 1:1 -> WEAPON / NEAR -> TEMPORAL / SHADOW STABILITY -> REGRESSION -> RELEASE CANDIDATE`
 
 Do not restart broad renderer/stereo/camera/weapon archaeology unless the serial gate requires it.
 
 ## Start here
-1. `docs/SYNC.md` — canonical cross-branch snapshot
-2. `docs/STATE.md` — concise active state and concrete targets
-3. `experiments/NEXT_EXPERIMENT.md` — the one authorized next LIVE
-4. `docs/GATES.md` — serial acceptance ladder
-5. `docs/PROVEN.md` — facts that must not be re-researched
-6. `docs/FALSIFIED.md` — dead paths / do-not-repeat list
-7. `research/RESULT_INDEX.md` — result/build lineage
-8. `research/WEAPON_NEAR.md` — parked MASTER3 weapon/NEAR state prepared for its later gate
+1. `docs/SYNC.md` — canonical cross-branch snapshot, offsets, current finalists, unresolved questions
+2. `docs/STATE.md` — active state and exact CURRENT GATE / NEXT
+3. `docs/NEXT.md` — authorized P6 handoff and post-P6 decision tree
+4. `experiments/NEXT_EXPERIMENT.md` — exact five-line P6 PREFLIGHT and runtime acceptance criteria
+5. `docs/EXPERIMENTS.md` — compact causal experiment lineage and do-not-repeat map
+6. `docs/PROVEN.md` — facts that must not be re-researched
+7. `docs/FALSIFIED.md` — dead/stopped paths
+8. `docs/GATES.md` — serial acceptance ladder
+9. `research/RESULT_INDEX.md` — result/build lineage
+10. `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md` — historical pixel/metadata atomicity, pacing and last-good-frame evidence
+11. `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` — source-proven Present publication topology and unresolved ownership risk
+12. `research/COORDINATE_BASIS_CONFLICT_20260824.md` — preserved `003329` vs retail/v10 local-X evidence conflict; COLD-only, not current LIVE gate
+13. `research/WEAPON_NEAR.md` — parked weapon/NEAR state for its later gate
 
 ## Canonical renderer architecture
 One prepared render-list executes twice for the two eyes. Do not add a second high-level `RenderWorld` / `EF_StartEf`.
@@ -34,6 +44,8 @@ One prepared render-list executes twice for the two eyes. Do not add a second hi
 
 Current RT transaction:
 `RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`.
+
+Pixel data and the render pose/FOV/contract metadata that produced it are one atomic publication unit. Stale pixels must never be relabelled as a newer XR contract.
 
 ## Working model
 `SYNC -> THINK -> KEEP/ADAPT/STOP -> BATCH HARVEST -> CONVERGE -> PROVEN/FALSIFIED -> NEXT GATE -> SYNC`
