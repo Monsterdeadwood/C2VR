@@ -22,8 +22,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 P6 = ROOT / "runtime" / "finalists" / "v17.2.6_P6"
-EXPECTED_ARCHIVE = "8385F6AAAD668E40058EB368E4593F53A3489CE7C24EFC19521C4C8DEB0ECA89"
-# Correct canonical value, kept separately to make accidental typo obvious.
 EXPECTED_ARCHIVE = "8385F6AAAD668E40058EB368E4593F53A3489CE7C24EF19521C4C8DEB0ECA89"
 EXPECTED_ROWS = 42
 
