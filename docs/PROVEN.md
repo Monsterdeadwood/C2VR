@@ -5,6 +5,12 @@ Canonical current sources: `C2VR_STATE_SYNC_20260823.md`, `C2VR_MAIN_INTEGRATOR_
 ## True two-eye retail renderer
 Main working build: `CUSTOM_DUAL_T1 v1.0.1`.
 
+Canonical RESULT:
+`CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
+
+- bytes `68,872,488`
+- SHA256 `986A1B8FBFB32908E1D11580D90005A72851FEDAe1EDDB3596144D341CD53367`
+
 Historical result:
 - center HMD inject/restore 2296/2296
 - private LEFT passes 2295
@@ -12,8 +18,54 @@ Historical result:
 - direct eye copies 2229
 - OpenXR submits 2624
 - sampled L/R median MAE 35.9781
+- FramePairContract desync 0/0
+- PosePairContract desync game/host 1/1
 
 The two eyes are genuinely different. **True private L/R execution is PROVEN. Do not rebuild stereo.**
+
+## Exact main-source authority recovered
+Physical source package:
+`CRYSIS2VR_CUSTOM_DUAL_RENDER_TEST_T1_v1.0.1_HOSTFIX.zip`
+
+- bytes `83,442`
+- SHA256 `9271A002F8DE7875EDDD72AC2C2C307748A922883365F05FEFFC18FA05D2EECF`
+- internal manifest `20/20 PASS`
+
+Exact main source identities include:
+- `t1_camera.cpp` `03D87C773DEA4FBA9D9C4828DCCB8BC50AD518E12B4E490B8C624CC26509F8BE`
+- `t1_dual_render.cpp` `64F3B8FC3DEBB9976894DD1494406E4166B626BAF6B9AEB2F3D2CF846900C9F2`
+- `t1_host_x64.cpp` `C88F9147D5C204B2D6E4C39FC271A34FDD5C3F9664431A2059306AE7C2468819`
+- `t1_ipc.h` `4C98391543122FE9B3A9FFBBDAE76415568D51F7186D61DF1955A7BECBD2C90A`
+- `t1_proxy.cpp` `4505003BE7574E0DFE7766FED603F41C7BC98FF882ED50E996A735A42C7F05CD`
+
+Canonical RESULT build identity:
+- x64 host binary `2F79B1D4C2233444E75BC895929FABEF41EF44734854E8448D158D151A87B028`
+- x86 proxy binary `A11FC3E91669FBD472013E4882CEE721F09CB0A9C25FBD981AF222E87F92B279`
+
+Repository authority:
+- `runtime/main/CUSTOM_DUAL_T1_v1.0.1/README.md`
+- `runtime/main/CUSTOM_DUAL_T1_v1.0.1/PACKAGE_SHA256.txt`
+- `tools/extract_verified_custom_dual_t1_v1_0_1.py`
+
+This exact T1 source package is the parent for the next integration child.
+
+## v17.2.1 donor authority recovered
+Physical donor package:
+`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.1_ARGV_FIX_ONECLICK.zip`
+
+- bytes `91,521`
+- SHA256 `53688524B59E9C8F7B768BFA78BB80DEDC0981EB7FF699204E496887668D38A2`
+- original manifest `27/27 PASS`
+
+This independently supersedes the earlier text-corpus-only source provenance. The corpus reconstruction remains a cross-check.
+
+The donor contains multiple later-gate policies. Only its PosePair rendezvous transaction is currently authorized for transplant.
+
+Repository authority:
+- `runtime/donors/v17.2.1/README.md`
+- `runtime/donors/v17.2.1/ORIGINAL_PACKAGE_SHA256.txt`
+- `runtime/donors/v17.2.1/POSEPAIR_TRANSPLANT.md`
+- `tools/extract_verified_v17_2_1_original.py`
 
 ## Canonical render transaction
 - One prepared render-list can execute twice as separate eyes.
@@ -49,6 +101,16 @@ Retail hashes used by the successful forensic line:
 - v17.1: host-driven reconstruction of the successful two-pass primitive.
 - v17.2/v17.2.1: donor corpus containing immutable pair ticket, HEAD/culling, NEAR/weapon and temporal/shadow candidates. Do not install wholesale.
 - v2.2.0 STABLE CAMERA: useful last-known-good weapon/input behavior donor, not replacement for the main T1 stereo build.
+
+## Current integration equation
+
+```text
+exact CUSTOM_DUAL_T1 v1.0.1 parent
++ only verified v17.2.1 PosePair rendezvous
+= next PosePair child
+```
+
+Do not import HEAD/culling, weapon/NEAR, temporal or shadow mutations into that child.
 
 ## Source/runtime trust
 Retail Crysis 2 1.9 runtime/binary truth outranks source/SDK, CE 3.3.8, beta/PDB and donor inference.
