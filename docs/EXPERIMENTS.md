@@ -89,6 +89,58 @@ Pre-LIVE validation:
 
 See `experiments/NEXT_EXPERIMENT.md` and `docs/NEXT.md`.
 
+## Historical v6.0.1 — no-flicker cadence root cause
+Provenance:
+`CRYSIS2VR_CUSTOM_VR_OWNER_v6.1.0_A_FUSION_PROOF_QUAD_PORTABLE.zip::CRYSIS2VR_BLACKBOX_LAB_BOOTSTRAP_v1.0.0/V601_FLICKER_FUSION_ROOT_CAUSE.txt`
+
+Observed in v6.0.0:
+- Quest `xrWaitFrame` could arrive before the next Crysis `Present`;
+- host missed producer `AcquireSync(1)`;
+- zero composition layers were submitted;
+- mismatched game/HMD cadence therefore created periodic blank XR frames.
+
+Historical fix:
+- cache the last complete Crysis frame;
+- refresh only when a new complete producer frame exists;
+- otherwise keep a coherent last-good frame alive;
+- `empty_layer_after_takeover` must remain `0`.
+
+**What this proves now:** producer cadence and XR cadence do not need to be one-to-one. It does **not** authorize stale-pair relabelling; any fallback must retain the exact render pose/FOV belonging to the cached complete pair.
+
+## Historical v6.0.0 — packet metadata publication race
+The same root-cause note records a second concrete bug:
+- producer released keyed mutex key `1` before publishing `eye_pair_packet_id`;
+- XR64 could pair frame `N` pixels with frame `N-1` pose/FOV metadata.
+
+Historical fix:
+1. publish packet metadata while producer owns both mutexes;
+2. `MemoryBarrier`;
+3. release both producer mutexes to key `1`;
+4. host reads packet ID only after acquiring both key `1` mutexes.
+
+**Proved design law:** complete L/R pixels and their render metadata are one atomic publication unit.
+
+## Historical v11 cadence fastpath — reuse telemetry
+Provenance:
+`CRYSIS2VR_CADENCE_FASTPATH_RESULT_20260818_133603.zip`
+
+Measured:
+- target refresh `72.000 Hz`
+- active submit `59.700 Hz`
+- cadence ratio `0.829`
+- fresh packed frames `1276`
+- reused packed frames `379`
+- game mutex misses `1320`
+- packed pose age avg `38.8874 ms`
+- packed pose age max `138.8912 ms`
+- submits `1655`
+
+The v11 notes explicitly state that v10 already reused the last private packed frame when a fresh game texture was unavailable.
+
+**Interpretation:** reuse is not inherently a pose-desync event. Reuse age/streak and pixel-metadata identity are separate metrics. Historical age maxima are evidence, not a release target.
+
+See `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md`.
+
 ## Historical camera experiments
 ### global SetCamera HMD / v1.0.3
 Observed near-perfect feedback chain where later camera input was the previous injected output.
@@ -114,6 +166,14 @@ Observed:
 - XR L/R remained non-duplicate
 
 **Interpretation:** strong mechanism evidence for upstream center-camera ownership, but not a retained five-minute visual 1:1 HEAD proof. Parked behind PosePair.
+
+### T1 upstream center owner
+`CUSTOM_DUAL_T1 v1.0.1` later retained the same architecture class:
+- center HMD inject/restore `2296/2296`
+- union cull `2296/2296`
+- direct gameplay RenderWorld call seam `Crysis2.exe +0x005E2476`
+
+**Consequence for future HEAD gate:** validate/converge the existing T1 upstream owner first. Do not restart broad HEAD reverse unless visual proof falsifies it.
 
 ## Historical weapon / NEAR experiments
 ### `20260817_010329`
@@ -153,6 +213,8 @@ Do not rerun a LIVE for this while PosePair P6 is active. Closure path is COLD-o
 - x86 proxy + x64 OpenXR host
 - keyed mutex shared textures
 - immutable frame-contract / exact-pair sequencing
+- packet pixel+metadata publication ordering
+- last-good complete-frame continuity
 - bounded wait causal tests
 - TTD/ReClass for narrow writer/field questions
 
@@ -163,6 +225,7 @@ Do not rerun a LIVE for this while PosePair P6 is active. Closure path is COLD-o
 - second high-level RenderWorld/EF_StartEf
 - all-SetCamera HMD injection
 - mono reprojection as final renderer
+- new broad HEAD reverse before existing T1 upstream owner is visually tested after PosePair
 - new broad weapon reverse before its serial gate
 - new broad temporal/shadow reverse before its serial gate
 - new broad coordinate-system hunt; only close the exact `003329` logger/helper conflict when HEAD gate opens
