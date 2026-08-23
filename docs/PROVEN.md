@@ -82,6 +82,28 @@ Changing only the bounded wait materially increased exact-pair acceptance (~7.9x
 Canonical per-eye sequence:
 `SetCamera(EYE) -> fill-side camera/view/projection/CameraZero -> RC_SetCamera 0x36 -> EF_Scene3D -> RC_RenderScene 0x33 -> render-thread eRC_SetCamera(EYE) -> eRC_RenderScene(TI_EYE, same RLD)`.
 
+## Render-thread `SThreadInfo` overwrite lineage corroboration
+Provenance: public CryEngine lineage `MergHQ/CRYENGINE` commit `8b63f61c6bb186fbee254b793775856468df47c5`, used only to explain an already retail-observed ownership mechanism.
+
+Source path `Code/CryEngine/RenderDll/Common/RenderThread.cpp`:
+- `SRenderThread::RC_RenderScene` allocates an `eRC_RenderScene` command containing a full `SThreadInfo` and calls `AddTI(..., gRenDev->m_RP.m_TI[m_nCurThreadFill])`;
+- `AddTI` performs a raw `memcpy` of `sizeof(SThreadInfo)` into the render-command buffer;
+- the render-thread command processor reconstructs `SThreadInfo TI` from that command and calls `gRenDev->RT_RenderScene(..., TI, ...)`.
+
+Source path `Code/CryEngine/RenderDll/XRenderD3D9/D3DRendPipeline.cpp`:
+- `RT_RenderScene` calls `FX_ApplyThreadState(TI, &m_RP.m_OldTI[nRecurse])` before normal scene processing;
+- `FX_ApplyThreadState` saves prior process-thread state and then performs whole-struct assignment `m_RP.m_TI[m_RP.m_nProcessThreadID] = TI`.
+
+Source path `Code/CryEngine/RenderDll/Common/RenderPipeline.h` shows that `SThreadInfo` carries, among other fields:
+- `m_matView`;
+- `m_matProj`;
+- `CCamera m_cam`;
+- `CRenderCamera m_rcam`.
+
+**Implication:** the existing retail fact that standalone `RC_SetCamera` mutation can be superseded on the RT side has a direct engine-lineage mechanism: cmd33 transports an authoritative whole `SThreadInfo` snapshot into `RT_RenderScene`, which replaces process-thread render state. This corroborates the current RC33/RT ownership model and is a do-not-repeat guard against returning to `RC_SetCamera`-only final ownership.
+
+**Trust boundary:** lineage semantics do not replace retail 1.9 proof. Do not transplant lineage offsets, struct sizes or ABI assumptions into retail without retail verification.
+
 ## Corrected retail anchors
 Crysis2.exe:
 - `CSystem::GetViewCamera +0x0006AE50`
