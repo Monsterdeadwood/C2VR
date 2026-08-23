@@ -165,6 +165,30 @@ These are source facts. They do **not** prove that a wrong-thread/auxiliary Pres
 
 The normal primary render-thread / same-immediate-context path is expected to preserve render->copy command ordering, so the source review does not prove a need for a GPU fence or engine-eye RT ring. The unresolved ownership risk and minimal passive closure are recorded in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` and `runtime/donors/v17.2.1/POSEPAIR_TRANSPLANT.md`.
 
+## Historical packet atomicity and continuity
+Historical v6.0.0/v6.0.1 root-cause material proved a concrete publication race and a cadence failure mode:
+- releasing producer key `1` before publishing `eye_pair_packet_id` could pair frame `N` pixels with frame `N-1` pose/FOV;
+- the fix was metadata publication while both producer mutexes were still owned, then `MemoryBarrier`, then release to key `1`, with the host reading metadata only after acquiring both key `1` mutexes;
+- if Quest `xrWaitFrame` arrived before the next Crysis `Present`, a producer miss followed by zero composition layers created periodic blank XR frames;
+- the historical no-flicker fix cached the last complete frame and kept continuity when no fresh producer frame was available.
+
+Project law:
+**complete L/R pixels and their render pose/FOV/contract metadata are one atomic publication unit.**
+
+This does not authorize stale relabel. Any future continuity fallback must keep the cached pair's original render metadata.
+
+Historical v11 cadence telemetry (`CRYSIS2VR_CADENCE_FASTPATH_RESULT_20260818_133603.zip`) measured `1276` fresh + `379` reused frames at target `72 Hz`, active submit `59.7 Hz`, pose-age average `38.8874 ms`, max `138.8912 ms`. This proves reuse existed as a real lineage mechanism; those ages are not a final release target.
+
+See `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md`.
+
+## Existing upstream HEAD mechanism in T1
+T1 already executed an upstream center-HMD path:
+- center HMD inject/restore `2296/2296`;
+- union cull `2296/2296`;
+- direct gameplay RenderWorld call seam `Crysis2.exe +0x005E2476 -> RenderInternal +0x005DEF10`.
+
+The mechanism is proven to execute; **HEAD visual 1:1 is not yet proven**. After PosePair closes, validate/converge this existing T1 owner before starting any new broad HEAD reverse.
+
 ## Retail identity
 - Crysis2.exe SHA256 `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`
 - CryRenderD3D11.dll SHA256 `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`
