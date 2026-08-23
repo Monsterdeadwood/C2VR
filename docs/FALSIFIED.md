@@ -1,21 +1,31 @@
 # Crysis 2 VR — FALSIFIED / STOPPED PATHS
 
-Canonical current sources: `C2VR_STATE_SYNC_20260823.md`, `C2VR_MAIN_INTEGRATOR_BLUEPRINT_20260823.md`.
+Do not repeat these without new independent evidence.
 
-- **Rebuilding stereo from scratch** — STOP. True private L/R execution is already proven by `CUSTOM_DUAL_T1 v1.0.1`.
-- **Second top-level `RenderWorld` / second `EF_StartEf` path** — forbidden for the current build. One prepared render-list executes twice.
-- **Applying HMD transform at every `Renderer::SetCamera`** — FALSIFIED by feedback-loop behavior (`G -> G*HMD -> G*HMD^2 -> ...`).
+- **Rebuild stereo from scratch** — STOP. `CUSTOM_DUAL_T1 v1.0.1` already proves true private L/R retail rendering.
+- **Second top-level `RenderWorld` / second `EF_StartEf`** — forbidden. One prepared render-list executes twice.
+- **Apply HMD transform at every `Renderer::SetCamera`** — FALSIFIED by cumulative feedback (`G -> G*HMD -> G*HMD^2 ...`).
+- **Fake/partial CCamera as authoritative camera object** — unsafe; earlier partial shadow broke native stereo semantics. Use a real full CCamera or a fully verified shadow with exact lifetime/layout.
 - **Standalone `RC_SetCamera` mutation as final eye ownership** — rejected because later RT-side state can supersede it.
 - **Native Cry SBS / DisplayStereo / CopyToStereo as final VR transport** — rejected.
-- **Mono RGB+depth/Z reprojection as final renderer** — visually and architecturally FALSIFIED; v15 late-sink lineage is not the shipping path.
+- **Mono RGB+depth/Z reprojection as final renderer** — visually and architecturally FALSIFIED; v15 late-sink line is not the shipping path.
 - **`camera-0x3E8 == CSystem`** — FALSIFIED.
-- **GPU constant-buffer hits as a gameplay detector** — rejected.
+- **GPU constant-buffer hits as gameplay detector** — rejected.
 - **Counters alone as visual proof** — rejected.
-- **`SHDF_ZPASS_ONLY` as a RIGHT-eye shadow policy** — rejected because it suppresses normal scene body as well.
-- **Wholesale v17.2 integration** — STOP. It mixes PosePair, HEAD/culling, temporal/shadow and NEAR/weapon changes, destroying causal attribution.
-- **New broad scheduler research** — STOP. The current PosePair finalist is an immutable host-owned current-XR-frame ticket.
-- **New generic camera hunting** — STOP unless the visual HEAD gate later falsifies the known ownership direction.
-- **New weapon reverse before the serial gate reaches WEAPON/NEAR** — STOP; exact NEAR anchors and donor transaction already exist.
-- **New temporal reverse before PosePair/HEAD/WEAPON integration is visually accepted** — STOP.
+- **`SHDF_ZPASS_ONLY` as normal RIGHT-eye shadow policy** — rejected because it suppresses normal scene body too.
+- **Wholesale v17.2 integration** — STOP. It mixes PosePair, HEAD/culling, weapon/NEAR, temporal and shadow mutations and destroys causal attribution.
+- **Treating raw Present as logical game frame** — FALSIFIED by cadence evidence (~18901 Present vs ~1880 RenderWorld vs ~1241 successful producer frames in historical harvest).
+- **Old pixels relabelled with a new pose** — FALSIFIED. If last-good fallback is used later, pixels must keep the pose/FOV they were actually rendered with.
+- **Universal `OpenXR +X -> Cry -X` rule** — FALSIFIED as a global coordinate rule. The old mapping is a reflection (`det=-1`) and arose from path-specific interpretation. Primary basis for future work is `(x,y,z) -> (+x,-z,+y)`; any `-X` use must be proven locally at its seam.
+- **Random weapon XYZ/muzzle offset grids before rigid-transform closure** — STOP. They confound pivot, basis and ownership.
+- **Head position as weapon rotation pivot** — STOP for final weapon math. Historical v7 object transform rotated around head position and mixes poorly with camera-space `FOB_NEAREST` semantics.
+- **Independent position and rotation correction as assumed final weapon SE(3)** — STOP. Current v17-style decomposition is a bug candidate because translation/pivot coupling is missing. Prefer one rigid bind transform.
+- **Automatic squeeze/grip-edge rebaseline as default weapon policy** — STOP. It can create discontinuous weapon snaps; next weapon proof must use fixed bind except explicit recenter/equip/rebind.
+- **AIM-vs-GRIP pose-family hunt** — STOP unless new evidence appears. AIM is canonical; GRIP is only a low-priority control.
+- **Gameplay aim/ballistics work during visual weapon gate** — STOP. Historical servo fallback is preserved, but ballistics remains a later blocker.
+- **Broad weapon reverse now** — STOP while PosePair is current gate.
+- **Broad HEAD/camera archaeology now** — STOP while PosePair is current gate. HEAD cold finalists are already prepared.
+- **Temporal/shadow mutation now** — STOP until PosePair, HEAD and weapon/NEAR visual gates pass serially.
+- **New broad symbol/corpus census for weapon functions** — STOP. When weapon gate opens, do a narrow `CryGameCrysis2.pdb/source -> retail` bridge for only `PostUpdateView`, `UpdateFPPosition`, `UpdateFPCharacter` (and ballistic symbols only if later required).
 
-Historical resource `20500` / broad per-view provenance work is retained as supporting archaeology, but it is no longer authorization to leave the working-build ladder.
+Historical resource `20500` / 320-byte per-view carrier work remains supporting archaeology, not authorization to restart broad GPU/resource searches.
