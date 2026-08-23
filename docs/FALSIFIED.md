@@ -32,7 +32,10 @@ Do not repeat these without new independent evidence.
 - **New broad symbol/corpus census for weapon functions** — STOP. When weapon gate opens, do a narrow `CryGameCrysis2.pdb/source -> retail` bridge for only `PostUpdateView`, `UpdateFPPosition`, `UpdateFPCharacter` (and ballistic symbols only if later required).
 - **Repeating the old broad WAVE3 cadence gate instrumentation before P6** — STOP. P4/P5 already causally isolated exact-pair wait/deadline as a major contributor. Add phase timestamps only if P6 still misses materially.
 - **Increasing wait beyond P6 after timeout starvation is closed** — STOP. If P6 drives timeouts near zero, the next timing tool is future-target pipeline lead, not a larger watchdog.
+- **Full GPU fence / synchronous GPU wait as the first fix for persistent eye-RT overwrite** — STOP. Source review does not prove a canonical-path overwrite race; close primary-Present/render-thread publication ownership first if P6 leaves this class active.
+- **Double/triple-buffering or ring-buffering engine eye RTs before publication ownership is closed** — STOP. It expands renderer mutation surface and can mask the actual owner. See `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
 
 Historical resource `20500` / 320-byte per-view carrier work remains supporting archaeology, not authorization to restart broad GPU/resource searches.
 
 Coordinate-basis conflict provenance is in `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
+Publication-ownership provenance is in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
