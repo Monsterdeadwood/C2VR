@@ -36,8 +36,16 @@ Unchanged running shadows are **not** P6 failure.
 
 ## POST-P6 DECISION
 - **timeouts near zero + flashes gone:** KEEP exact architecture. STOP increasing wait. Next timing experiment is pipeline lead `target = predictedDisplayTime + K*predictedDisplayPeriod`, `K=0..3`, choose the smallest sustainable K.
-- **timeouts near zero + flashes remain:** STOP timeout path. Inspect presentation/timeliness seam.
+- **timeouts near zero + flashes remain:** STOP timeout path. Inspect presentation/timeliness seam and the already-recorded publication-owner risk in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
 - **many timeouts remain:** add passive phase timestamps `contract -> RenderWorld -> RT L -> RT R -> Present publish -> host consume` before any mutation.
+
+Reserve only if post-P6 evidence demands it:
+- coherent last-good **complete** stereo pair;
+- keep the exact pose/FOV/metadata that rendered those pixels;
+- never relabel cached pixels as the new/current XR contract.
+
+Historical packet-atomicity and continuity evidence is preserved in:
+`research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md`.
 
 ## PARKED AFTER POSEPAIR
 1. HEAD 1:1 rotation-first + coherent visibility envelope.
@@ -45,5 +53,13 @@ Unchanged running shadows are **not** P6 failure.
 3. TEMPORAL / SHADOW stability.
 4. Regression.
 5. Release candidate.
+
+### First HEAD action after PosePair
+Do **not** restart broad HEAD reverse first. `CUSTOM_DUAL_T1 v1.0.1` already has:
+- center HMD inject/restore `2296/2296`;
+- union cull `2296/2296`;
+- upstream RenderWorld call seam `Crysis2.exe +0x005E2476`.
+
+First validate/converge that existing upstream center-HMD owner in headset. Only reverse a new owner if that visual proof falsifies it.
 
 Before final HEAD/eye-position math, resolve the explicit local-X sign conflict in `research/COORDINATE_BASIS_CONFLICT_20260824.md`. That question is COLD-only and is not authorization to delay P6.
