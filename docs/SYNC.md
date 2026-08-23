@@ -56,6 +56,8 @@ Do not rebuild stereo.
 - A completed game-side pair is not cross-process-visible until the Present publication gate copies/publishes it.
 - `xrEndFrame` frame count is not the same thing as visible projection-layer submit count; `layerCount=0` can occur while the XR session continues.
 - A fresh game render is not intrinsically required for every XR submit; a coherent cached last-good complete stereo pair with its original pose/FOV is architecturally valid as a separate fallback policy.
+- Historical v6.0.0/v6.0.1 proved that pixels and render metadata must be published atomically: metadata before mutex release, barrier, then release; otherwise frame N pixels can be paired with frame N-1 pose/FOV.
+- Historical v11 measured real last-good reuse (`1276` fresh, `379` reused) at 72 Hz target; reuse itself is not equivalent to pose desync, but reuse age remains a separate release metric.
 
 ## EVIDENCE CONFLICT — OPENXR↔CRY LOCAL X SIGN
 **Do not promote either sign to final HEAD truth yet.** Preserve both evidence paths.
@@ -111,11 +113,13 @@ See `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
 3. Reserve: coherent last-good complete stereo pair with its own original render pose/FOV; never stale-relabel it to a new pose.
 
 ### HEAD after PosePair
-- `G * HMDrelative` rotation-first on immutable real center CCamera, coherent frustum, before visibility.
-- `yawOnly(G) * HMDrelative` if game pitch/body contamination appears.
-- `HMDrelative * G` only as order control.
-- consider `XR_REFERENCE_SPACE_TYPE_VIEW` for center-head pose at the same target time.
-- translation remains blocked until rotation passes visually.
+- first validate/converge the existing T1 upstream center-HMD owner before new broad HEAD reverse;
+- T1 already executed center HMD inject/restore `2296/2296` and union cull `2296/2296` at the RenderWorld seam `+0x005E2476`;
+- `G * HMDrelative` rotation-first on immutable real center CCamera, coherent frustum, before visibility remains the first composition candidate if the existing owner needs convergence;
+- `yawOnly(G) * HMDrelative` if game pitch/body contamination appears;
+- `HMDrelative * G` only as order control;
+- consider `XR_REFERENCE_SPACE_TYPE_VIEW` for center-head pose at the same target time;
+- translation remains blocked until rotation passes visually;
 - coordinate-sign conflict above must be resolved before committing final eye/head position basis.
 
 ### WEAPON / NEAR after HEAD
@@ -178,7 +182,7 @@ Run `v17.2.6 EXACT_BLOCK120 P6` unchanged.
 
 Interpretation:
 - timeouts near zero + flashes gone => STOP increasing wait; KEEP exact architecture and ADAPT to pipeline-lead K batch.
-- timeouts near zero + flashes remain => STOP timeout path; inspect presentation seam.
+- timeouts near zero + flashes remain => STOP timeout path; inspect presentation seam and publication/timeliness evidence.
 - many timeouts remain => add passive phase timestamps contract -> RenderWorld -> RT L -> RT R -> Present publish -> host consume before any mutation.
 
 Do not add HEAD, weapon, temporal or shadow mutations to P6. Unchanged running shadows are not P6 failure.
@@ -193,6 +197,8 @@ Do not add HEAD, weapon, temporal or shadow mutations to P6. Unchanged running s
 - keyed-mutex shared texture transport
 - exact immutable ticket / seqlock contract sequencing
 - bounded host-wait timing experiments P4/P5
+- historical packet metadata/pixel atomicity fix and last-good continuity
+- historical v10/v11 fresh/reuse cadence telemetry
 - historical NEAR and gameplay-aim controller bridges
 - targeted TTD/ReClass only for concrete writer/field questions
 
@@ -228,8 +234,10 @@ Important local/project artifacts already exist and should not be regenerated bl
 ## UNRESOLVED
 - P6 visual/telemetry verdict
 - timely-prediction lead after exact identity
+- publication ownership/timeliness if exact timeouts collapse but flashes remain
+- release-safe cached-pair age/reuse bounds if last-good fallback becomes necessary
 - exact cause of the `003329` vs retail/v10 X-sign conflict
-- HEAD visual 1:1 composition
+- HEAD visual 1:1 composition using the existing upstream T1 owner
 - true VIEW-space center-head use vs left-view-derived center
 - weapon fixed-bind SE(3) vs upstream entity seam
 - exact retail weapon function mapping
@@ -238,3 +246,12 @@ Important local/project artifacts already exist and should not be regenerated bl
 
 ## SERIAL ORDER
 `POSEPAIR -> HEAD 1:1 -> WEAPON / NEAR -> TEMPORAL / SHADOW STABILITY -> REGRESSION -> RELEASE CANDIDATE`
+
+## BRANCH DELTA IMPORTED 2026-08-24
+This sync imported the branch-specific historical packet-atomicity, last-good pacing and T1 HEAD-owner evidence without changing the active P6 gate. Detailed provenance:
+- `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md`
+- `docs/EXPERIMENTS.md`
+- `docs/PROVEN.md`
+- `docs/NEXT.md`
+
+No new LIVE was performed during this sync.
