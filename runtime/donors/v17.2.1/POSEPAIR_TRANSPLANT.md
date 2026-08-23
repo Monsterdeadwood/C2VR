@@ -180,3 +180,51 @@ PASS requires in-headset:
 - true L/R T1 renderer remains intact
 
 On PASS: freeze PosePair and move to HEAD 1:1. On FAIL: identify which contract component is late/mismatched; do not reopen stereo discovery.
+
+# 10. Publication-owner guard discovered after donor recovery
+Source-level review on 2026-08-24 identified an ownership hazard that must be preserved for future diagnostics, without changing the currently authorized P6 run.
+
+Verified donor behavior:
+- RIGHT `RT_RenderScene` return publishes `g_completedContract/g_completedSerial`.
+- `src/t1_proxy.cpp::publish_pair()` copies the persistent engine eye RTs into the shared textures.
+- `hkPresent()` calls `publish_pair()`.
+- the factory hook installs `hkPresent` on every successfully created swapchain.
+- there is no explicit `s == canonical_primary_swapchain` publication guard, canonical render-thread-ID guard, or `current_ticket()==NULL`/outside-eye-transaction guard in the verified donor source.
+
+This is **source-proven implementation topology**, not proof that an auxiliary Present actually races in retail runtime.
+
+On the intended primary render-thread / same-immediate-context path, render commands and subsequent `CopyResource` commands should remain ordered. Therefore do not add a full GPU fence, synchronous GPU wait, or engine-eye RT ring as the first response to the persistent-RT overwrite hypothesis.
+
+If the current P6 timing experiment leaves flashes/dropouts inconsistent with exact-pair timing, first close the narrower publication authority:
+
+```text
+RIGHT completion
+ -> leave eye transaction
+ -> canonical render-thread EndFrame
+ -> PRIMARY Present only
+ -> read completed serial/contract
+ -> queue CopyResource L/R
+ -> re-read completed serial/contract
+ -> require unchanged identity
+ -> publish pair metadata
+ -> release both producer keyed mutexes
+ -> host consume
+```
+
+Recommended passive guards:
+- `primary_present_wrong_thread == 0`
+- `aux_present_publish == 0`
+- `publish_inside_eye == 0`
+- `completed_serial_changed_during_copy == 0`
+- `resource_epoch_changed == 0`
+
+The cheap serial/contract sandwich should precede heavier synchronization. On a canonical same-thread path, pair identity changing across the copy window should be impossible.
+
+Full reasoning and provenance:
+`research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
+
+Current decision remains:
+- KEEP exact immutable PosePair architecture;
+- KEEP `v17.2.6 EXACT_BLOCK120 P6` as NEXT;
+- do not mutate publication ownership before P6 unless another branch supplies a newer closing result;
+- if P6 leaves this question active, close publication ownership before GPU-fence/ring-buffer experiments.
