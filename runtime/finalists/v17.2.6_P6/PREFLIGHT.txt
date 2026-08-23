@@ -1,0 +1,5 @@
+MISSING FACT: do the remaining flashes/dropouts come from the 45 ms exact-pair watchdog expiring before slow-but-valid RC33 pairs finish?
+WHY NOT COLD: P5 proved 83.5% exact hits and max observed wait beyond 45 ms, but only a longer LIVE watchdog can causally show whether the remaining zero-layer gaps disappear.
+PASS: exact_wait_timeouts approaches zero, exact hit ratio rises toward 1.0, host_submits remains continuous, and visual flashes/dropouts materially reduce.
+FAIL: timeouts/misses persist despite 120 ms or flashes remain with near-zero timeouts, exposing a different presentation seam.
+BASELINE MUST HOLD: exact-only submit, stale-pair drain, source-device keyed transport, RC33 two-pass, camera/FOV, temporal/shadow code, weapon code, and byte-exact restore remain unchanged.
