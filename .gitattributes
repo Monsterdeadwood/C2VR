@@ -1,0 +1,27 @@
+# Evidence/source files are hash-sensitive. Keep repository bytes deterministic.
+* text=auto
+
+*.c      text eol=lf
+*.cpp    text eol=lf
+*.h      text eol=lf
+*.hpp    text eol=lf
+*.py     text eol=lf
+*.md     text eol=lf
+*.txt    text eol=lf
+*.json   text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.def    text eol=lf
+*.patch  text eol=lf
+
+# Windows launcher/source-package scripts may have historical CRLF/BOM identities.
+# Do not claim byte identity from a normalized repository copy without an explicit hash check.
+*.bat    text eol=crlf
+*.cmd    text eol=crlf
+*.ps1    text eol=crlf
+
+*.zip    binary
+*.dll    binary
+*.exe    binary
+*.pdb    binary
+*.pyc    binary
