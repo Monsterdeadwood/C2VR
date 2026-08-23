@@ -153,6 +153,18 @@ The conflict has not been causally resolved. Possible causes include old stock-e
 - source-level upstream topology is known: `CPlayer::PostUpdateView -> FPWeaponPos/Angles -> CItem::UpdateFPPosition -> weapon entity SetWorldTM`, followed by `CItem::UpdateFPCharacter` / skeleton preprocessing
 - exact retail RVAs for those GameDll functions are not yet proven
 
+## PosePair publication topology — source-proven, runtime effect unresolved
+From verified donor source `runtime/donors/v17.2.1/src/t1_dual_render.cpp` and `src/t1_proxy.cpp`:
+- matching LEFT + RIGHT serial is required before the RIGHT path publishes `g_completedContract/g_completedSerial` after `RT_RenderScene` returns;
+- `publish_pair()` copies persistent engine eye RTs to keyed-mutex shared textures and publishes the exact completed contract;
+- `hkPresent()` calls `publish_pair()`;
+- the factory hook installs the Present hook on every successfully created swapchain;
+- verified donor source has no explicit canonical-primary-swapchain check or canonical render-thread-ID check around pair publication.
+
+These are source facts. They do **not** prove that a wrong-thread/auxiliary Present actually races in the retail failing path.
+
+The normal primary render-thread / same-immediate-context path is expected to preserve render->copy command ordering, so the source review does not prove a need for a GPU fence or engine-eye RT ring. The unresolved ownership risk and minimal passive closure are recorded in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` and `runtime/donors/v17.2.1/POSEPAIR_TRANSPLANT.md`.
+
 ## Retail identity
 - Crysis2.exe SHA256 `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`
 - CryRenderD3D11.dll SHA256 `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`
