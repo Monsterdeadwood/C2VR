@@ -1,92 +1,108 @@
-# C2VR — beta/PDB identity conflict — 2026-08-25
+# C2VR — beta/PDB identity conflict — RESOLVED 2026-08-25
 
-Purpose: prevent multiple Crysis 2 beta/debug PDB families from being silently collapsed into one `5620 PDB` identity. This is a COLD archival/version-mapping issue, not a runtime gate.
+Purpose: prevent Crysis 2 build-5620 PDB families from being silently collapsed by filename and preserve the exact reason the historical sizes differed.
 
-## Why this note exists
-Retained C2VR evidence contains at least two different observed size sets for similarly named CryEngine PDBs. The discrepancy is real evidence of different roots, architectures, build variants, or package copies. Until exact path + SHA256 closes each identity, a filename alone is not an identity.
+## Resolution
+The two previously conflicting size sets are from the **same exact local build-5620 root but different architecture directories**:
 
-Do **not** use only `CryGameCrysis2.pdb`, `CryAction.pdb`, etc. as a unique source label.
+- Set A = `crysis2(5620)_r\crysis2(5620)_01_13\Bin32`
+- Set B = `crysis2(5620)_r\crysis2(5620)_01_13\Bin64`
 
-## Observed set A — earlier PDB-rich x86 beta / SDK forensic summary
-Retained `C2VR_SDK_COOP_FORENSICS_RESULT_20260815_161600.zip` / `C2VR_PDB_SYMBOL_ATLAS_RESULT_20260815_165408.zip` dossier reports a PDB-rich x86 beta family with:
+This is now closed by already-retained COLD evidence. No new game/runtime scan was required.
 
-| Module / PDB | Observed bytes |
-|---|---:|
-| `CryGameCrysis2.dll` | 7,523,552 |
-| `CryGameCrysis2.pdb` | 82,045,952 |
-| `CryAction.dll` | 8,522,464 |
-| `CryAction.pdb` | 40,791,040 |
-| `CrySystem.dll` | 4,777,184 |
-| `CrySystem.pdb` | 18,607,104 |
-| `CryRenderD3D11.dll` | 3,438,304 |
-| `CryRenderD3D11.pdb` | 19,467,264 |
-| `Cry3DEngine.pdb` | 14,117,888 |
-| `CryEntitySystem.pdb` | 7,703,552 |
+The 2026-08-15 PDB Atlas contains exact `Image + PDB + ImageSHA256 + PdbSHA256` rows for Bin32. The 2026-08-21 Total Cold Atlas `01_INPUT_MANIFEST.tsv` contains exact path + size + SHA256 for both Bin32 and Bin64. The older size discrepancy was therefore architecture, not evidence of an unknown beta revision.
 
-The same retained evidence records no-protect binaries:
-- `Bin32_no_protect\CrySystem.dll` — 3,785,216 bytes
-- `Bin32_no_protect\CryAction.dll` — 3,605,504 bytes
+## Stable identity labels
+Use these labels in future version mapping:
 
-These sizes must remain associated with their exact source root/package when recovered.
+- `BETA5620_BIN32`
+- `BETA5620_BIN64`
+- `BETA5620_BIN32_NO_PROTECT` for the explicitly separate no-protect binaries
 
-## Observed set B — TOTAL COLD ATLAS 2026-08-21 census
-`C2VR_TOTAL_COLD_ATLAS_v1.1.3` performed a READ-ONLY / NO GAME LAUNCH / NO OPENXR / NO HOOKS corpus pass and discovered 24,806 source files plus 213 beta artifacts across 5 roots. Its symbol census recorded:
+Never use a bare filename such as `CryGameCrysis2.pdb` as a unique identity.
 
-| PDB | Observed bytes |
-|---|---:|
-| `Cry3DEngine.pdb` | 12,536,832 |
-| `CryAction.pdb` | 36,940,800 |
-| `CryEntitySystem.pdb` | 6,679,552 |
-| `CryGameCrysis2.pdb` | 80,251,904 |
-| `CryRenderD3D11.pdb` | 16,362,496 |
-| `CryRenderD3D9.pdb` | 16,534,528 |
+## BETA5620_BIN32 high-value identities
+Root:
+`C:\GOG Games\Crysis 2\crysis2(5620)_r\crysis2(5620)_01_13\Bin32`
 
-The same census contained many other PDBs and explicitly walked a `beta` provenance set before the symbol census.
+| File | Bytes | SHA256 |
+|---|---:|---|
+| `CryGameCrysis2.dll` | 7,523,552 | `162FC5AB4BD76AD55D8B2855BE8B05FDD5F79276607357A453E56F31B3D54BC0` |
+| `CryGameCrysis2.pdb` | 82,045,952 | `B3EF76859CCE75CF92A4DBD1CCBDE67230F079175F75AE772AA7E184D824A155` |
+| `CryAction.dll` | 8,522,464 | `4973E731298D617EE1DCE1B3D1A298905CF03A604D8A1617A2C7CF669C1604A5` |
+| `CryAction.pdb` | 40,791,040 | `376E35C155C6C020C9AADDADCF0325CEA0DD62B4B2D59764CDF58A8CD97959EB` |
+| `CrySystem.dll` | 4,777,184 | `6B44BAEA80BF3C6E7A4BACB6ABD472DB3C64AEE2EAFD7416B6644A87D9960479` |
+| `CrySystem.pdb` | 18,607,104 | `2F0A3ED75D671079035DAA384D839BEBAB19AAE3DC55DC71FAAF41F30DD5F825` |
+| `CryRenderD3D11.dll` | 3,438,304 | `0C368CD36A2BCA7E384DACA6F2CE3AD8C330CB40A60007053B43B7B36AEEEC08` |
+| `CryRenderD3D11.pdb` | 19,467,264 | `3B679714B3C3CB7221795D093AC13868168115A78A90BE22C3266F78B2F5754C` |
+| `Cry3DEngine.dll` | 2,596,576 | `B5B1FD54968E7FD6154A4CE6B18D9536F7A52112C71EFE20058EB109383DFF15` |
+| `Cry3DEngine.pdb` | 14,117,888 | `9DEFEFF46C8321D4496A9775669C39449EBED1FB499F97FC78C9236770F76F3A` |
+| `CryEntitySystem.dll` | 798,944 | `F21B30243B0E880E6766A26CFA963B04366090DBA61111456FFFD77D2713862B` |
+| `CryEntitySystem.pdb` | 7,703,552 | `388B6BBEE48B8DE4556E83D8A9672151AF17D8168AC5F5B83FC4D65A98FC05A0` |
 
-## Conflict
-Set A and Set B cannot be treated as the same exact files because sizes differ materially for every overlapping high-value PDB shown above.
+Additional Bin32 PDB identities are retained in the Total Cold Atlas manifest, including `CryAISystem`, `CryAnimation`, `CryNetwork`, `CryRenderD3D9`, `CryRenderNULL`, `CryScriptSystem`, `Crysis2.pdb`, editor/resource-compiler PDBs and others.
 
-Examples:
-- `CryGameCrysis2.pdb`: 82,045,952 vs 80,251,904
-- `CryAction.pdb`: 40,791,040 vs 36,940,800
-- `CryRenderD3D11.pdb`: 19,467,264 vs 16,362,496
-- `Cry3DEngine.pdb`: 14,117,888 vs 12,536,832
-- `CryEntitySystem.pdb`: 7,703,552 vs 6,679,552
+## BETA5620_BIN64 high-value identities
+Root:
+`C:\GOG Games\Crysis 2\crysis2(5620)_r\crysis2(5620)_01_13\Bin64`
 
-Possible causes include:
-1. Bin32 vs Bin64/debug-tool PDB family;
-2. different beta/source roots under the five-root discovery;
-3. different build/package revision;
-4. protected vs no-protect or SDK/prototype package lineage;
-5. duplicate filenames from different directories selected by different analyzers.
+| File | Bytes | SHA256 |
+|---|---:|---|
+| `CryGameCrysis2.dll` | 10,705,632 | `CB8696038776A121C7E750CB42D1D8B9C952C56BA0C9035FF74B092DAD5A063E` |
+| `CryGameCrysis2.pdb` | 80,251,904 | `85A90E51EC3E5BC87EEF244DE270C1B791399CA84965381C01AA7C92610464EB` |
+| `CryAction.dll` | 5,068,000 | `888124A15CDEB73F37B2C4617E08F8D9B38AA65FB347FEBF7C606B9DEBCF3438` |
+| `CryAction.pdb` | 36,940,800 | `26E97242B2E96A0BA02DB7FCB9F5A211EE15E93B06B4CF9CDA17776398F31CBA` |
+| `CrySystem.dll` | 5,154,528 | `8ED33EB5784B896C1D9609D8AD379F4142097A39854AD18152989DD02E537F39` |
+| `CrySystem.pdb` | 16,239,616 | `938B5BC8E1F9982BE5120277F8486F78E1D5A900AE5F0F4691ABFAA49B222EF6` |
+| `CryRenderD3D11.dll` | 3,386,080 | `CC1E7E9C5D43CF348E25F714040FDBA534ED67654BB6BE57E2C6436533C732E2` |
+| `CryRenderD3D11.pdb` | 16,362,496 | `D1F0C0272555D08FD18FD1ECFE21EE3908E2861CEE4D584ACBAECDC731FEA747` |
+| `Cry3DEngine.dll` | 3,350,752 | `B73619DD0CE44288DCE20E18A0A24E4F2B5C8EEB1324681D1E196571F9027D7C` |
+| `Cry3DEngine.pdb` | 12,536,832 | `618D97053FE92236C9EA5D580A6A537B4A66753B7ACDFCB191E00121A9128887` |
+| `CryEntitySystem.dll` | 976,096 | `29A265F7880B6840B73EC735497CF5D1D050FDD87B0F9475E435E89C64D7CA2E` |
+| `CryEntitySystem.pdb` | 6,679,552 | `BB8445F243BB7E0EDCBC6D15B31FFCC30AE2E77E5C8572E49889D157E1BFF348` |
 
-Do not choose among these hypotheses by filename or size alone.
+Additional Bin64 PDB identities retained in the same manifest include `CryAISystem`, `CryAnimation`, `CryNetwork`, `CryRenderD3D9`, `CryRenderNULL`, `CryScriptSystem`, `Crysis2.pdb`, editor/audio PDBs and others.
 
-## Required identity key
-Future mappings must identify a PDB/binary with at least:
+## BETA5620_BIN32_NO_PROTECT
+Separate exact binary identities already recorded by the PDB Atlas:
 
-`ROOT_ID + RELATIVE_PATH + SIZE + SHA256 + PE_MACHINE(if binary) + SOURCE_PACKAGE/BUILD`
+| File | Bytes | SHA256 |
+|---|---:|---|
+| `Bin32_no_protect\CryAction.dll` | 3,605,504 | `9E0D87DC94E7B3DF74ABC5671CC839E07F10E8F7282CB928BE0FAB70256F0D3A` |
+| `Bin32_no_protect\CrySystem.dll` | 3,785,216 | `8B9A8AF576E89E73FE01421420A5BA75D9229E4538951BB10707451758B873FE` |
 
-For PDBs, also preserve GUID/age or CodeView association when obtainable.
+Do not substitute no-protect RVAs for normal Bin32 without explicit mapping.
+
+## Evidence sources
+### `C2VR_PDB_SYMBOL_ATLAS_RESULT_20260815_165408.zip`
+Physical Library carrier recovered during this audit:
+- bytes `64,634,999`
+- SHA256 `6413D3B7CD7A6FF44E38F539F5A7CEA1372C5948BEDD4E951E1258002E6AA3C2`
+
+Its `ATLAS/PDB_SCAN_LOG.csv` explicitly pairs each Bin32 image and PDB with SHA256, and its `ATLAS/BINARY_DONORS.csv` preserves exact image identities.
+
+### `C2VR_TOTAL_COLD_ATLAS_RESULT_20260821_195858.zip`
+Physical Library carrier recovered during this audit:
+- bytes `4,375,163`
+- SHA256 `1B45312DAA8E438CAA14CA5FE5DAF73A4B359B671ABDB30D2F6D17DC346C78CF`
+
+Its `01_INPUT_MANIFEST.tsv` records exact path + byte size + SHA256 across the source/beta corpus and proves that the smaller historical PDB set is `Bin64` from the same 5620 tree.
 
 ## Mapping rule
-A symbol/RVA/function-size result derived from a PDB must carry its identity key. A mapping from one set does not automatically validate the other set.
+A beta-derived symbol/RVA/function-size mapping must carry at least:
 
-Evidence precedence remains:
-1. retail proof;
-2. exact same-package/source-path beta mapping;
-3. cross-beta convergence;
-4. generic symbol-name similarity.
+`BETA5620_BIN32|BIN64 + relative path + SHA256`
 
-## COLD closure plan
-Use `tools/C2VR_EXTERNAL_CORPUS_IDENTITY.ps1` to hash only high-value beta/PDB candidates under the existing Crysis 2 tree. It is read-only and does not launch the game.
+For especially important functions, retain PDB GUID/age or CodeView association when obtainable, but the architecture/path/hash ambiguity that triggered this note is now resolved.
 
-After the output exists:
-1. cluster candidates by exact path/hash;
-2. assign stable IDs such as `BETA5620_BIN32_A`, `BETA5620_BIN64_A`, `SDK11_BIN64`, etc. only when path/build evidence supports the label;
-3. link every existing PDB-derived retail mapping to the exact cluster that produced it;
-4. update `research/SOURCE_CORPUS_REGISTRY.md` with immutable identities;
-5. if two independent clusters map the same retail function, treat that as stronger cross-version convergence.
+Cross-architecture convergence is useful evidence, but neither beta architecture outranks retail 1.9 proof.
 
-## Gate discipline
-No LIVE is authorized by this note. Current runtime gate remains P6 PosePair. This identity closure may proceed in WAVE 1 COLD in parallel.
+## Tool status
+`tools/C2VR_EXTERNAL_CORPUS_IDENTITY.ps1` remains useful as an independent future re-verifier if the user's local tree is moved/changed. It is no longer required to resolve this specific Bin32-vs-Bin64 question because the retained result manifests already closed it.
+
+## Classification
+**RESOLVED COLD.**
+
+No LIVE, game launch, OpenXR session, hook or mutation was needed.
+
+Current runtime gate remains P6 PosePair.
