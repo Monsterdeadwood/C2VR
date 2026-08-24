@@ -24,18 +24,21 @@ Do not restart broad renderer/stereo/camera/weapon archaeology unless the serial
 
 ## Start here
 1. `docs/SYNC.md` — canonical cross-branch snapshot, offsets, current finalists, unresolved questions
-2. `docs/STATE.md` — active state and exact CURRENT GATE / NEXT
-3. `docs/NEXT.md` — authorized P6 handoff and post-P6 decision tree
-4. `experiments/NEXT_EXPERIMENT.md` — exact five-line P6 PREFLIGHT and runtime acceptance criteria
-5. `docs/EXPERIMENTS.md` — compact causal experiment lineage and do-not-repeat map
-6. `docs/PROVEN.md` — facts that must not be re-researched
-7. `docs/FALSIFIED.md` — dead/stopped paths
-8. `docs/GATES.md` — serial acceptance ladder
-9. `research/RESULT_INDEX.md` — result/build lineage
-10. `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md` — historical pixel/metadata atomicity, pacing and last-good-frame evidence
-11. `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` — source-proven Present publication topology and unresolved ownership risk
-12. `research/COORDINATE_BASIS_CONFLICT_20260824.md` — preserved `003329` vs retail/v10 local-X evidence conflict; COLD-only, not current LIVE gate
-13. `research/WEAPON_NEAR.md` — parked weapon/NEAR state for its later gate
+2. `research/SOURCE_CORPUS_REGISTRY.md` — canonical registry of retail, beta/dev, ModSDK, Crysis2Coop, PDB, CryEngine source, VR/stereo donors, public pinned repos, RDC/TTD/RESULT carriers and preservation status
+3. `docs/STATE.md` — active state and exact CURRENT GATE / NEXT
+4. `docs/NEXT.md` — authorized P6 handoff and post-P6 decision tree
+5. `experiments/NEXT_EXPERIMENT.md` — exact five-line P6 PREFLIGHT and runtime acceptance criteria
+6. `docs/EXPERIMENTS.md` — compact causal experiment lineage and do-not-repeat map
+7. `docs/PROVEN.md` — facts that must not be re-researched
+8. `docs/FALSIFIED.md` — dead/stopped paths
+9. `docs/GATES.md` — serial acceptance ladder
+10. `research/RESULT_INDEX.md` — result/build lineage
+11. `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md` — historical pixel/metadata atomicity, pacing and last-good-frame evidence
+12. `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` — source-proven Present publication topology and unresolved ownership risk
+13. `research/COORDINATE_BASIS_CONFLICT_20260824.md` — preserved `003329` vs retail/v10 local-X evidence conflict; COLD-only, not current LIVE gate
+14. `research/WEAPON_NEAR.md` — parked weapon/NEAR state for its later gate
+
+Before downloading, rescanning, or calling a beta/mod/donor “new”, check `research/SOURCE_CORPUS_REGISTRY.md`. Existing exact/local corpora must be re-harvested narrowly when possible instead of duplicated.
 
 ## Canonical renderer architecture
 One prepared render-list executes twice for the two eyes. Do not add a second high-level `RenderWorld` / `EF_StartEf`.
@@ -54,7 +57,7 @@ Pixel data and the render pose/FOV/contract metadata that produced it are one at
 
 ## Repository map
 - `docs/` — canonical state, proven/falsified facts, gates, workflow and policy
-- `research/` — evidence indexes and focused blocker research
+- `research/` — evidence indexes, source/beta/mod/donor registry and focused blocker research
 - `experiments/` — reproducible causal experiments
 - `runtime/` — accepted main/donor source authority
 - `tools/` — deterministic extraction/build/analysis tooling
