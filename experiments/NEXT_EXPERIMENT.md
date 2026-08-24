@@ -11,44 +11,64 @@ Do not build a new weapon/HEAD/temporal variant before this result.
 SHA256:
 `8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`
 
-P6 differs from the previous WAIT45 finalist only by the bounded exact-pair watchdog ceiling:
-`45 ms -> 120 ms`.
+Exact source/package audit now proves the P5->P6 scope:
+- all game/in-process runtime source is byte-identical;
+- only changed first-party runtime file is x64 `src/t1_host_x64.cpp`;
+- the one causal timing-policy mutation is `45 ms -> 120 ms` watchdog ceiling;
+- P6 additionally adds passive exact-wait timeout and latency-histogram telemetry.
 
 It is not a fixed sleep. The wait exits as soon as the exact pair arrives.
 
 Recorded validation before LIVE:
-- static `130/130 PASS`
-- independent `98/98 PASS`
-- game-side camera/FOV/weapon/shadow/temporal/RC33 code unchanged from P5
+- P5 exact carrier SHA verified; package manifest `39/39 PASS`;
+- P6 exact carrier SHA verified; package manifest `42/42 PASS`;
+- static `130/130 PASS`;
+- independent `98/98 PASS`;
+- game-side camera/FOV/weapon/NEAR/shadow/temporal/RC33 source byte-identical from P5.
+
+Full exact causal ladder:
+`research/POSEPAIR_CAUSAL_LADDER_P4_P5_P6_20260825.md`.
 
 ## Why this is the current gate
-Latest causal P5 result:
-- `269 exact_pair_consumes`
-- `269 host_submits`
-- `53 misses`
-- exact ratio `83.5404%`
-- `pair_wait_ms_max = 47`
-- `354/354` completed/copies
-- flashes/dropouts remained
+Exact P4->P5 package comparison proves the runtime causal mutation was confined to the x64 host wait policy:
 
-The previous line was roughly `92 exact / 776 miss` (~10.6%). A single bounded-wait change raised exact acceptance about 7.9x, so watchdog/deadline timing is already a proven contributor.
+P4:
+`budget = periodMs * 1.65`, clamped to `12..28 ms`.
+
+P5:
+`budget = 45 ms`.
+
+The game-side source, exact-only submit path, stale drain, IPC/proxy publication, renderer eye code, temporal and shadow policy remained unchanged.
+
+Canonical outcomes:
+- P4: `92 exact / 776 miss` = `10.599%` exact acceptance;
+- P5: `269 exact / 53 miss` = `83.5404%` exact acceptance;
+- improvement: ~`7.88x`;
+- P5 `pair_wait_ms_max = 47`;
+- `354/354` completed/copies;
+- flashes/dropouts remained.
+
+This is strong causal evidence that the prior deadline/watchdog was expiring before many valid exact pairs became host-visible.
 
 ## PREFLIGHT — exactly 5 lines
-**MISSING FACT:** whether extending only the bounded exact-pair wait ceiling to 120 ms eliminates or materially reduces remaining exact misses and headset flashes/dropouts.
-**WHY NOT COLD:** code identity and rendezvous logic are already verified; only LIVE can tell whether the missing projection layers are caused by the watchdog expiring before the complete exact pair reaches the host.
-**PASS:** exact ratio approaches 100%, misses collapse, flashes/dropouts disappear or materially collapse, true L/R remains alive/fused, no new black eye or renderer regression.
-**FAIL:** misses remain material despite 120 ms, or exact identity is high while flashes remain, or the proven true-L/R primitive regresses.
-**BASELINE MUST HOLD:** `CUSTOM_DUAL_T1 v1.0.1` true private L/R architecture, one prepared render-list executed twice, exact retail hashes, no second RenderWorld/EF_StartEf, no HEAD/weapon/temporal/shadow policy changes.
+**MISSING FACT:** whether raising only the causal exact-pair watchdog ceiling from 45 ms to 120 ms, while preserving the P5 architecture, eliminates or materially reduces remaining exact timeouts/misses and headset flashes/dropouts.
+**WHY NOT COLD:** P4->P5 and P5->P6 exact-package deltas are now COLD-closed; only LIVE can measure the real 120 ms arrival/timeout distribution and whether visual flashes track those timeouts.
+**PASS:** exact wait timeouts approach zero, exact ratio approaches 100%, misses collapse, flashes/dropouts disappear or materially collapse, true L/R remains alive/fused, no new black eye or renderer regression.
+**FAIL:** timeouts/misses remain material despite 120 ms, or timeouts are near zero while flashes remain, or the proven true-L/R primitive regresses.
+**BASELINE MUST HOLD:** `CUSTOM_DUAL_T1 v1.0.1` inherited camera/dual-eye architecture, one prepared render-list executed twice, exact retail hashes, exact-only submit/stale drain/keyed transport, no second RenderWorld/EF_StartEf, no HEAD/weapon/NEAR/temporal/shadow game-side policy changes.
 
 ## Required telemetry
 Capture at minimum:
-- exact_pair_consumes
-- host_submits
+- `exact_pair_consumes`
+- `exact_wait_timeouts`
+- wait bins `<20`, `<30`, `<40`, `<60`, `>=60 ms`
+- `pair_wait_ms_last`
+- `pair_wait_ms_max`
+- `host_submits`
 - pair misses / zero-layer frames
-- pair wait distribution and max
 - completed pair count / copy count
 - contract/ticket identity mismatch counters
-- layerCount submission counts
+- layerCount submission counts where available.
 
 Visual report must include:
 - whether flashes/dropouts remain
@@ -61,16 +81,18 @@ Visual report must include:
 Counters alone are not PASS.
 
 ## Interpretation after P6
-### If exact ratio ~100% and flashes disappear
+### If timeouts approach zero and flashes disappear/materially collapse
 KEEP exact identity. **Do not increase timeout again.** Next experiment becomes pipeline lead:
 `targetDisplayTime = predictedDisplayTime + K*predictedDisplayPeriod`
 with minimal successful `K`, candidate batch `K=0,1,2,3`.
 
-### If exact ratio ~100% but flashes remain
-Identity is closed, timing freshness is not. Move to pipeline lead and/or coherent last-good complete stereo pair with its own original render pose/FOV. Never relabel old pixels with a new pose.
+### If timeouts approach zero but flashes remain
+STOP the watchdog path. Do not immediately increase/tune wait again. Inspect the existing presentation/publication/timeliness chain and `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` first.
 
-### If misses remain high
-Stay on PosePair rendezvous timing. Investigate only the existing chain:
+A coherent last-good complete stereo pair remains only a reserve policy and must retain its original render pose/FOV. Never relabel old pixels with a new pose.
+
+### If timeouts remain material
+Stay on PosePair rendezvous timing. Add passive timestamps before mutation along:
 `xrWaitFrame -> contract N -> RenderWorld -> RC queue -> RT L -> RT R -> complete pair -> Present -> publish_pair -> host -> xrEndFrame`.
 
 ## Forbidden in P6 run
