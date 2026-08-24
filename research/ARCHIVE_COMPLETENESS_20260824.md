@@ -15,21 +15,34 @@ Large proprietary/beta/PDB/capture corpora should normally remain outside ordina
 Current repository directory:
 `runtime/main/CUSTOM_DUAL_T1_v1.0.1/`
 
-At audit time it contains repository metadata/readme and package hashes, but the exact package source is recovered by:
+Exact package source is recovered by:
 `tools/extract_verified_custom_dual_t1_v1_0_1.py`
 
-The extractor declares the canonical external source carrier:
+The extractor declares the canonical source carrier:
 `CRYSIS2VR_CUSTOM_DUAL_RENDER_TEST_T1_v1.0.1_HOSTFIX.zip`
 
-It verifies 20 package-manifest entries before promotion.
+### Recovery completed 2026-08-25
+The exact HOSTFIX carrier was re-located in persistent Library and materialized.
+
+Verified identity:
+- bytes `83,442`
+- SHA256 `9271A002F8DE7875EDDD72AC2C2C307748A922883365F05FEFFC18FA05D2EECF`
+- ZIP CRC PASS
+- internal package manifest `20/20 PASS`
+
+The exact scientific RESULT carrier was also re-located and materialized:
+`CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
+- bytes `68,872,488`
+- SHA256 `986A1B8FBFB32908E1D11580D90005A72851FEDAE1EDDB3596144D341CD53367`
+
+These identities independently match the retained source/integrity history.
 
 ### Preservation status
-**EXTERNAL-CARRIER DEPENDENT.**
+**PHYSICAL SOURCE CARRIER RECOVERED + IDENTITY VERIFIED + PACKAGE MANIFEST 20/20 PASS + SCIENTIFIC RESULT CARRIER VERIFIED.**
 
-T1 is the proven main renderer parent, therefore loss of this carrier would be disproportionately expensive even though the scientific state/offsets are preserved.
+T1 is no longer an unresolved/lost external dependency. The immutable ZIP remains the byte-exact authority because the original package contains mixed EOL identities and normal Git checkout rules may normalize text files.
 
-### Action
-Locate the exact carrier in persistent storage, verify archive/package hashes, then promote the small exact source tree and build/recovery scripts into the repository where byte identity can be preserved safely. Keep the original carrier SHA/provenance even after source promotion.
+See `research/T1_CARRIER_RECOVERY_20260825.md`.
 
 ## 2. P6 v17.2.6 EXACT_BLOCK120
 Canonical package identity:
@@ -46,7 +59,7 @@ A persistent Library carrier was re-located during this audit with the same 85,8
 **PHYSICAL CARRIER AVAILABLE + IDENTITY VERIFIED; SOURCE NOT YET FULLY PROMOTED INTO THE FINALIST DIRECTORY.**
 
 ### Action
-Promote the exact small source/build/recovery text files into `runtime/finalists/v17.2.6_P6/` after preserving original file hashes and documenting any Git EOL normalization boundary. Do not mutate P6 behavior before first LIVE result.
+Promote exact small source/build/recovery files only if useful, preserving original per-file hashes and documenting Git EOL normalization. Do not mutate P6 behavior before first LIVE result.
 
 ## 3. v17.2.1 donor
 Current repository authority:
@@ -68,7 +81,7 @@ This is acceptable for donor use only if every future transplant can still be tr
 
 This remains the correct policy for:
 - huge PDBs;
-- leaked/beta/dev game builds;
+- beta/dev game builds;
 - RenderDoc captures;
 - TTD traces;
 - large raw Ghidra exports;
@@ -97,7 +110,7 @@ Persistent storage also contains broad Crysis/CryENGINE research packages such a
 Do not import these wholesale. Mine them SOURCE-FIRST and promote only:
 - original source URL/version/date;
 - exact symbol/function names;
-- useful source snippets as mappings, not bulk copied copyrighted code;
+- useful source mappings rather than bulk copied code;
 - architecture facts relevant to an active/future gate;
 - hashes of external carriers where preservation matters.
 
@@ -105,7 +118,7 @@ Do not import these wholesale. Mine them SOURCE-FIRST and promote only:
 See:
 `research/PUBLIC_LINEAGE_ENRICHMENT_20260824.md`
 
-High-value public lineage now preserved there includes:
+High-value public lineage preserved there includes:
 - CryENGINE CCamera coordinate/Matrix34 semantics;
 - native dual-render asymmetric stereo model;
 - rendering-camera/culling ownership;
@@ -117,13 +130,13 @@ High-value public lineage now preserved there includes:
 These are candidate/lineage evidence. Retail causal proof still outranks them.
 
 ## 7. Highest-value next archival/research work
-Priority order:
-1. locate and verify the exact T1 HOSTFIX source carrier;
-2. promote exact P6 small source/build/recovery files without changing P6 behavior;
-3. mine Crytek SIGGRAPH/GDC/GPU Pro stereo material for precise weapon-depth, HUD, temporal and shadow policies;
-4. mine closest public GameSDK source lineage for `CItem::UpdateFPPosition`, `CItem::UpdateFPCharacter`, `CWeapon::SetFiringLocator`, `GetProbableHit`, `GetFiringPos`, `GetFiringDir`;
-5. cross-index the existing public CryENGINE donor/doc ZIPs instead of redownloading similar corpora;
-6. complete an external-carrier manifest for high-value beta/PDB/capture artifacts.
+Priority order after T1 recovery:
+1. close exact beta/PDB root identities with `tools/C2VR_EXTERNAL_CORPUS_IDENTITY.ps1` and `research/BETA_PDB_IDENTITY_CONFLICT_20260825.md`;
+2. preserve/optionally promote P6 exact source/build/recovery files without changing P6 behavior;
+3. recover exact ModSDK x64 module identities for future C2-specific weapon mapping;
+4. targeted re-harvest of already-owned Crysis2Coop for GameDLL/weapon seams, no redownload;
+5. mine Crytek SIGGRAPH/GDC/GPU Pro stereo material for precise weapon-depth, HUD, temporal and shadow policies;
+6. continue compact identity indexing for scientifically important RDC/TTD/RESULT carriers rather than importing raw bulk evidence.
 
 ## Gate discipline
 None of this changes the active runtime gate.
