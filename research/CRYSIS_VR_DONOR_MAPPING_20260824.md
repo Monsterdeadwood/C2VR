@@ -166,22 +166,28 @@ Future G4 instrumentation should distinguish:
 
 This is a useful classification framework for temporal corruption hunting.
 
-## 9. Public Crysis 2 Co-op source package is a higher-lineage acquisition target
-A separate public source release exists:
-`Crysis 2 Co-op - Source Files`
+## 9. Crysis2Coop corpus status — already possessed, not a new acquisition target
+The project had already acquired and processed the public `Crysis 2 Co-op` / Crysis 2 ModSDK-lineage material before this harvest. Therefore **do not redownload or treat it as a newly discovered dependency**.
 
-Published by the mod authors on ModDB, Apr 18 2012:
+Public package identity remains useful provenance:
+- `Crysis 2 Co-op - Source Files`
 - filename `Crysis2Coop.rar`
+- published Apr 18 2012
 - size `11,133,614` bytes
 - MD5 `dc640394f1534084baf4ac7c7e04c34c`
-- description says it includes all source files used to create their project.
 
-Persistent project storage already contains the source URL and expected MD5 in `04_CRYSIS2_PUBLIC_MOD_MATERIAL.zip`.
+The correct next action is a **targeted re-harvest of the already-held corpus**, not acquisition:
+- `CPlayer::PostUpdateView`
+- `CItem::UpdateFPPosition`
+- `CItem::UpdateFPCharacter`
+- `CWeapon::SetFiringLocator`
+- fire-mode `GetProbableHit`
+- `GetFiringPos`
+- `GetFiringDir`
+- first-person weapon helpers / muzzle helpers / skeleton update order
+- stereo/near-geometry CVars and any Crysis 2-specific handling
 
-### C2VR impact
-This should be treated as a high-priority **Crysis 2 ModSDK-lineage source corpus**, potentially closer to retail Crysis 2 than the Crysis 1 VR donor.
-
-Do not assume it contains proprietary retail engine source. Inspect first and classify every file as GameDLL/mod source, scripts/flowgraphs, SDK headers or generated artifacts.
+Classify every useful hit by exact file/version/provenance and then triangulate against local beta/PDB and retail. Do not repeat the earlier broad corpus pass unless a specific missing fact requires it.
 
 ## 10. Gate consequences
 No runtime gate change.
