@@ -255,3 +255,15 @@ This sync imported the branch-specific historical packet-atomicity, last-good pa
 - `docs/NEXT.md`
 
 No new LIVE was performed during this sync.
+
+## COLD / DONOR ENRICHMENT IMPORTED 2026-08-24
+The following research is now part of the canonical GitHub state and may be used by future branches as candidate-generating evidence without repeating broad discovery:
+- `research/PUBLIC_LINEAGE_ENRICHMENT_20260824.md` — official CryENGINE camera/stereo/culling/weapon/VR lineage and future G2/G3/G4 implications.
+- `research/ARCHIVE_COMPLETENESS_20260824.md` — exact distinction between Git-preserved source, package identity, and external physical carriers; T1 carrier remains an archival gap, P6 carrier is available and identity-verified.
+- `research/CRYSIS_VR_DONOR_MAPPING_20260824.md` — Crysis VR source topology for `PostUpdateView -> UpdateFPPosition -> UpdateFPCharacter`, rigid controller/weapon bind, firing-locator chain, and first-eye shadow reuse precedent.
+- `research/BETA_5620_PUBLIC_CROSSCHECK_20260824.md` — independent public Crysis 2 build-5620 runtime-map anchors for beta/PDB cross-check only.
+- `research/CRYSIS2_MODSDK64_DONOR_20260824.md` — Crysis 2 ModSDK x64 runtime/launcher as a closer cross-architecture donor for later function fingerprinting.
+
+Important correction: `Crysis2Coop` is **already-held / already-processed project corpus**, not a new acquisition target. Do not redownload it. When G3 opens, perform only a targeted re-harvest of the existing Crysis2Coop/GameDLL corpus for the exact weapon and firing functions above.
+
+These imports do not promote donor facts to retail `PROVEN` and do not change the current runtime gate. No new LIVE was performed for this COLD enrichment.
