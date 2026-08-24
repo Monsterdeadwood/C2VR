@@ -109,8 +109,54 @@ Classification:
 Current project impact:
 Do not spend a new LIVE or broad replay cycle closing this historical writer question while P6 is the active gate. Current retail camera ownership/renderer architecture is already substantially stronger than this old branch.
 
+## 6. Authoritative SetupCamera SetCamera arg writer - PROVEN
+Returned artifact:
+`C2VR_BREAKTHROUGH_TTD_SETCAMERA_ARG_WRITER_RESULT_20260823_070742.zip`
+
+This follow-up correctly adapted after the first local-copy destination was shown not to be the authoritative SetCamera arg. It targeted the actual `Renderer::SetCamera +0x00148340` call returning to `Crysis2.exe+0x0057AC76`.
+
+In the exact trace:
+- authoritative SetCamera arg = trace-local `0x0019E334`;
+- reverse watch target = arg `+0x04`;
+- last writer EIP = `0x0056C993`, reusable RVA `Crysis2.exe+0x0016C993`;
+- writer `EBP = 0x049C5AD8` = verified source CCamera;
+- writer `EBX = 0x0019E334` = authoritative SetCamera arg;
+- `ESI = source+0x08`;
+- `EDI = authoritative arg+0x08`.
+
+The returned result explicitly says:
+`VERDICT: PROVEN`.
+
+Exact writer instruction:
+
+```asm
++0x0016C983  push ebp
++0x0016C984  mov  ebp,[esp+0x0C]
++0x0016C988  push esi
++0x0016C989  push edi
++0x0016C98A  mov  ecx,0x0C
++0x0016C98F  mov  esi,ebp
++0x0016C991  mov  edi,ebx
++0x0016C993  rep movsd
+```
+
+This copies 12 dwords / `0x30` bytes from source CCamera to destination, i.e. the leading Matrix34 area. Subsequent instructions copy additional camera fields individually, beginning with source/destination `+0x30`, `+0x34`, `+0x38`, `+0x3C`, etc.
+
+Classification:
+**EXACT-RETAIL SOURCE CCAMERA -> AUTHORITATIVE SETCAMERA LOCAL CCAMERA COPY/WRITER LINEAGE PROVEN.**
+
+This resolves the apparent contradiction with section 3: the earlier trace stopped at one local copy destination `0x0019E094`, which was not the authoritative SetCamera arg. The same copy routine later creates/writes another local CCamera at `0x0019E334`, and that second local camera is the arg to the primary SetCamera return `+0x0057AC76`.
+
+Reusable chain:
+
+`verified RenderInternal source CCamera -> Crysis2.exe+0x0016C993 camera copy -> local authoritative CCamera -> Renderer::SetCamera +0x00148340 -> return +0x0057AC76`
+
+Trace-local addresses must not be hardcoded.
+
 ## Current relevance
 For future HEAD work after PosePair closes:
-- `+0x0016C993` is a valid exact-retail CPU consumption landmark for the verified CCamera Matrix34 orientation;
-- do not assume its local destination is passed directly to Renderer::SetCamera;
-- prefer current upstream T1/SetupCamera/RenderWorld architecture and use this recovered reader only as an independent provenance cross-check.
+- `+0x0016C993` is a valid exact-retail CPU camera-copy landmark;
+- it copies the verified source CCamera Matrix34 into local camera instances;
+- one such local instance is proven to become the authoritative `Renderer::SetCamera` argument for the SetupCamera return `+0x0057AC76`;
+- do not assume every local copy produced by the same routine is that authoritative arg;
+- prefer current upstream T1/SetupCamera/RenderWorld architecture and use this recovered chain as an independent provenance proof.
