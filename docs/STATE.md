@@ -2,18 +2,19 @@
 
 ## CURRENT GATE — 2026-08-25
 
-`220427 V6.0.1 LIVE -> BIND USER HEADSET VERDICT -> VISUAL BASELINE DECISION`
+`220427 PARTIAL VISUAL BASELINE -> SCALE / SOURCE-PROJECTION CONTRACT`
 
-The exact historical Z-reprojection v6.0.1 PRIVATE_RTV recovery is no longer merely PREPARED/UNRUN. It has now executed in the target environment.
+Fresh direct user verdict is now bound. 220427 is not a HARD RED: scale is wrong/problematic, but the rest is broadly normal/promising enough to continue from this control.
 
 Read first:
 1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
-2. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
-3. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-4. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-5. `docs/FALSIFIED.md`
-6. `docs/NEXT.md`
-7. `experiments/NEXT_EXPERIMENT.md`
+2. `docs/MONO_QUALITY_ANCHOR_20260818.md`
+3. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
+4. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+5. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+6. `docs/FALSIFIED.md`
+7. `docs/NEXT.md`
+8. `experiments/NEXT_EXPERIMENT.md`
 
 Evidence law:
 `USER_HEADSET_VERDICT > captures > raw LIVE logs/status > counters > generated analyzer summary > static validation > package intent`.
@@ -41,58 +42,95 @@ raw RESTORE_OK                  = True
 native eye records L/R          = 0/0
 ```
 
-Historical v6.0.0 blocker `XR_RTV_CREATE_FAIL eye=0 image=0 hr=0x80070057` is mechanically closed by private typed eye staging + CopyResource to XR swapchains.
+The historical v6.0.0 `XR_RTV_CREATE_FAIL` blocker is mechanically closed.
 
-## ARCHITECTURE CLASSIFICATION
+## DIRECT USER VISUAL VERDICT
 
-Actual headset source in 220427:
+```text
+USER_HEADSET_VERDICT       = PARTIAL_ACCEPT / PROMISING
+WORLD_SCALE                = FAIL
+WHOLE_BUILD_VISUAL_RED     = NO
+FULL_USER_VISUAL_GREEN     = NO
+```
+
+User report: scale is problematic, otherwise this branch is broadly normal and worth finishing.
+
+Do not infer unspoken PASS/FAIL for fusion, shadows/light or RIGHT-eye quality from this verdict alone.
+
+## CURRENT ARCHITECTURE
+
+220427 headset source:
 
 `ONE CENTER RGB + inverse depth -> x64 depth reprojection -> synthetic LEFT/RIGHT -> private eye RTs -> XR swapchains`.
 
 Therefore:
 
 ```text
-LIVE_STATUS                         = LIVE
 PRIVATE_RTV_XR_BRIDGE               = MECHANICAL_GREEN
 MONO_DEPTH_SYNTHETIC_LR_OUTPUT      = MECHANICAL_GREEN
 TRUE_PRIVATE_LR_SCENE_RENDER        = NO
-USER_HEADSET_VERDICT                = UNBOUND
-FULL_USER_VISUAL_GREEN              = NO
 ```
 
-Mono RGB+depth/Z reprojection remains forbidden as the assumed final renderer. It may be retained as a narrow transport/control component.
+Mono RGB+depth/Z reprojection remains a current working/control path, not the assumed final renderer.
+
+## RECOVERED MONO QUALITY PROPERTY
+
+Historical `CRYSIS2VR_FULL_POSE_WORLD_NEAR_RESULT_20260818_030228.zip` retained:
+
+```text
+r_MotionBlur=0
+r_PostMSAA=0
+```
+
+and its contemporary council record explicitly ties those settings to the cleaner image reported by the user.
+
+Classification:
+`COMPONENT_VISUAL_GREEN: CLEAN_MONO_IMAGE_QUALITY_SETTINGS`.
+
+Fresh 220427 RESULT does not prove whether those settings were active:
+`220427 CLEAN_MONO_QUALITY_PAIR = UNKNOWN`.
+
+Separate stock-native-SBS bisection showed MotionBlur OFF alone and SSAO OFF alone did not cure stock RIGHT-eye softness. Keep that distinction.
+
+## SCALE / RESOLUTION EVIDENCE
+
+Fresh 220427:
+
+```text
+source_eye / game_texture = 1600x1200
+union_fov_deg             = 114.086
+union_ratio               = 0.963753
+```
+
+Historical 030228 already exposed:
+
+```text
+calculated source target ~= 2032x1968
+actual producer          = 1400x1050
+WORLD union projection   = 110.747 deg / 1.02737
+FOB_NEAREST              = 55 deg / 1.33333
+```
+
+So scale is now treated first as a projection/source-resolution/reprojection-rectangle contract problem.
+
+Do not jump to arbitrary worldScale/IPD/convergence tuning.
 
 ## ANALYZER CORRECTION
 
-Fresh generated `Z_REPROJECTION_VERDICT.txt` incorrectly reports:
-- `OpenXRTransport=FAIL` despite 4691 submits and `ever_submitted=1`;
-- `eyeStageCopies=0` despite raw `eye_stage_copies=9382`;
-- `Restore=FAIL` despite raw `RESTORE_OK=True`.
+Fresh generated `Z_REPROJECTION_VERDICT.txt` incorrectly reports transport/copy/restore failure despite raw successful runtime evidence.
 
 Classification:
 `ANALYZER_FALSE_NEGATIVE / SUMMARY_PARSER_BUG`.
 
-Do not downgrade the executed runtime to PIPELINE_INCOMPLETE based on those contradicted summary fields.
-
 ## CURRENT NEXT
 
-No new build yet.
+Preserve the exact 220427 bridge and broadly acceptable behavior.
 
-First bind the user's direct headset verdict for 220427:
-- world/head stability;
-- binocular/fusion quality;
-- shadows/light;
-- RIGHT-eye quality;
-- scale/geometry;
-- general usability.
-
-Then:
-
-### If ACCEPT
-Freeze 220427 as a component visual/control baseline, preserve its XR bridge, and isolate the next question to true-L/R/source geometry.
-
-### If RED
-Hard-stop v6.0.1 as a whole visual parent, salvage only the PRIVATE_RTV_XR_BRIDGE, and continue recovery of the exact historical user-accepted single-window profile.
+The next work is surgical:
+1. recover/verify whether `r_MotionBlur=0` + `r_PostMSAA=0` are active in the exact 220427 lineage;
+2. map actual producer dimensions to center render projection, packed depth projection, XR eye FOV, reprojection sampling rectangle and submitted swapchain rectangle;
+3. change one scale/quality variable category per child;
+4. require direct headset verdict after each LIVE.
 
 ## EXISTING HARD REDS REMAIN HARD RED
 
@@ -106,21 +144,22 @@ No direct visual descendants from:
 
 ## PRESERVED COMPONENT AUTHORITIES
 
-- `CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip` = `COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`, fusion still failed.
+- `CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip` = world stability/no flicker donor, fusion failed.
 - `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` = camera ownership reference.
-- `CUSTOM_DUAL_T1 v1.0.1 / 212003` = `MECHANICAL_GREEN: TRUE_PRIVATE_LR_RENDERER`, not a whole visual parent.
-- controller-directed firing evidence remains a weapon-direction donor only.
-- historical one-window / good-scale / stable-head / headset-visible behavior profile remains valuable, exact package identity still OPEN.
+- `CUSTOM_DUAL_T1 v1.0.1 / 212003` = true-private-L/R mechanical donor only.
+- `030228` clean mono settings = `r_MotionBlur=0 + r_PostMSAA=0` quality donor.
+- controller-directed firing evidence = weapon-direction donor only.
+- historical one-window/good-scale/stable-head behavior profile remains useful, exact package identity still OPEN.
 
 ## PARKED
 
-Until 220427 receives a direct headset verdict:
+Until scale/quality control is closed:
+- true-L/R architecture merge;
 - PosePair/K;
 - final HEAD rewrite;
 - weapon/NEAR merge;
 - temporal/shadow mutation;
-- later Z v6.1+ descendants;
-- arbitrary IPD/FOV/convergence tuning;
+- later Z descendants;
 - release optimization.
 
 ## RETAIL IDENTITY
