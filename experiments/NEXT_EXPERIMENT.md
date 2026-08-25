@@ -1,117 +1,81 @@
 # Crysis 2 VR — NEXT EXPERIMENT
 
 ## Decision
-**ADAPT at the first missing edge. Run the minimal P6 latch-wait child.**
+**STOP direct descendants of the two current USER VISUAL HARD-RED builds. Recover a near-normal historical visual baseline before another mutation.**
 
-Do not run pipeline-lead K, HEAD, weapon/NEAR, temporal or shadow experiments until this recovery edge is green.
-
-Detailed evidence:
-`research/P6_STARTUP_LATCH_RACE_20260825.md`
-
-Corrected state:
-`docs/STATE_OVERRIDE_20260825_P6_RED.md`
+Authoritative history and rules:
+- `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+- `docs/LATEST_OVERRIDE_20260825_T1_K0_HARD_RED.md`
+- `docs/FALSIFIED.md`
 
 ## CURRENT GATE
-`MASTER 2 regression recovery / contract-latch rendezvous`
+`VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
 
-## FIRST MISSING EDGE
-The executed P6 run reaches private eye target readiness before the first valid local RenderWorld camera/contract snapshot after OpenXR session re-entry. The inherited `dRC` path turns that transient condition into global `T1_Fault("NO_LATCHED_RENDER_CONTRACT")`, and `T1_HostRunning()` then remains false because `faulted=1`.
+## SUPERSEDED EXPERIMENTS
+The old contract-latch experiment is no longer current. Runtime evidence later closed the latch/pair-production edge, but subsequent user headset verdicts remained catastrophic.
 
-Raw P6 ordering:
-- game `ENGINE_EYES_READY` `01:25:48.700`
-- game `FAULT NO_LATCHED_RENDER_CONTRACT` `01:25:48.700`
-- host `XR_STATE 4/5` `01:25:48.858`
-- result: zero queued pairs, zero LEFT/RIGHT, zero completes, zero exact consumes/submits
+Do NOT run or derive the next visual child from:
+- `C2VR_RC33_V1721_RESULT_20260825_063149.zip` lineage;
+- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`.
 
-## WORKING ANCESTOR
-Exact physical package recovered:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.5_EXACT_WAIT45_P5_ONECLICK.zip`
-SHA256 `D0C7B94A0DB56DCB7974FC20EC9D1017DA790ADFF80B64B177275F5B1BDC9737`
+The latter has SHA256:
+`7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`.
 
-Exact raw RESULT recovered:
-`C2VR_RC33_V1721_RESULT_20260823_170445.zip`
-SHA256 `7B1CF8E0CBBF87930CE8FE8D810341527804C3AEC8C9C90999251F3186724DD2`
+User classification:
+`USER_VISUAL_HARD_RED`.
 
-Known-good P5:
-- `354/354` completed/copies
-- `269` exact consumes
-- `269` host submits
-- exact hit ratio `0.835404`
-- `53` misses
-- `31` stale drains
-- wait last/max `31/47 ms`
+## MISSING FACT
+Which exact historical Crysis package/runner corresponds to the nearest state where the user observed a real head-driven in-game camera/world and described the remaining problem as primarily flicker/two-screen stereo rather than catastrophic camera/world failure?
 
-`SCRIPT_LINEAGE_GAP = CLOSED`.
+Primary recovery target:
+`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` and its exact parent package/runner.
 
-## P6 INTERMEDIATE
-Executed P6 package:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
-SHA256 `8385F6AAAD668E40058EB368E4593F53A3489CE7C24EF19521C4C8DEB0ECA89E`
-
-P5 -> P6:
-- all game/in-process runtime source byte-identical;
-- only first-party runtime source change is x64 host 45 -> 120 ms exact watchdog plus passive wait telemetry;
-- exact-only submit/stale-drain architecture unchanged.
-
-## NEXT CHILD
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.7_P6_LATCH_WAIT_ONECLICK.zip`
-
-BASE_PACKAGE = P5 exact working package above
-BASE_SCRIPT = `RUN_C2VR_V17_TRUE_LR.cmd -> tools\Run-V17.ps1`
-KNOWN_GOOD_RESULT = P5 RESULT above
-WHAT_IS_REUSED = P5 launcher/build/restore/logging/packaging plus already-executed P6 host 120 ms/watch telemetry
-ONLY DELTA = relative to P6, `src/t1_dual_render.cpp` only
-UNCHANGED LAUNCH PATH = byte-identical
-UNCHANGED BUILD PATH = byte-identical
-UNCHANGED RESTORE PATH = byte-identical
-EXPECTED NEW RESULT = optional early WAIT marker, no global latch fault, then center latch -> queue -> LEFT -> RIGHT -> completion -> host exact consume/submit
-
-Exact launcher/recovery hashes remain:
-- RUN cmd `9CF526A7F08B19A2974B4FA454C23966768D7CC4C782CE46EF14ECA86353DCD4`
-- Run-V17.ps1 `AD6B3D7614700E2117F550AEB626D8432C88F9513924FEBA4524FA623237F6F5`
-- RECOVER cmd `53EF1565B315AB737176112E76DE31A329C9645184BB2B3C406D3C372D87B659`
-- Recover-V17.ps1 `CD020C2D50ACCE0818D487373E009DEF0477F23F53966D543596A500D5DF6C5F`
-
-## ONLY RUNTIME MUTATION
-Old P6:
-```cpp
-if(!T1_GetCenterCamera(center,sizeof(center),&cc)||!T1_GetSnapshotContract(&fc)){
-    T1_Fault("NO_LATCHED_RENDER_CONTRACT");
-    return;
-}
-```
-
-P7:
-```cpp
-if(!T1_GetCenterCamera(center,sizeof(center),&cc)||!T1_GetSnapshotContract(&fc)){
-    if(InterlockedCompareExchange(&g_latchWaitLogged,1,0)==0)
-        T1_Log("WAIT_LATCHED_RENDER_CONTRACT fail_closed=1 fault=0");
-    return;
-}
-```
-
-No eye pair is rendered/submitted on the missing-latch call. No stale pair is relabelled. No mono fallback is introduced. The next valid RenderWorld can publish the snapshot normally.
-
-## COLD VALIDATION
-- static `130/130 PASS`
-- independent `98/98 PASS`
-- IPC ABI `T1FrameContract=196`, `T1Shared=1084`
-- P6 120ms host policy unchanged
-- exact-only/stale-drain unchanged
-- HEAD/weapon/temporal/shadow unchanged
+Secondary ownership reference:
+`CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
+SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
 
 ## PREFLIGHT — exactly 5 lines
-**MISSING FACT:** does removing only the premature global latch fault allow P6 to recover pair production after OpenXR session re-entry?
-**WHY NOT K:** P6 produced zero queued pairs and zero submits; cadence K is downstream of this first missing edge.
-**PASS:** no global latch fault, then center inject/restore >0, queued pairs >0, LEFT/RIGHT >0, completed pairs >0, exact consumes/submits >0.
-**FAIL:** no latch/pair after host session+views are valid, or renderer/transport regression; package first missing edge and STOP.
-**BASELINE MUST HOLD:** exact P5/P6 launcher/build/restore/IPC/RC33/OpenXR architecture, 120 ms watchdog and all downstream policies remain unchanged.
+**MISSING FACT:** can the exact historical near-normal camera checkpoint and its real executed runner be recovered and reproduced without importing later renderer policies?
+**WHY NOT K/HEAD:** both recent descendants are USER VISUAL HARD RED; timing or additional camera integration cannot be interpreted on a broken visual parent.
+**PASS:** exact historical package+runner recovered, unchanged reproduction launches/restores correctly, and the user confirms the old near-normal camera/world behavior is actually restored.
+**FAIL:** exact lineage cannot be bound, or unchanged reproduction is also catastrophic; record the precise failure and move to the next older user-positive checkpoint without inventing a new architecture.
+**BASELINE MUST HOLD:** x86 game+x64 OpenXR host infrastructure, exact retail hashes, known-good launcher/build/restore lineage, no simultaneous camera+stereo+temporal+shadow+weapon mutation.
 
-## RUN
-Use the inherited one-click only:
-`RUN_C2VR_V17_TRUE_LR.cmd`
+## REQUIRED RECOVERY EVIDENCE
+Before any new runtime mutation record:
+- exact package filename;
+- package SHA256;
+- exact runner filename/hash;
+- exact result filename/hash if available;
+- which files differ from its known ancestor;
+- user historical visual verdict bound to that run;
+- whether the checkpoint is whole-build accepted or component/reference only.
 
-Return the generated `C2VR_RC33_V1721_RESULT_*.zip`. The inherited filename prefix remains intentional lineage and is not build identity; `BUILD_COMMANDS.log` and `BUILD_IDENTITY.txt` determine the actual child.
+## FIRST REPRO LIVE
+The first LIVE after recovery must be the recovered baseline **unchanged**.
 
-## AFTER PASS
-If pair production/submission is restored, inspect the same run's unchanged P6 120 ms timing telemetry. Then return to MASTER 3 transport cadence with fixed watchdog and serial K testing. HEAD remains blocked until exact hit ratio, visual stability, L/R non-duplicate proof, hashes and restore satisfy MASTER 3 acceptance.
+Headset acceptance asks only:
+- stationary world;
+- slow yaw;
+- fast yaw/reversal;
+- camera fall/jump/shear;
+- lighting/shadow stability;
+- severe two-screen/monitor-panel behavior;
+- blur/extreme lateral separation.
+
+Do not test weapon polish or tune cadence simultaneously.
+
+## AFTER REPRO
+- If the historical near-normal behavior is reproduced: freeze that package/runner/result and make one causal child.
+- If it is not reproduced: classify that exact reproduction honestly and step backward to the next user-positive checkpoint.
+- Any catastrophic user visual verdict immediately marks that exact package HARD RED and forbids it as a direct parent.
+
+## FORBIDDEN UNTIL BASELINE RECOVERY
+- K=1/K=2 pipeline lead descendants;
+- new HEAD composition;
+- weapon/NEAR integration;
+- temporal-history policy changes;
+- second-eye shadow policy changes;
+- broad camera/stereo archaeology;
+- new BAT/PS1 scaffold when an exact historical runner exists;
+- counter-only PASS.
