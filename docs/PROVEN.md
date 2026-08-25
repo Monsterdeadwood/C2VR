@@ -1,9 +1,31 @@
 # Crysis 2 VR — PROVEN
 
-## True two-eye retail renderer
-Main parent: `CUSTOM_DUAL_T1 v1.0.1`.
+## EVIDENCE LANGUAGE
 
-Canonical RESULT: `CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
+This file records proven facts, not whole-build visual acceptance unless explicitly stated.
+
+Use:
+- `MECHANICAL_GREEN` — mechanism proven;
+- `COMPONENT_VISUAL_GREEN` — one user-visible property accepted;
+- `FULL_USER_VISUAL_GREEN` — complete visual parent accepted;
+- `VISUAL_RED` — user rejected headset result;
+- `LIVE_VISUAL_UNBOUND` — runtime executed but direct visual verdict is not bound;
+- `NOT_LIVE` — target runtime experiment did not execute.
+
+A PASS with missing prerequisites is `VACUOUS_PASS_INVALID`.
+
+See `docs/HISTORICAL_AUDIT_PASS2_20260825.md`.
+
+---
+
+# TRUE TWO-EYE RETAIL RENDERER PRIMITIVE
+
+Main technical source authority:
+`CUSTOM_DUAL_T1 v1.0.1`.
+
+Canonical RESULT:
+`CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
+
 - bytes `68,872,488`
 - SHA256 `986A1B8FBFB32908E1D11580D90005A72851FEDAe1EDDB3596144D341CD53367`
 - center HMD inject/restore `2296/2296`
@@ -15,10 +37,17 @@ Canonical RESULT: `CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
 - FramePairContract desync `0/0`
 - PosePairContract acceptance failed
 
-**True private L/R execution is PROVEN. Do not rebuild stereo.**
+Classification:
+`MECHANICAL_GREEN: TRUE_PRIVATE_LR_RENDERER`.
+
+**True private L/R retail execution is proven. Do not rebuild stereo from scratch.**
+
+This is not automatic visual-parent authority after later user HARD RED descendants.
 
 ## Exact parent source authority
+
 `CRYSIS2VR_CUSTOM_DUAL_RENDER_TEST_T1_v1.0.1_HOSTFIX.zip`
+
 - bytes `83,442`
 - SHA256 `9271A002F8DE7875EDDD72AC2C2C307748A922883365F05FEFFC18FA05D2EECF`
 - manifest `20/20 PASS`
@@ -38,73 +67,187 @@ Repository authority:
 - `runtime/main/CUSTOM_DUAL_T1_v1.0.1/`
 - `tools/extract_verified_custom_dual_t1_v1_0_1.py`
 
-## PosePair timing causality
+---
+
+# EXACT PHYSICAL WORLD-STABILITY CHECKPOINT
+
+Recovered physical package:
+`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+
+- bytes `164221`
+- SHA256 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`
+
+Exact runner lineage:
+
+`20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`.
+
+Historical user-visible result:
+- flicker gone;
+- shadows/textures/objects stable;
+- eyes still did not fuse.
+
+Classification:
+`COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`
+`BINOCULAR_FUSION = FAIL`.
+
+This is the strongest exact physical reproduction anchor currently recovered for world stability.
+
+---
+
+# CAMERA OWNERSHIP REFERENCE
+
+`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
+
+Historical user observation:
+- head left/right drove the real in-game camera/world;
+- the remaining dominant failure was flicker/two-screen behavior;
+- state was described as close.
+
+Classification:
+`COMPONENT_VISUAL_GREEN: CAMERA_OWNERSHIP_REFERENCE`.
+
+Related single-source topology reference:
+`CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
+SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
+
+Known topology:
+HMD applied once at `Crysis2.exe+0x0057AC76`; downstream SetCamera calls pass through.
+
+Do not inherit the surrounding native/NVIDIA final stereo.
+
+---
+
+# POSEPAIR / DEADLINE TIMING CAUSALITY
+
 P4 exact-stale-drain baseline:
 - `92` exact consumes
 - `776` misses
 - `386` stale drains
 - exact ratio about `10.6%`
 
-`v17.2.5 WAIT45`:
+P5 `v17.2.5 WAIT45`:
 - `269 exact_pair_consumes`
 - `269 host_submits`
 - `53 misses`
 - exact ratio `83.5404%`
 - `31` stale drains
-- `pair_wait_ms_last = 31`
-- `pair_wait_ms_max = 47`
+- `pair_wait_ms_last=31`
+- `pair_wait_ms_max=47`
 - completed/copies `354/354`
-- visual flashes/dropouts remained
+- visible flashes/dropouts remained
 
-Changing only the bounded wait materially increased exact-pair acceptance (~7.9x). Therefore deadline/watchdog timing is a PROVEN contributor to projection-layer misses. This does **not** yet prove timely prediction or final visual stability.
+Changing the bounded wait from the earlier P4 policy to the P5 WAIT45 policy materially increased exact-pair acceptance. Therefore deadline/watchdog timing is a **proven contributor** to projection-layer misses in that lineage.
 
-`v17.2.6 EXACT_BLOCK120 P6` is statically verified but **not LIVE-proven**:
-- only runtime policy delta vs P5: watchdog ceiling `45 ms -> 120 ms`
-- game-side camera/FOV/weapon/shadow/temporal/RC33 unchanged
-- static `130/130 PASS`
-- independent `98/98 PASS`
-- package SHA256 `8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`
+This does not prove final visual stability or make cadence the current gate.
 
-## Frame/presentation facts
-- raw DXGI Present count is not a logical game-frame count
-- `xrEndFrame` frame count is not the same as visible projection-layer submission count; `layerCount=0` may occur while XR remains active
-- game-side completed pair is not visible cross-process until the Present publication/copy gate
-- a fresh game render is not fundamentally required for every XR submit; a later last-good fallback is valid only if the complete L/R pixels retain the exact pose/FOV that rendered them
-- old pixels relabelled with a newer pose are forbidden
+## Corrected P6 LIVE status
 
-## Canonical render transaction
-- one prepared render-list executes twice
-- `RC_RenderScene` packages camera/thread state with the render-list snapshot
-- render-item storage survives first eye; logical reset occurs at next top-level `EF_StartEf`
-- `RT_RenderScene` contains shadows, HDR/deferred, ordered lists, temporal state and postprocess, not only draws
-- RT transaction: `RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`
+P6:
+`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
 
-Canonical per-eye sequence:
+SHA256:
+`8385F6AAAD668E40058EB368E4593F53A3489CE7C24EF19521C4C8DEB0ECA89E`.
+
+P6 is **not merely static**. It was executed.
+
+Raw result:
+`C2VR_RC33_V1721_RESULT_20260825_012454.zip`.
+
+Observed:
+- host published contracts through about `1533`;
+- exact hits `0`;
+- misses about `1409`;
+- consumes/submits `0`;
+- game `renderworld_calls≈900`;
+- `scene_packets≈899`;
+- pairs queued/completed/L/R `0`;
+- fault `NO_LATCHED_RENDER_CONTRACT`;
+- 120 ms wait policy was present;
+- restore/hash checks passed.
+
+Classification:
+`LIVE_RUNTIME_RED_BEFORE_PAIR_PRODUCTION`.
+
+Therefore:
+- P6 does not prove a better cadence policy;
+- increasing watchdog from 45 ms to 120 ms did not preserve the working P5 runtime path;
+- P6 is not a canonical visual parent.
+
+A later noncanonical latch-grace experiment proved pair production could be restored, but that run was then USER VISUAL HARD RED. It does not authorize returning to cadence K as current work.
+
+---
+
+# FRAME / PRESENTATION FACTS
+
+- raw DXGI Present count is not logical game-frame count;
+- `xrEndFrame` count is not equivalent to visible projection-layer submission count; `layerCount=0` may occur while XR remains active;
+- game-side completed pair is not cross-process visible until publication/copy gate;
+- a fresh game render is not fundamentally required for every XR submit, but cached pixels must retain the exact pose/FOV/metadata that rendered them;
+- old pixels relabelled with a newer pose are forbidden;
+- one fresh eye plus one stale eye is invalid;
+- `RESULT ZIP` existence is not proof that the runtime experiment executed;
+- analyzer PASS with absent prerequisites is invalid.
+
+---
+
+# HISTORICAL PACKET ATOMICITY AND CONTINUITY
+
+Historical v6.0.0/v6.0.1 material proved a concrete publication race and cadence failure mode:
+- releasing producer key `1` before publishing `eye_pair_packet_id` could pair frame N pixels with frame N-1 pose/FOV;
+- fix: publish metadata while both producer mutexes are still owned, then MemoryBarrier, then release key `1`;
+- host reads metadata only after acquiring both key `1` mutexes;
+- Quest `xrWaitFrame` arriving before next Crysis Present plus zero projection layers created periodic blank XR frames;
+- v6.0.1 cached/reused the last complete frame to remove that flicker.
+
+Project law:
+**complete L/R pixels and their render pose/FOV/contract metadata are one atomic publication unit.**
+
+This does not authorize stale relabel.
+
+Historical v11 cadence telemetry (`CRYSIS2VR_CADENCE_FASTPATH_RESULT_20260818_133603.zip`) measured real reuse, but its own arbiter said `STRUCTURAL_ARBITER=REJECT_DO_NOT_CALL_FIXED` and `VISUAL_ARBITER=UNRESOLVED_UNTIL_USER_HEADSET_TEST`.
+
+Therefore v11 cadence is component evidence, not visual GREEN.
+
+---
+
+# CANONICAL RENDER TRANSACTION
+
+Proven mechanical facts:
+- one prepared render-list may execute twice;
+- `RC_RenderScene` packages camera/thread state with the render-list snapshot;
+- render-item storage survives first eye; logical reset occurs at next top-level `EF_StartEf`;
+- `RT_RenderScene` contains shadows, HDR/deferred, ordered lists, temporal state and postprocess, not only draws;
+- RT transaction: `RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`.
+
+Canonical per-eye mechanical sequence:
 `SetCamera(EYE) -> fill-side camera/view/projection/CameraZero -> RC_SetCamera 0x36 -> EF_Scene3D -> RC_RenderScene 0x33 -> render-thread eRC_SetCamera(EYE) -> eRC_RenderScene(TI_EYE, same RLD)`.
 
-## Render-thread `SThreadInfo` overwrite lineage corroboration
-Provenance: public CryEngine lineage `MergHQ/CRYENGINE` commit `8b63f61c6bb186fbee254b793775856468df47c5`, used only to explain an already retail-observed ownership mechanism.
+Do not infer visual acceptance from this topology alone.
 
-Source path `Code/CryEngine/RenderDll/Common/RenderThread.cpp`:
-- `SRenderThread::RC_RenderScene` allocates an `eRC_RenderScene` command containing a full `SThreadInfo` and calls `AddTI(..., gRenDev->m_RP.m_TI[m_nCurThreadFill])`;
-- `AddTI` performs a raw `memcpy` of `sizeof(SThreadInfo)` into the render-command buffer;
-- the render-thread command processor reconstructs `SThreadInfo TI` from that command and calls `gRenDev->RT_RenderScene(..., TI, ...)`.
+---
 
-Source path `Code/CryEngine/RenderDll/XRenderD3D9/D3DRendPipeline.cpp`:
-- `RT_RenderScene` calls `FX_ApplyThreadState(TI, &m_RP.m_OldTI[nRecurse])` before normal scene processing;
-- `FX_ApplyThreadState` saves prior process-thread state and then performs whole-struct assignment `m_RP.m_TI[m_RP.m_nProcessThreadID] = TI`.
+# RENDER-THREAD SThreadInfo OVERWRITE LINEAGE
 
-Source path `Code/CryEngine/RenderDll/Common/RenderPipeline.h` shows that `SThreadInfo` carries, among other fields:
+Public CryEngine lineage `MergHQ/CRYENGINE` commit `8b63f61c6bb186fbee254b793775856468df47c5` corroborates an already retail-observed ownership mechanism.
+
+`SRenderThread::RC_RenderScene` transports a full `SThreadInfo` into the render command; RT processing reconstructs that state and `FX_ApplyThreadState` replaces process-thread render state.
+
+`SThreadInfo` includes camera/view/projection state including:
 - `m_matView`;
 - `m_matProj`;
 - `CCamera m_cam`;
 - `CRenderCamera m_rcam`.
 
-**Implication:** the existing retail fact that standalone `RC_SetCamera` mutation can be superseded on the RT side has a direct engine-lineage mechanism: cmd33 transports an authoritative whole `SThreadInfo` snapshot into `RT_RenderScene`, which replaces process-thread render state. This corroborates the current RC33/RT ownership model and is a do-not-repeat guard against returning to `RC_SetCamera`-only final ownership.
+Implication:
+standalone `RC_SetCamera` mutation can be superseded by the authoritative cmd33 `SThreadInfo` snapshot.
 
-**Trust boundary:** lineage semantics do not replace retail 1.9 proof. Do not transplant lineage offsets, struct sizes or ABI assumptions into retail without retail verification.
+Trust boundary:
+source lineage semantics do not replace retail offsets/layout proof.
 
-## Corrected retail anchors
+---
+
+# CORRECTED RETAIL ANCHORS
+
 Crysis2.exe:
 - `CSystem::GetViewCamera +0x0006AE50`
 - `CSystem::m_ViewCamera +0x3F0`
@@ -113,7 +256,7 @@ Crysis2.exe:
 - `RenderInternal +0x005DEF10`
 - direct RenderWorld call seam `+0x005E2476`
 - `C3DEngine::SetupCamera +0x0057A730`
-- once/frame camera propagation landmark `+0x0057AC76`
+- once/logical-frame camera propagation landmark `+0x0057AC76`
 
 CryRenderD3D11.dll:
 - `EF_RenderScene +0x00101270`
@@ -141,79 +284,102 @@ CryRenderD3D11.dll:
 - `RT_SetCameraInfo` candidate `+0x000FB2E0`
 - `mfSetCamera` candidate `+0x0008AF30`
 
-## Camera ownership facts
-- applying HMD transform at every `Renderer::SetCamera` creates cumulative feedback (`G -> G*HMD -> G*HMD^2 ...`)
-- real game-owned CCamera + bounded mutation/restore preserved stereo better than fake partial CCamera shadows
-- HEAD must be upstream of visibility; eye execution remains downstream
-- per-eye LEFT/RIGHT must share one immutable contract identity
+---
 
-## Coordinate basis: CONFLICT, not PROVEN
-Do not cite either `XR +X -> Cry +X` or `XR +X -> Cry -X` as a closed project fact.
+# CAMERA OWNERSHIP FACTS
 
-Evidence path A, historical runtime `RESULT 20260817_003329`:
-- `1722` complete applied L/R pairs
-- median stock separation `0.02220543`
-- median exact Quest separation `0.06677189`
-- median dot(`stock R-L`,`exact R-L`) `-0.9999997`
-- historical interpretation: stock `R-L` aligns with `-CCamera column0`, motivating `XR (x,y,z)->Cry (-x,-z,+y)`
+- applying HMD at every `Renderer::SetCamera` creates cumulative feedback (`G -> G*HMD -> G*HMD^2...`);
+- real game-owned CCamera + bounded mutation/restore preserved behavior better than fake partial shadows;
+- HEAD belongs upstream of visibility/list selection;
+- EYES belong downstream in the per-eye transaction;
+- LEFT/RIGHT must share one immutable render-contract identity.
 
-Evidence path B, retail/static + later lineage:
-- exact retail LEFT/RIGHT ProcessScene callsites are known
-- retail LEFT path visibly constructs a negative local-X eye offset before SetCamera
-- Cry stereo source semantics are LEFT `-halfIPD`, RIGHT `+halfIPD`
-- v10 frame-contract code uses `XR (x,y,z)->Cry (+x,-z,+y)` and belongs to a later visually improved projection-coherence line
+Current work must first recover a user-acceptable visual baseline before reopening final HEAD composition.
 
-The conflict has not been causally resolved. Possible causes include old stock-eye label reversal, row/column/basis interpretation error, or a later compensation elsewhere. Resolve COLD from the exact `003329` writer/classifier or retail eye-transform helper before final HEAD/position work. See `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
+---
 
-## Weapon / NEAR facts preserved for later gate
-- `FOB_NEAREST` is a distinct camera-space/near family, not ordinary WORLD depth
-- historical run `20260817_010329`: right controller visibly moved weapon/viewmodel; firing still followed monitor/game-center aim; image still flickered
-- later historical GOLD `021239`: controller-driven gameplay aim servo + trigger produced user-confirmed firing following weapon/muzzle direction. This is a proven fallback behavior path, not proof of direct ballistic owner
-- v10 / `20260818_034749`: synchronizing WORLD/NEAR projection removed the observed weapon counter-motion symptom, proving projection mismatch can masquerade as bad weapon pose
-- current controller action family: RIGHT aim pose is canonical; grip is not a separate required pose-family hunt
-- rigid future candidate: `GripBind = inverse(C_bind) * W_bind`; `W_now = C_now * GripBind`
-- source-level upstream topology is known: `CPlayer::PostUpdateView -> FPWeaponPos/Angles -> CItem::UpdateFPPosition -> weapon entity SetWorldTM`, followed by `CItem::UpdateFPCharacter` / skeleton preprocessing
-- exact retail RVAs for those GameDll functions are not yet proven
+# COORDINATE BASIS — CONFLICT, NOT PROVEN
 
-## PosePair publication topology — source-proven, runtime effect unresolved
-From verified donor source `runtime/donors/v17.2.1/src/t1_dual_render.cpp` and `src/t1_proxy.cpp`:
-- matching LEFT + RIGHT serial is required before the RIGHT path publishes `g_completedContract/g_completedSerial` after `RT_RenderScene` returns;
-- `publish_pair()` copies persistent engine eye RTs to keyed-mutex shared textures and publishes the exact completed contract;
+Do not cite either `XR +X -> Cry +X` or `XR +X -> Cry -X` as a closed global fact.
+
+Historical `003329` and later retail/static/source-lineage evidence conflict.
+
+Possible causes include:
+- old stock-eye label reversal;
+- row/column/basis interpretation error;
+- later compensation elsewhere.
+
+Resolve from exact writer/classifier or retail eye-transform helper only after visual baseline recovery.
+
+See `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
+
+---
+
+# WEAPON / NEAR FACTS PRESERVED FOR LATER
+
+- `FOB_NEAREST` is a distinct camera-space/near family;
+- `010329`: controller moved viewmodel, firing still followed monitor/game-center aim, image still flickered;
+- `021239 / A1_HISTORY_FIX_175934`: controller-directed firing along weapon direction is a proven component donor, not proof of a good renderer;
+- v10 `034749`: WorldCenter/Union/FOBNearest projection mechanics are structurally proven, but the user-visible counter-motion improvement is currently supported by a **secondary historical user-verdict summary**, not a recovered direct adjacent primary message;
+- therefore do not state `034749` as whole-build visual GOLD or as primary-bound proof;
+- RIGHT aim pose remains canonical; grip is not a required pose-family hunt;
+- future rigid candidate remains `GripBind = inverse(C_bind) * W_bind`; `W_now = C_now * GripBind`;
+- source-level upstream topology `CPlayer::PostUpdateView -> FPWeaponPos/Angles -> CItem::UpdateFPPosition -> weapon entity SetWorldTM` remains useful;
+- exact retail RVAs for those GameDll functions are not yet proven.
+
+---
+
+# POSEPAIR PUBLICATION TOPOLOGY — SOURCE-PROVEN, NOT CURRENT VISUAL GATE
+
+Verified donor source shows:
+- matching LEFT/RIGHT serial required before publishing completed contract/serial;
+- `publish_pair()` copies persistent eye RTs to keyed-mutex shared textures;
 - `hkPresent()` calls `publish_pair()`;
-- the factory hook installs the Present hook on every successfully created swapchain;
-- verified donor source has no explicit canonical-primary-swapchain check or canonical render-thread-ID check around pair publication.
+- source has no explicit canonical-primary-swapchain or canonical-render-thread-ID guard around pair publication.
 
-These are source facts. They do **not** prove that a wrong-thread/auxiliary Present actually races in the retail failing path.
+These are source facts, not proof of a retail wrong-thread race.
 
-The normal primary render-thread / same-immediate-context path is expected to preserve render->copy command ordering, so the source review does not prove a need for a GPU fence or engine-eye RT ring. The unresolved ownership risk and minimal passive closure are recorded in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` and `runtime/donors/v17.2.1/POSEPAIR_TRANSPLANT.md`.
+Do not add GPU fences or eye-RT rings without direct evidence.
 
-## Historical packet atomicity and continuity
-Historical v6.0.0/v6.0.1 root-cause material proved a concrete publication race and a cadence failure mode:
-- releasing producer key `1` before publishing `eye_pair_packet_id` could pair frame `N` pixels with frame `N-1` pose/FOV;
-- the fix was metadata publication while both producer mutexes were still owned, then `MemoryBarrier`, then release to key `1`, with the host reading metadata only after acquiring both key `1` mutexes;
-- if Quest `xrWaitFrame` arrived before the next Crysis `Present`, a producer miss followed by zero composition layers created periodic blank XR frames;
-- the historical no-flicker fix cached the last complete frame and kept continuity when no fresh producer frame was available.
+See `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
 
-Project law:
-**complete L/R pixels and their render pose/FOV/contract metadata are one atomic publication unit.**
+---
 
-This does not authorize stale relabel. Any future continuity fallback must keep the cached pair's original render metadata.
+# EXISTING UPSTREAM HEAD MECHANISM IN T1
 
-Historical v11 cadence telemetry (`CRYSIS2VR_CADENCE_FASTPATH_RESULT_20260818_133603.zip`) measured `1276` fresh + `379` reused frames at target `72 Hz`, active submit `59.7 Hz`, pose-age average `38.8874 ms`, max `138.8912 ms`. This proves reuse existed as a real lineage mechanism; those ages are not a final release target.
-
-See `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md`.
-
-## Existing upstream HEAD mechanism in T1
-T1 already executed an upstream center-HMD path:
+T1 mechanically executed an upstream center-HMD path:
 - center HMD inject/restore `2296/2296`;
 - union cull `2296/2296`;
-- direct gameplay RenderWorld call seam `Crysis2.exe +0x005E2476 -> RenderInternal +0x005DEF10`.
+- direct gameplay RenderWorld seam `Crysis2.exe+0x005E2476 -> RenderInternal+0x005DEF10`.
 
-The mechanism is proven to execute; **HEAD visual 1:1 is not yet proven**. After PosePair closes, validate/converge this existing T1 owner before starting any new broad HEAD reverse.
+This proves mechanism execution only.
 
-## Retail identity
+**HEAD visual 1:1 is not proven.**
+
+Final HEAD work is parked until visual baseline recovery succeeds. Do not use “PosePair closes next” as current authorization.
+
+---
+
+# HISTORICAL SINGLE-WINDOW PROFILE
+
+19-Aug user oracle records a useful behavior profile:
+- one window;
+- native OpenXR dual eye;
+- good world scale;
+- stable head movement;
+- headset image present;
+- hand/weapon still wrong.
+
+Exact physical package/hash remains OPEN.
+
+Do not guess it and do not invent an old mythical build containing every later independent success.
+
+---
+
+# RETAIL IDENTITY
+
 - Crysis2.exe SHA256 `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`
 - CryRenderD3D11.dll SHA256 `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`
 
-## Source/runtime trust
-Retail Crysis 2 1.9 runtime/binary truth outranks source/SDK, CE lineage, beta/PDB and donor inference. Visual headset PASS outranks counters alone.
+Retail 1.9 runtime/binary truth outranks source/SDK/beta/donor inference.
+For visual/playability claims, explicit headset acceptance outranks counters and technical topology.
