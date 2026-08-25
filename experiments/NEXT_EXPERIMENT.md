@@ -1,128 +1,117 @@
 # Crysis 2 VR — NEXT EXPERIMENT
 
 ## Decision
-**ADAPT. P6 has now executed and returned RED before eye-pair production.**
+**ADAPT at the first missing edge. Run the minimal P6 latch-wait child.**
 
-Do not run pipeline-lead K, HEAD, weapon/NEAR, temporal or shadow experiments while the contract-latch edge is red.
+Do not run pipeline-lead K, HEAD, weapon/NEAR, temporal or shadow experiments until this recovery edge is green.
 
-Corrected state override:
+Detailed evidence:
+`research/P6_STARTUP_LATCH_RACE_20260825.md`
+
+Corrected state:
 `docs/STATE_OVERRIDE_20260825_P6_RED.md`
 
-## Latest raw runtime evidence
-Raw RESULT:
-`C2VR_RC33_V1721_RESULT_20260825_012454.zip`
+## CURRENT GATE
+`MASTER 2 regression recovery / contract-latch rendezvous`
 
-The inherited `V1721` result prefix is not package identity. `BUILD_COMMANDS.log` compiled directly from:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK\src`
+## FIRST MISSING EDGE
+The executed P6 run reaches private eye target readiness before the first valid local RenderWorld camera/contract snapshot after OpenXR session re-entry. The inherited `dRC` path turns that transient condition into global `T1_Fault("NO_LATCHED_RENDER_CONTRACT")`, and `T1_HostRunning()` then remains false because `faulted=1`.
 
-Therefore the old `P6 = PREPARED / UNRUN` classification is superseded.
+Raw P6 ordering:
+- game `ENGINE_EYES_READY` `01:25:48.700`
+- game `FAULT NO_LATCHED_RENDER_CONTRACT` `01:25:48.700`
+- host `XR_STATE 4/5` `01:25:48.858`
+- result: zero queued pairs, zero LEFT/RIGHT, zero completes, zero exact consumes/submits
 
-P6 package:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
-SHA256 `8385F6AAAD668E40058EB368E4593F53A3489CE7C24EF19521C4C8DEB0ECA89E`
-
-## P6 verdict
-Host:
-- `contract_id = 1533`
-- `xr_frame_requests = 1533`
-- `xr_frame_exact_hits = 0`
-- `xr_frame_misses = 1409`
-- `exact_pair_consumes = 0`
-- `host_submits = 0`
-- `exact_wait_timeouts = 11`
-- `pair_wait_ms_last = 125.000`
-- `last_completed_contract = 0`
-- fault `NO_LATCHED_RENDER_CONTRACT`
-
-Game:
-- `host_alive = 1`
-- `session_running = 1`
-- `views_valid = 1`
-- `renderworld_calls = 900`
-- `scene_packets = 899`
-- `custom_pairs_queued = 0`
-- `pairs_completed = 0`
-- `rt_scene_left = 0`
-- `rt_scene_right = 0`
-- `direct_pair_copies = 0`
-- fault `NO_LATCHED_RENDER_CONTRACT`
-
-Retail hashes matched and `RESTORE_VERIFY = PASS`.
-
-## Correct interpretation
-This run does **not** test whether 120 ms is the right final watchdog. It failed earlier than pair production.
-
-The current blocker is:
-`HOST publish N -> GAME observes N -> GAME validates N -> GAME queues N`
-
-Stop at the first missing edge. Do not repair cadence/presentation downstream while the game-side contract latch is red.
-
-## Last working ancestor
+## WORKING ANCESTOR
+Exact physical package recovered:
 `CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.5_EXACT_WAIT45_P5_ONECLICK.zip`
 SHA256 `D0C7B94A0DB56DCB7974FC20EC9D1017DA790ADFF80B64B177275F5B1BDC9737`
 
-P5 runtime result:
-- `pairs_completed/copies = 354/354`
-- `exact_pair_consumes = 269`
-- `host_submits = 269`
-- `xr_frame_misses = 53`
-- exact hit ratio `83.5404%`
-- stale drains `31`
+Exact raw RESULT recovered:
+`C2VR_RC33_V1721_RESULT_20260823_170445.zip`
+SHA256 `7B1CF8E0CBBF87930CE8FE8D810341527804C3AEC8C9C90999251F3186724DD2`
+
+Known-good P5:
+- `354/354` completed/copies
+- `269` exact consumes
+- `269` host submits
+- exact hit ratio `0.835404`
+- `53` misses
+- `31` stale drains
 - wait last/max `31/47 ms`
-- flashes/dropouts remained
 
-This is the last lineage that satisfies the MASTER 3 precondition that exact pairs were actually rendered and submitted.
+`SCRIPT_LINEAGE_GAP = CLOSED`.
 
-## SCRIPT LINEAGE GATE
-The exact P5 package identity is known, but its standalone physical ZIP/runner bytes have not yet been recovered from the currently accessible Library/GitHub corpus.
+## P6 INTERMEDIATE
+Executed P6 package:
+`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
+SHA256 `8385F6AAAD668E40058EB368E4593F53A3489CE7C24EF19521C4C8DEB0ECA89E`
 
-Classification:
-`SCRIPT_LINEAGE_GAP`
+P5 -> P6:
+- all game/in-process runtime source byte-identical;
+- only first-party runtime source change is x64 host 45 -> 120 ms exact watchdog plus passive wait telemetry;
+- exact-only submit/stale-drain architecture unchanged.
 
-Do **not** silently reconstruct a new launcher from P6 or write a fresh BAT/PS1 scaffold.
+## NEXT CHILD
+`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.7_P6_LATCH_WAIT_ONECLICK.zip`
 
-Required recovery order:
-`BASE_PACKAGE -> BASE_SCRIPT -> KNOWN_GOOD_RESULT -> MINIMAL_DELTA`.
+BASE_PACKAGE = P5 exact working package above
+BASE_SCRIPT = `RUN_C2VR_V17_TRUE_LR.cmd -> tools\Run-V17.ps1`
+KNOWN_GOOD_RESULT = P5 RESULT above
+WHAT_IS_REUSED = P5 launcher/build/restore/logging/packaging plus already-executed P6 host 120 ms/watch telemetry
+ONLY DELTA = relative to P6, `src/t1_dual_render.cpp` only
+UNCHANGED LAUNCH PATH = byte-identical
+UNCHANGED BUILD PATH = byte-identical
+UNCHANGED RESTORE PATH = byte-identical
+EXPECTED NEW RESULT = optional early WAIT marker, no global latch fault, then center latch -> queue -> LEFT -> RIGHT -> completion -> host exact consume/submit
 
-Known base identity:
-- BASE_PACKAGE: `v17.2.5 EXACT_WAIT45 P5`
-- BASE_SCRIPT family: inherited `RUN_C2VR_V17_TRUE_LR.cmd -> tools\Run-V17.ps1`
-- KNOWN_GOOD_RESULT: P5 counters above
-- MINIMAL_DELTA: passive contract-publication/latch telemetry only
+Exact launcher/recovery hashes remain:
+- RUN cmd `9CF526A7F08B19A2974B4FA454C23966768D7CC4C782CE46EF14ECA86353DCD4`
+- Run-V17.ps1 `AD6B3D7614700E2117F550AEB626D8432C88F9513924FEBA4524FA623237F6F5`
+- RECOVER cmd `53EF1565B315AB737176112E76DE31A329C9645184BB2B3C406D3C372D87B659`
+- Recover-V17.ps1 `CD020C2D50ACCE0818D487373E009DEF0477F23F53966D543596A500D5DF6C5F`
+
+## ONLY RUNTIME MUTATION
+Old P6:
+```cpp
+if(!T1_GetCenterCamera(center,sizeof(center),&cc)||!T1_GetSnapshotContract(&fc)){
+    T1_Fault("NO_LATCHED_RENDER_CONTRACT");
+    return;
+}
+```
+
+P7:
+```cpp
+if(!T1_GetCenterCamera(center,sizeof(center),&cc)||!T1_GetSnapshotContract(&fc)){
+    if(InterlockedCompareExchange(&g_latchWaitLogged,1,0)==0)
+        T1_Log("WAIT_LATCHED_RENDER_CONTRACT fail_closed=1 fault=0");
+    return;
+}
+```
+
+No eye pair is rendered/submitted on the missing-latch call. No stale pair is relabelled. No mono fallback is introduced. The next valid RenderWorld can publish the snapshot normally.
+
+## COLD VALIDATION
+- static `130/130 PASS`
+- independent `98/98 PASS`
+- IPC ABI `T1FrameContract=196`, `T1Shared=1084`
+- P6 120ms host policy unchanged
+- exact-only/stale-drain unchanged
+- HEAD/weapon/temporal/shadow unchanged
 
 ## PREFLIGHT — exactly 5 lines
-**MISSING FACT:** after host publishes contract N, does the x86 game side observe the new contract sequence/id at all, and if so where is it rejected before queue publication?
-**WHY NOT CADENCE K:** P6 produced zero queued pairs, zero LEFT/RIGHT RC33 calls and zero submits, so MASTER 3 cadence is downstream of the first missing edge.
-**PASS:** one exact N is seen by game, validates, queues, reaches LEFT then RIGHT, completion N publishes and host accepts/submits the same N.
-**FAIL:** the first edge remains absent; record whether failure is mapping/open, ABI/version/size, sequence observation, validation rejection or queue publication.
-**BASELINE MUST HOLD:** P5 launcher/build/restore/logging/packaging and RC33/OpenXR/IPC architecture remain unchanged; no HEAD/weapon/NEAR/temporal/shadow mutation.
+**MISSING FACT:** does removing only the premature global latch fault allow P6 to recover pair production after OpenXR session re-entry?
+**WHY NOT K:** P6 produced zero queued pairs and zero submits; cadence K is downstream of this first missing edge.
+**PASS:** no global latch fault, then center inject/restore >0, queued pairs >0, LEFT/RIGHT >0, completed pairs >0, exact consumes/submits >0.
+**FAIL:** no latch/pair after host session+views are valid, or renderer/transport regression; package first missing edge and STOP.
+**BASELINE MUST HOLD:** exact P5/P6 launcher/build/restore/IPC/RC33/OpenXR architecture, 120 ms watchdog and all downstream policies remain unchanged.
 
-## Required telemetry for the next child
-On host and game sides, record only what localizes the first missing edge:
-- mapping/open success
-- ABI/version/size
-- host publish sequence before/after
-- contract id
-- predictedDisplayTime
-- game-observed sequence/id
-- validation result and rejection reason
-- queue publication id
-- LEFT begin/end
-- RIGHT begin/end
-- completion publication
-- host accept/submit identity
-- monotonic timestamps at publish and observe
+## RUN
+Use the inherited one-click only:
+`RUN_C2VR_V17_TRUE_LR.cmd`
 
-Failed execution must still package the normal RESULT logs and restore report.
+Return the generated `C2VR_RC33_V1721_RESULT_*.zip`. The inherited filename prefix remains intentional lineage and is not build identity; `BUILD_COMMANDS.log` and `BUILD_IDENTITY.txt` determine the actual child.
 
-## After the latch is green
-Return to MASTER 3, preserving the same working parent:
-1. choose/document rendezvous policy;
-2. fixed watchdog;
-3. `K=0` one LIVE;
-4. `K=1` only if needed;
-5. `K=2` only if needed;
-6. fail closed on an exact-pair miss;
-7. require `exact_hit_ratio >= 0.98`, three minutes without visible flashes, deterministic private L/R non-duplicate proof, byte-exact restore and retail-hash PASS.
-
-Only then unlock HEAD -> WEAPON/NEAR -> TEMPORAL/SHADOW.
+## AFTER PASS
+If pair production/submission is restored, inspect the same run's unchanged P6 120 ms timing telemetry. Then return to MASTER 3 transport cadence with fixed watchdog and serial K testing. HEAD remains blocked until exact hit ratio, visual stability, L/R non-duplicate proof, hashes and restore satisfy MASTER 3 acceptance.
