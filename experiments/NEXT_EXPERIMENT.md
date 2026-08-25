@@ -4,63 +4,61 @@
 
 `VISIBLE PRIVATE L/R / STEREO CAUSAL MATRIX`
 
-Old PosePair/cadence-K/final-HEAD direction remains parked.
-
 ## R1 CLOSED MECHANICALLY
 
 Result:
 `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260825_175757.zip`
 SHA256 `E737A348BD60CC479CAC6284023F94D3542D8923D09C04E8D0D822D66810F9BD`.
 
-R1 reached DONE with 824 hidden private L/R pairs, balanced 824/824 eye execution, 824/824 temporal restore, temporal_leak=0, pose_mismatch=0, no hidden publication/shared copy/OpenXR submit.
+R1 reached DONE with 824 hidden private L/R pairs, balanced 824/824 eye execution, 824/824 temporal restore, temporal_leak=0, pose_mismatch=0, and no hidden publication/shared copy/OpenXR submit.
 
 Classification:
 `LIVE / MECHANICAL PASS / VISIBLE TRUE STEREO NOT TESTED`.
 
+## R2 v1.0.0 RESULT 194014
+
+`NOT_LIVE`.
+
+The run stopped at Stage 3 before x86 client compile and before game launch because an inherited PowerShell source-sanity guard still expected the obsolete v6 mono transport status string.
+
+Exact failure:
+`v6 game client guard failed: custom_vr_transport=MONO_BACKBUFFER_TO_TWO_OPENXR_EYES`
+
+No R2 phase executed and no stereo/headset conclusion is allowed.
+
 Record:
-`experiments/R1_HIDDEN_T1_REPLAY_RESULT_20260825_175757.md`.
+`experiments/R2_NOT_LIVE_20260825_194014.md`.
 
 ## NEXT RUNTIME
 
-`R2 PRIVATE L/R PHASE MATRIX`
-
-Status:
-`PREPARED / UNRUN`.
+`R2 PRIVATE L/R PHASE MATRIX v1.0.1 GUARDFIX`
 
 Package:
-`CRYSIS2VR_V601_PRIVATE_LR_R2_v1.0.0_ONECLICK.zip`
-
-Bytes:
-`199164`
+`CRYSIS2VR_V601_PRIVATE_LR_R2_v1.0.1_GUARDFIX_ONECLICK.zip`
 
 SHA256:
-`CFC430BDC6B916ACCB87F382924C718F5A60710C0BEFE837282F6C133877E856`.
+`42B7CF4E23C794F52912961631BC402E1B9273DA41AA23A32FF11AE2293422EB`.
 
-Static validation:
-`R2_STATIC=PASS (67/67)`.
+Guardfix validation:
+`PASS 43/43`.
 
-Record:
-`experiments/R2_PRIVATE_LR_PHASE_MATRIX_PREPARED_20260825.md`.
+R2 runtime sources and phase matrix are byte-identical to v1.0.0.
+
+ONLY DELTA:
+one source-sanity needle in `tools/Build-Run-EngineTap.ps1` changes from the obsolete
+`custom_vr_transport=MONO_BACKBUFFER_TO_TWO_OPENXR_EYES`
+to the actual R2 identity
+`custom_vr_transport=R2_PHASED_MONO_OR_PRIVATE_LR`.
+
+All other known source-guard needles were prevalidated against the actual R2 sources.
 
 ## PREFLIGHT — exactly 5 lines
 
 MISSING FACT = where visible true-private L/R first becomes wrong: replay/state, eye translation, asymmetric projection, or eye order.
 WHY THIS PARENT = R1 proved hidden private L/R can execute mechanically under the stable v6 world owner without temporal leak; R2 preserves that lineage.
-ONE MUTATION CATEGORY = change only visible XR source/projection mux; no new world owner, renderer seam, launcher, transport stack, HEAD, K, weapon or temporal policy.
+ONE MUTATION CATEGORY = change only visible XR source/projection mux; v1.0.1 additionally fixes one non-runtime pre-build sanity string.
 PASS = phase matrix localizes the first bad transition, or PRIVATE_FULL is stable/nonduplicate and user-fused while MONO controls remain stable.
-FAIL = baseline is invalid, private publication fails, restore/hash fails, or no phase yields interpretable mechanical/visual evidence.
-
-## LINEAGE
-
-BASE_PACKAGE = `CRYSIS2VR_V601_HIDDEN_T1_R1_v1.0.0_ONECLICK.zip`
-BASE_SCRIPT = `20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`
-KNOWN_GOOD_RESULT = `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260825_175757.zip`
-WHAT IS REUSED = exact v6 world owner, R1 T1 RC/RT replay, temporal restore, IPC v5/636, host startup, Zig discovery, retail guards, backup/restore, logging and RESULT packaging.
-ONLY DELTA = phased mono/private direct/private swap XR source plus phase-specific pose/FOV controls and richer analyzer.
-UNCHANGED LAUNCH PATH = YES
-UNCHANGED BUILD PATH = YES
-UNCHANGED RESTORE PATH = YES
-EXPECTED NEW RESULT = `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_*.zip` with R2_PRIVATE_STEREO_STATUS, phase-tagged XR captures and R2_ANALYSIS.
+FAIL = baseline invalid, private publication fails, restore/hash fails, or no phase yields interpretable mechanical/visual evidence.
 
 ## RUN
 
@@ -78,20 +76,4 @@ Automatic phases:
 >74 s    DONE
 ```
 
-Interpretation:
-- PRIVATE_ZERO bad -> replay/state blocker.
-- ZERO good, IPD bad -> eye translation/camera geometry blocker.
-- IPD good, FULL bad -> asymmetric FOV/projection blocker.
-- FULL vs SWAP visually different -> eye mapping/order localized.
-- private bad, MONO_B recovers -> private path causally implicated.
-- PRIVATE_FULL stable + nonduplicate + user-fused -> strong visible stereo candidate, not automatic whole-build GREEN.
-
-## AUTOMATIC DATA
-
-Per-phase XR captures plus L/R MAE, changed-pixel ratio, luma MAE, capture coverage, FULL/SWAP comparison, packet/render/present identity, replay/stage/publish counts, temporal restore/leak, pose match/miss, copies/submits/empty-layer firewall, replay command-issue timing, restore and retail hash evidence.
-
-`VISUAL_RESULT=NOT_AUTOMATED__USER_HEADSET_VERDICT_REQUIRED`.
-
-## FORBIDDEN
-
-No K=1/K=2, PosePair child, final HEAD, weapon/NEAR, native Nvidia/Cry final stereo, new temporal/shadow policy or new transport stack in this LIVE.
+No K/PosePair/final HEAD/weapon/NEAR/new temporal-shadow policy is added.
