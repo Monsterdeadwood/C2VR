@@ -2,105 +2,120 @@
 
 ## CURRENT GATE
 
-`220427 V6.0.1 LIVE -> BIND USER HEADSET VERDICT`
+`220427 PARTIAL VISUAL BASELINE -> SCALE / SOURCE-PROJECTION CONTRACT`
 
-The exact Z-reprojection v6.0.1 PRIVATE_RTV recovery has now executed. Do not rerun it merely because older STATE/NEXT text called it the next runtime.
+The direct headset verdict is now bound:
+- scale is wrong/problematic;
+- otherwise the branch is broadly normal/promising and worth finishing;
+- do not discard 220427 as a visual HARD RED.
 
 Read first:
 1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
-2. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
-3. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-4. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+2. `docs/MONO_QUALITY_ANCHOR_20260818.md`
+3. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
+4. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
 5. `docs/FALSIFIED.md`
 
-## LATEST RESULT
-
-`CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
-
-SHA256:
-`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
-
-Mechanical result:
-- XR session ran;
-- 4691 submits;
-- private eye staging active;
-- 9382 eye-stage copies;
-- 9382 depth-reprojection draws;
-- 33 XR pair captures;
-- raw restore PASS.
-
-This closes the narrow old `XR_RTV_CREATE_FAIL` blocker.
-
-## IMPORTANT LIMIT
-
-The fresh output is synthetic stereo from one center color+depth source, not true independent L/R scene rendering.
-
-Therefore:
+## KEEP FROM 220427
 
 ```text
-PRIVATE_RTV_XR_BRIDGE          = KEEP / MECHANICAL_GREEN
-MONO_DEPTH_SYNTHETIC_LR_OUTPUT = MECHANICAL_GREEN
-FINAL_RENDERER                 = NOT PROVEN
-USER_HEADSET_VERDICT           = UNBOUND
+XR session / Quest output             KEEP
+private typed eye RTV bridge          KEEP
+CopyResource to XR swapchain          KEEP
+4691 submits                          PROVEN
+9382 reprojection draws               PROVEN
+current broadly usable visual control KEEP
 ```
 
-Do not turn a transport success into a visual-GOLD claim.
+Do not rebuild transport.
 
-## ANALYZER NOTE
+## CURRENT ARCHITECTURE LIMIT
 
-Generated `Z_REPROJECTION_VERDICT.txt` contains false-negative summary fields for XR transport, eye-stage copies and restore. Raw logs/status are authoritative for those executed facts.
+220427 still uses one center color+depth image to synthesize LEFT/RIGHT.
 
-Analyzer repair is a later isolated tooling task, not a reason to rerun or redesign the renderer now.
+It is not final true-L/R scene rendering.
 
-## NEXT ACTION
+That question is parked until scale and image-quality controls are closed.
 
-Bind the direct headset verdict for the already executed 220427 run.
+## RECOVERED QUALITY FACT
 
-Needed visual fields:
+Historical mono/reprojection result `20260818_030228` retained:
 
 ```text
-WORLD_STABILITY       = ?
-CAMERA_WORLD_LOCK     = ?
-BINOCULAR_FUSION      = ?
-WORLD_SCALE           = ?
-SHADOW_LIGHT_STABLE   = ?
-RIGHT_EYE_QUALITY     = ?
-WEAPON_VISIBLE_STATE  = ?
-USER_HEADSET_VERDICT  = ACCEPT / RED
+r_MotionBlur=0
+r_PostMSAA=0
 ```
 
-No new code is required to answer this gate.
+and the contemporary council explicitly says those settings corresponded to the cleaner image reported by the user.
 
-## DECISION TREE
+Treat this as:
+`COMPONENT_VISUAL_GREEN: CLEAN_MONO_IMAGE_QUALITY_SETTINGS`.
 
-### If ACCEPT
+Fresh 220427 RESULT does not prove those settings were active.
 
-Freeze 220427 as a component visual/control baseline and preserve the proven private-RTV XR bridge unchanged.
+## CURRENT SCALE FACTS
 
-Next scientific gate:
-`TRUE L/R SOURCE GEOMETRY WITHOUT LOSING ACCEPTED WORLD/CAMERA OUTPUT`.
+220427:
 
-That future child must be one mutation category only. It must not simultaneously rewrite HEAD, weapon, NEAR, temporal, shadow and cadence.
+```text
+source_eye / game_texture = 1600x1200
+union_fov_deg             = 114.086
+union_ratio               = 0.963753
+```
 
-### If RED
+Historical 030228 already showed a related source/projection mismatch:
 
-Mark v6.0.1 whole visual parent `VISUAL_RED`.
+```text
+calculated target ~= 2032x1968
+actual producer   = 1400x1050
+```
 
-Keep only:
-`PRIVATE_RTV_XR_BRIDGE`.
+So the next problem is not "guess a scale number".
 
-Then continue exact archival recovery of the historical user-accepted single-window behavior profile rather than tuning Z-reprojection or resurrecting rejected parents.
+It is:
+`which projection + source rectangle does each synthesized eye actually represent?`
+
+## NEXT EXPERIMENT ORDER
+
+1. **QUALITY CONTROL**: on the exact 220427 lineage verify current `r_MotionBlur` and `r_PostMSAA` values. If not already `0/0`, make a child whose only runtime delta is those two known historical clean-mono quality settings. Do not change scale in the same child.
+2. **SCALE CONTRACT**: preserve the accepted quality control and record/compare actual producer size, center projection/FOV/ratio, packed-depth projection, XR eye FOV, reprojection sampling rectangle and submitted XR rectangle.
+3. Only after the mismatch is identified, make one scale/projection correction. No arbitrary IPD/convergence sweep.
+
+Each child gets a fresh explicit headset verdict.
+
+## PASS TARGET FOR QUALITY CONTROL
+
+```text
+same world/head behavior
+same scale defect, not worse
+image at least as clean as 220427
+no new blur introduced
+XR bridge unchanged
+```
+
+The quality control is not allowed to claim scale fixed.
+
+## PASS TARGET FOR SCALE CHILD
+
+```text
+world scale natural
+world/head remains stable
+image quality preserved
+no binocular/telescope catastrophe
+XR bridge unchanged
+```
 
 ## DO NOT DO NOW
 
-- no GOODLINE descendant;
-- no R2/T1 visible descendant;
-- no v17 whole-build descendant;
+- no true-L/R renderer merge yet;
+- no GOODLINE/R2/T1/v17 whole-build descendant;
 - no K/PosePair;
-- no later Z v6.1/v6.2/v6.3/v6.4 jump;
-- no arbitrary IPD/FOV/convergence tuning;
 - no weapon/NEAR merge;
 - no temporal/shadow mutation;
-- no broad reverse.
+- no controller work;
+- no arbitrary worldScale/IPD/convergence matrix;
+- no broad reverse;
+- no new launcher architecture.
 
-One executed LIVE is already on the table. Bind what the user actually saw before touching the machine again.
+Current goal is deliberately small:
+**make the already-promising 220427 image clean and correctly scaled before changing the renderer family again.**
