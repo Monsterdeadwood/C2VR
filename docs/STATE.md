@@ -1,71 +1,168 @@
 # Crysis 2 VR State
 
-## LATEST RESULT
-Latest completed causal runtime result is `v17.2.5 WAIT45` on PosePair/projection-layer cadence:
-- `269 exact_pair_consumes`
-- `269 host_submits`
-- `53 misses`
-- exact ratio `83.5404%`
-- stale drains `31`
-- `pair_wait_ms_last = 31`
-- `pair_wait_ms_max = 47`
-- `354/354` completed/copies
-- visual flashes/dropouts still remained
+## LATEST VISUAL OVERRIDE — 2026-08-25
 
-P4 immediately before it produced `92 exact`, `776 misses`, `386 stale drains`, about `10.6%` exact acceptance. WAIT45 improved the exact ratio about 7.9x. Therefore watchdog/deadline timing is a PROVEN contributor to missing projection layers.
+Current gate:
 
-The next build exists but still has no recorded LIVE result:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
-SHA256 `8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`.
+`VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
 
-P6 changes only the bounded exact-pair watchdog `45 ms -> 120 ms`; it is not a forced sleep. Recorded validation: `130/130 PASS` plus independent `98/98 PASS`. Game-side camera/FOV/weapon/shadow/temporal/RC33 policy is unchanged from P5.
+This supersedes the earlier assumption that cadence K/P6 is the immediate next gate.
 
-## BEST WORKING / MAIN PARENT
-`CUSTOM_DUAL_T1 v1.0.1`
+### Recent USER HARD RED #1
+Raw result:
+`C2VR_RC33_V1721_RESULT_20260825_063149.zip`
 
-True retail two-eye rendering is already PROVEN:
-- center HMD inject/restore `2296/2296`
-- private LEFT `2295`
-- private RIGHT `2295`
-- direct eye copies `2229`
-- OpenXR submits `2624`
-- median sampled L/R MAE `35.9781`
-- FramePairContract desync `0/0`
-- acceptance failure was PosePairContract, not lack of stereo
+Runtime pair production/submission was alive, but the user reported catastrophic camera/world instability with light/shadow state visibly sliding/moving.
 
-Do not rebuild stereo.
+Classification:
+`USER_VISUAL_HARD_RED`.
 
-## CURRENT GATE
-**POSEPAIR / PROJECTION-LAYER EXACT-PAIR CADENCE GATING.**
+### Recent USER HARD RED #2
+Package:
+`CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`
 
-Immediate question: are the remaining flashes/dropouts caused by the bounded exact-pair watchdog expiring before a slow-but-valid RC33 L/R pair reaches Present publication and host consumption?
+SHA256:
+`7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`
+
+The user ran it and reported that it is visually even worse than the previous rejected build.
+
+Classification:
+`USER_VISUAL_HARD_RED / RESULT_ZIP_NOT_BOUND`.
+
+No fresh RESULT ZIP is bound to that verdict yet. Do not invent counters.
+
+### Consequence
+STOP direct descendants of both rejected visual parents.
+
+Specifically:
+- no `K=1` or `K=2` from T1 v1.0.2 PosePair K0;
+- no HEAD child from it;
+- no WEAPON/NEAR child from it;
+- no temporal/shadow child from it;
+- do not promote `063149` or T1 v1.0.2 based on counters/static validation.
+
+Permanent precedence and historical evidence:
+`docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`.
+
+Newest override:
+`docs/LATEST_OVERRIDE_20260825_T1_K0_HARD_RED.md`.
+
+## SOURCE AUTHORITY VS VISUAL AUTHORITY
+
+Technical main renderer source authority remains:
+`CUSTOM_DUAL_T1 v1.0.1`.
+
+It proves true private retail LEFT/RIGHT rendering:
+- center HMD inject/restore `2296/2296` in its canonical technical result;
+- private LEFT `2295`;
+- private RIGHT `2295`;
+- direct eye copies `2229`;
+- OpenXR submits `2624`;
+- median sampled L/R MAE `35.9781`;
+- FramePairContract desync `0/0`.
+
+But technical true-L/R proof is **not visual-parent acceptance**. The v1.0.2 user HARD RED explicitly prevents using T1 source authority as automatic justification for a cadence descendant.
+
+Likewise v17.2.x remains a selective donor family, not a wholesale visual parent.
+
+## HISTORICAL USER VISUAL FAILURES NOW BOUND TO POLICY
+
+The following old failure classes are permanently frozen in the project memory:
+
+1. **All-SetCamera HMD injection**
+   - `171947` showed recursive `G * HMD^n` feedback;
+   - eyes collapsed toward equality;
+   - never repeat.
+
+2. **Native/NVIDIA monitor stereo as final VR**
+   - user explicitly rejected this direction after repeated flashes/flicker;
+   - archaeology/control only.
+
+3. **Real Quest IPD/FOV grafted onto native monitor-stereo**
+   - `205430`: user reported wrong stereo, flicker, shadows disappearing/changing;
+   - saved captures showed per-eye lighting/shadow/near-geometry disagreement;
+   - do not reopen as final shortcut.
+
+4. **STABLE_CAMERA v2.2.0**
+   - `010329`: simpler single-camera-owner policy still flickered;
+   - weapon-in-hand did not establish correct muzzle/ballistics;
+   - simplification alone is not a visual fix.
+
+5. **2026-08-22 unbound severe visual RED**
+   - recovered user verdict: extreme lateral separation, blur and compressed/bad-looking image;
+   - exact package identity not recovered;
+   - keep `UNBOUND_VISUAL_RED`; never guess the lineage.
+
+6. **2026-08-25 063149 and T1 PosePair K0**
+   - both are now hard visual rejects;
+   - no direct descendants.
+
+## RECOVERY CHECKPOINTS / NOT WHOLE-BUILD GOLD
+
+### A1 native repair camera checkpoint
+`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
+
+User reported that head left/right movement drove the in-game camera/world and described the state as close, with the main remaining issue being flicker/two-screen behavior.
+
+Classification:
+`CAMERA_OWNERSHIP_REFERENCE_ONLY`.
+
+### Single-source upstream camera owner
+`CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
+SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
+
+Policy:
+- HMD applied once at `Crysis2.exe+0x0057AC76`;
+- downstream SetCamera calls pass through.
+
+Classification:
+`HEAD_OWNERSHIP_TOPOLOGY_REFERENCE`, not visual GOLD.
+
+### 191909
+Historical lower-divergence orientation/native-stereo control.
+
+Classification:
+`LOW_DIVERGENCE_CONTROL_ONLY`.
+
+### 203734 / 204156
+Useful 6DoF/IPD/FOV propagation evidence. Subsequent `205430` kills promotion of the surrounding renderer policy.
+
+Classification:
+`POSE_MATH_AND_IPC_COMPONENT_REFERENCE_ONLY`.
+
+### 021239
+Historical weapon/controller-to-real-fire component donor.
+
+Classification:
+`WEAPON_MUZZLE_COMPONENT_DONOR_ONLY`.
+
+### x86 game + x64 OpenXR host
+Infrastructure GOLD. Keep this process split.
 
 ## NEXT
-Run **P6 (`v17.2.6 EXACT_BLOCK120`) unchanged** and return its RESULT ZIP plus headset observations.
 
-Interpretation:
-- timeouts near zero + flashes gone => KEEP exact identity, STOP increasing wait, ADAPT to future-target pipeline lead `K=0..3`;
-- timeouts near zero + flashes remain => STOP timeout path, inspect presentation seam/timeliness;
-- many timeouts remain => add passive phase timestamps `contract -> RenderWorld -> RT L -> RT R -> Present publish -> host consume` before any mutation.
+Before another visual build:
 
-Unchanged running shadows are not P6 failure.
+1. recover the exact physical package and exact working runner corresponding to the nearest user-positive/near-normal Crysis camera checkpoint;
+2. reproduce it unchanged;
+3. bind a fresh raw RESULT and explicit headset verdict;
+4. freeze that exact baseline;
+5. make one causal visual mutation per child;
+6. if the picture becomes catastrophic, STOP and revert immediately.
 
-## FINISH ORDER
-`POSEPAIR -> HEAD 1:1 -> WEAPON / NEAR -> TEMPORAL / SHADOW STABILITY -> REGRESSION -> RELEASE CANDIDATE`
+Do not resume cadence K until all are visually acceptable:
+- stationary world;
+- slow yaw;
+- fast yaw/reversal;
+- no camera falling/jumping;
+- stable lighting/shadows;
+- coherent non-duplicate L/R;
+- exact restore/hashes.
 
-## PROVEN ARCHITECTURE
-Canonical eye transaction:
-`SetCamera(EYE) -> fill-side camera/view/projection/CameraZero -> RC_SetCamera 0x36 -> EF_Scene3D -> RC_RenderScene 0x33 snapshots same-eye SThreadInfo -> render-thread eRC_SetCamera(EYE) -> eRC_RenderScene(TI_EYE, same RLD)`.
+Counters alone never establish visual PASS.
 
-One prepared render-list executes twice:
-`SetCamera(L) -> EF_Scene3D -> SetCamera(R) -> EF_Scene3D`.
+## CANONICAL RETAIL TARGETS / OFFSETS
 
-Current RT transaction:
-`RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`.
-
-The game-side completed pair is published cross-process from the Present gate. Exact host wait therefore includes host->RenderWorld phase, RC queue latency, RT LEFT, RT RIGHT, Present publication, shared copy/keyed-mutex rendezvous and host consume.
-
-## CONCRETE RETAIL TARGETS / OFFSETS
 Crysis2.exe:
 - `CSystem::GetViewCamera +0x0006AE50`
 - `CSystem::m_ViewCamera +0x3F0`
@@ -103,79 +200,37 @@ CryRenderD3D11.dll:
 - `RT_SetCameraInfo` candidate `+0x000FB2E0`
 - `mfSetCamera` candidate `+0x0008AF30`
 
-## CURRENT FINALISTS
-### Active gate
-1. `P6 EXACT_BLOCK120` unchanged.
-2. If P6 closes starvation: pipeline lead batch `target = predictedDisplayTime + K*predictedDisplayPeriod`, `K=0..3`, preserving exact ticket identity.
-3. Reserve: coherent last-good complete stereo pair with the exact pose/FOV that produced it. Never relabel old pixels with a new pose.
+## RENDERER FACTS THAT REMAIN PROVEN
 
-### Parked HEAD gate
-HEAD research is prepared but blocked behind PosePair:
-- `G * HMDrelative` rotation-first on one real center CCamera, coherent frustum, upstream of visibility;
-- `yawOnly(G) * HMDrelative` if body/game pitch contamination appears;
-- `HMDrelative * G` only as multiplication-order control;
-- future center-pose refinement: `XR_REFERENCE_SPACE_TYPE_VIEW` at the same target display time;
-- translation blocked until rotation visually passes.
+One prepared render-list executes twice:
+`SetCamera(L) -> EF_Scene3D -> SetCamera(R) -> EF_Scene3D`.
 
-### Coordinate-basis conflict
-Do **not** treat either local-X sign as final truth yet.
+Do not add a second top-level `RenderWorld` or second `EF_StartEf`.
 
-Historical `RESULT 20260817_003329` measured 1722 complete pairs and reported median dot(`stock R-L`,`exact R-L`) `-0.9999997`, leading to `XR x -> Cry -x`.
+RT transaction:
+`RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`.
 
-Independent later evidence points the other way: retail `ProcessScene` has exact LEFT/RIGHT return landmarks, its LEFT eye path constructs a negative local-X offset, Cry stereo source semantics are LEFT `-halfIPD` / RIGHT `+halfIPD`, and v10 frame-contract code used `XR (x,y,z) -> Cry (+x,-z,+y)`.
+Stale pixels must never be relabelled with a newer pose/FOV/XR ticket.
 
-This is an explicit evidence conflict, not a settled PROVEN fact. Resolve COLD from the exact `003329` writer/classifier or the remaining retail eye-transform helper before final HEAD/eye position work. Do not spend a LIVE on it while P6 is current gate. See `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
+## PARKED QUESTIONS
 
-### Parked WEAPON / NEAR gate
-- historical controller->visual weapon motion is proven;
-- historical gameplay aim servo + trigger is a working fallback donor;
-- primary future rigid candidate: `GripBind = inverse(C_bind) * W_bind`; `W_now = C_now * GripBind`;
-- fixed bind only, no automatic grip rebind;
-- same controller contract for both eyes;
-- keep weapon pose separate from per-eye NEAR projection;
-- if renderer shim cannot pass, move upstream to real FP weapon entity between `UpdateFPPosition` and `UpdateFPCharacter`.
+These are not current LIVE gates:
+- pipeline-lead K timing;
+- exact `003329` coordinate-sign conflict;
+- final HEAD 1:1 composition / VIEW-space center pose;
+- weapon fixed-bind SE(3) / upstream entity seam;
+- exact retail weapon function mapping;
+- temporal-history isolation;
+- precise second-eye shadow policy.
 
-Unclosed exact retail GameDll targets:
-- `CPlayer::PostUpdateView`
-- `CItem::UpdateFPPosition`
-- `CItem::UpdateFPCharacter`
-- `CWeapon::SetFiringLocator`
-- fire-mode `GetProbableHit/GetFiringPos/GetFiringDir`
+They reopen only after a user-accepted visual baseline is recovered.
 
-## METHOD ALREADY USED
-- source/SDK/PDB/RTTI/donor corpus harvest
-- RenderDoc/GPU projection and constant-buffer provenance
-- Ghidra/source-to-retail mapping
-- retail `ProcessScene` decompile / callsite closure
-- runtime loaded-memory disassembly and raw stack propagation
-- x86 proxy / x64 OpenXR host split
-- keyed-mutex shared textures
-- immutable frame contract / seqlock publication / exact pair identity
-- serial causal timing P4/P5
-- historical controller->NEAR and controller->gameplay-aim bridges
-- targeted TTD/ReClass only for concrete writer/field questions
-
-Do not build another broad analyzer after a concrete target exists.
-
-## IMPORTANT PATHS / VERSIONS / DEPENDENCIES
+## IMPORTANT PATHS / IDENTITIES
 - Retail: `C:\GOG Games\Crysis 2`, GOG retail `1.9.0.0`, 32-bit DX11
-- Beta/source bridge: `C:\GOG Games\Crysis 2\crysis2(5620)\_r\crysis2(5620)\_01_13`
+- Beta/source bridge: `C:\GOG Games\Crysis 2\crysis2(5620)_r\crysis2(5620)_01_13`
 - Shared tools: `C:\GOG Games\VR Research Tools`
-- Architecture: x86 in-process game/proxy + x64 OpenXR host
-- Quest/OpenXR through the project's Meta/Oculus OpenXR runtime
-- Beta `CryGameCrysis2.pdb` observed size `82,045,952` bytes
-- older broad symbol census stopped at `80,000` hits; missing weapon symbols there are not negative evidence
+- Architecture infrastructure: x86 game/proxy + x64 OpenXR host
 
 Retail hashes:
 - Crysis2.exe SHA256 `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`
 - CryRenderD3D11.dll SHA256 `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`
-
-## UNRESOLVED QUESTIONS
-1. P6 visual/telemetry verdict.
-2. Pipeline lead after exact identity.
-3. Exact cause of the `003329` vs retail/v10 local-X sign conflict.
-4. HEAD visual 1:1 composition and true VIEW-space center pose.
-5. Weapon fixed-bind SE(3) vs upstream entity seam.
-6. Exact retail weapon function mapping.
-7. Temporal-history isolation.
-8. Precise second-eye shadow policy.
