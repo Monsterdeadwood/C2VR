@@ -1,95 +1,105 @@
 # Crysis 2 VR — NEXT
 
 ## CURRENT GATE
-**POSEPAIR / PROJECTION-LAYER EXACT-PAIR CADENCE GATING.**
+**VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT.**
 
-Do not move to HEAD, weapon/NEAR, temporal or shadow work before this gate is closed.
+This replaces the old P6/cadence-K next step.
 
-## NEXT LIVE
-Run unchanged:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
+Read first:
+1. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+2. `docs/LATEST_OVERRIDE_20260825_T1_K0_HARD_RED.md`
+3. `docs/FALSIFIED.md`
 
-SHA256:
-`8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`
+## WHY THE OLD NEXT IS CANCELLED
 
-Exact P4->P5->P6 package comparison is now closed COLD in:
-`research/POSEPAIR_CAUSAL_LADDER_P4_P5_P6_20260825.md`.
+Two recent descendants are user HARD RED:
 
-Precise P5->P6 scope:
-- all game/in-process runtime source is byte-identical;
-- only changed first-party runtime file is `src/t1_host_x64.cpp`;
-- one causal timing-policy mutation: exact-pair watchdog `45 ms -> 120 ms`;
-- passive P6 additions: exact-wait timeout counter and latency histogram/status logging;
-- exact-only submit, stale drain, IPC, proxy publication, camera/FOV, RC33 eye code, weapon/NEAR game-side code, temporal and shadow policy are unchanged.
+- `C2VR_RC33_V1721_RESULT_20260825_063149.zip`
+  - transport/pairs alive;
+  - catastrophic camera/world instability and moving/sliding light/shadows in headset.
 
-`120 ms` is not a forced sleep. `wait_exact_pair()` returns immediately when the requested exact pair is available.
+- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`
+  - SHA256 `7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`;
+  - user reports it visually even worse;
+  - no fresh RESULT ZIP is bound yet.
 
-Recorded pre-LIVE validation:
-- P5 physical package SHA/manifest verified `39/39 PASS`;
-- P6 physical package SHA/manifest verified `42/42 PASS`;
-- static `130/130 PASS`;
-- independent `98/98 PASS`.
+Therefore:
+- NO K=1/K=2 child;
+- NO HEAD child;
+- NO WEAPON/NEAR child;
+- NO temporal/shadow child;
+- NO further watchdog tuning as a visual fix.
 
-## PREFLIGHT — exactly 5 lines
-**MISSING FACT:** do the remaining flashes/dropouts come from the 45 ms watchdog expiring before a slow-but-valid exact RC33 pair becomes host-visible?
-**WHY NOT COLD:** P4->P5 exact-package identity plus the ~7.88x exact-rate gain already establishes wait-budget causality; only LIVE can show whether the 120 ms watchdog collapses the remaining timeouts/misses and whether visual flashes collapse with them.
-**PASS:** exact wait timeouts approach zero, exact ratio rises toward 1, host submits become continuous, flashes/dropouts materially reduce, true L/R remains fused/alive.
-**FAIL:** misses/timeouts remain material despite 120 ms, or flashes remain while timeouts are near zero, or the true-L/R baseline regresses.
-**BASELINE MUST HOLD:** exact-only submit, stale-pair drain, keyed transport, two RC33 eye passes, camera/FOV, temporal/shadow, weapon/NEAR game-side policy and byte-exact restore remain unchanged.
+## NEXT WORK
 
-## REQUIRED P6 TELEMETRY
-At minimum preserve:
-- `exact_pair_consumes`
-- `exact_wait_timeouts`
-- wait histogram `<20`, `<30`, `<40`, `<60`, `>=60 ms`
-- `pair_wait_ms_last`
-- `pair_wait_ms_max`
-- `host_submits`
-- pair misses / zero-layer frames
-- completed pair / copy counts
-- contract/ticket mismatch counters
-- layerCount submit counts where available.
+Recover exact physical package + runner for the nearest user-positive/near-normal Crysis camera checkpoint.
 
-The histogram is important because it distinguishes ordinary 30-60 ms arrivals from genuine 120 ms watchdog expiry.
+Priority recovery candidates:
 
-## WHAT TO REPORT FROM HEADSET
-- flashes/dropouts: gone / reduced / unchanged
-- stereo fusion/depth: stable / unstable
-- head-motion latency/judder: acceptable / obvious
-- shadows: still running / unexpectedly improved
+### 1. A1 native-repair camera checkpoint
+`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
 
-Unchanged running shadows are **not** P6 failure.
+Historical user verdict:
+- head left/right drove the real in-game camera/world;
+- remaining major problem was flicker/two-screen behavior;
+- state was described as very close.
 
-## POST-P6 DECISION
-- **timeouts near zero + flashes gone/materially collapsed:** KEEP exact architecture. STOP increasing wait. Next timing experiment is pipeline lead `target = predictedDisplayTime + K*predictedDisplayPeriod`, `K=0..3`, choose the smallest sustainable K.
-- **timeouts near zero + flashes remain:** STOP timeout path. Do not immediately tune another wait. Inspect presentation/timeliness seam and the already-recorded publication-owner risk in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
-- **many timeouts remain:** add passive phase timestamps `contract -> RenderWorld -> RT L -> RT R -> Present publish -> host consume` before any mutation.
+Target use:
+`CAMERA_OWNERSHIP_REFERENCE_ONLY`.
 
-Reserve only if post-P6 evidence demands it:
-- coherent last-good **complete** stereo pair;
-- keep the exact pose/FOV/metadata that rendered those pixels;
-- never relabel cached pixels as the new/current XR contract.
+### 2. Single-source upstream camera owner
+`CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
+SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
 
-Historical packet-atomicity and continuity evidence is preserved in:
-`research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md`.
+Target use:
+- preserve HMD x1 at `Crysis2.exe+0x0057AC76`;
+- downstream SetCamera pass-through;
+- compare against all-SetCamera feedback-loop failure.
 
-## PARKED AFTER POSEPAIR
-1. HEAD 1:1 rotation-first + coherent visibility envelope.
-2. WEAPON / FOB_NEAREST rigid bind or upstream FP entity owner.
-3. TEMPORAL / SHADOW stability.
-4. Regression.
-5. Release candidate.
+This is an ownership topology reference, not visual GOLD.
 
-### First HEAD action after PosePair
-Do **not** restart broad HEAD reverse first. Exact T1->P6 source lineage proves the upstream camera core is preserved. `CUSTOM_DUAL_T1 v1.0.1` already has:
-- center HMD inject/restore `2296/2296`;
-- union cull `2296/2296`;
-- upstream RenderWorld call seam `Crysis2.exe +0x005E2476`.
+### 3. Historical controls/components
+- `191909`: low-divergence orientation/native-stereo control only;
+- `203734/204156`: 6DoF/IPD/FOV propagation component proof only;
+- `021239`: weapon/muzzle component donor only;
+- x86 game + x64 OpenXR host: infrastructure GOLD;
+- `CUSTOM_DUAL_T1 v1.0.1`: true-L/R renderer technical proof only.
 
-First validate/converge that existing upstream center-HMD owner in headset. Only reverse a new owner if that visual proof falsifies it.
+## NEXT LIVE RULE
 
-See:
-- `research/T1_TO_P6_SOURCE_LINEAGE_20260825.md`
-- `research/T1_CARRIER_RECOVERY_20260825.md`
+Do not build a new visual child until the exact chosen ancestor and runner are recovered.
 
-Before final HEAD/eye-position math, resolve the explicit local-X sign conflict in `research/COORDINATE_BASIS_CONFLICT_20260824.md`. That question is COLD-only and is not authorization to delay P6.
+Then:
+
+`EXACT HISTORICAL PACKAGE -> UNCHANGED REPRO -> USER HEADSET VERDICT -> FREEZE -> ONE CAUSAL MUTATION`
+
+No multi-policy integration.
+
+## PASS FOR RECOVERED BASELINE
+
+A baseline is eligible to become a visual parent only if the user confirms in headset:
+- stationary head -> stationary world;
+- slow yaw does not make camera/world fall, jump or shear;
+- fast yaw/reversal does not explode eye coherence;
+- lighting and shadows remain spatially stable enough to judge the world;
+- no severe two-screen/monitor-panel behavior;
+- L/R remain non-duplicate where true stereo is expected;
+- restore and retail hashes pass.
+
+Counters are supporting evidence only.
+
+## FAIL
+
+Any user report equivalent to catastrophic camera motion, severe flicker, sliding shadows/lights, wrong two-screen stereo, extreme lateral separation or unusable blur marks the package `USER_VISUAL_HARD_RED` and immediately forbids it as a direct future visual parent.
+
+## PARKED
+
+Until a visual baseline is recovered:
+- cadence K;
+- final HEAD composition;
+- weapon/NEAR integration;
+- temporal isolation;
+- second-eye shadow policy;
+- coordinate-sign LIVE experiments.
+
+Do not reopen these merely because their code already exists.
