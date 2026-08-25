@@ -2,107 +2,269 @@
 
 ## PURPOSE
 
-This document reconstructs the visual history that was repeatedly lost when technical counters, package names, and later design summaries were allowed to overwrite the user's actual headset verdict.
+This file reconstructs C2VR history from the user's headset verdicts, raw RESULTs, physical package identity, and exact runner lineage.
 
-It complements `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md` and `docs/FALSIFIED.md`.
+The purpose is not nostalgia. It prevents a future branch from resurrecting a visually failed architecture because an old ZIP was called `GOLD`, `MAIN`, `CLEAN`, `NO_BINOCULAR`, or because a RESULT ZIP existed.
 
-For visual acceptance:
+For visual/playability acceptance:
 
-`USER_HEADSET_VERDICT > XR_CAPTURE > RAW RESULT > counters > package README > intended architecture`
+`USER_HEADSET_VERDICT > XR_CAPTURE > RAW LIVE RESULT > counters > package README > intended architecture`
 
-A technical fact may be KEEP while the package that produced it is VISUAL REJECT.
+A technical fact may be KEEP while the whole package is VISUAL RED.
+
+## NEW GLOBAL IDENTITY RULE
+
+`RESULT ZIP != LIVE`.
+
+A RESULT archive counts as a visual/runtime experiment only if the game/runtime actually executed the experiment being claimed.
+
+At minimum distinguish:
+
+```text
+PACKAGE_EXISTS
+BUILD_ATTEMPTED
+GAME_LAUNCHED
+XR_SESSION_RAN
+TARGET_CODE_EXECUTED
+HEADSET_IMAGE_EXISTED
+USER_HEADSET_VERDICT
+```
+
+A ZIP containing only `FAILURE.txt`, build logs, or preflight output must never enter visual lineage as a tested build.
 
 ---
 
-# 1. EARLY BRING-UP: OPENXR ALIVE IS NOT VR
+# 1. EARLY BRING-UP — OPENXR ALIVE WAS NOT VR
 
-## 1.1 Mouse-look head control
+## 1.1 Mouse-look / SendInput head control
 
 Early bring-up used:
 
 `HMD yaw/pitch -> SendInput mouse-look -> Crysis game camera`
 
-User verdict:
-- head movement changed the view;
-- it behaved like a mouse;
-- no true VR roll;
-- not a real VR camera.
+The user observed that head motion changed the view, but it behaved like mouse look rather than a spatial VR camera.
 
-Classification:
-- `OPENXR/INPUT BRING-UP = KEEP`
-- `MOUSE_LOOK_AS_HEAD_OWNER = HARD STOP`
+KEEP:
+- OpenXR pose acquisition;
+- input plumbing;
+- launch/injection evidence.
 
-Permanent rule:
-Never use mouse emulation as proof of HEAD ownership. It mixes HMD, body and game aim and cannot establish proper roll/6DoF.
+STOP:
+- mouse emulation as final HEAD ownership;
+- treating mouse-like yaw/pitch as true roll/6DoF.
 
 ## 1.2 `C2VR_NATIVE_MVP_v0.1.2`
 
-User verdict:
+User-observed state:
 - game loaded;
-- HMD movement worked as mouse-look;
+- HMD movement affected view;
 - headset was black.
-
-What this proved:
-- OpenXR host/session alive;
-- pose alive;
-- game launch/injection alive.
-
-What it did NOT prove:
-- visible VR output;
-- camera ownership;
-- stereo.
 
 Classification:
 `TECHNICAL_BRINGUP_KEEP / VISUAL_HARD_RED`.
 
-## 1.3 First visible two-eye output
+Permanent lesson:
+`OPENXR_SESSION_ALIVE != VISIBLE_VR`.
 
-User verdict after the first visible eye transport:
+## 1.3 First visible two-eye transport
+
+The first visible eye output established another trap.
+
+User verdict:
 - image existed;
-- "two screens in two eyes";
-- horizon did not stay spatially stable when head rotated/tilted.
+- effectively “two screens in two eyes”;
+- horizon/world did not remain spatially locked when head rotated/tilted.
 
-Permanent rule:
-`TWO_EYE_TEXTURES != VR`.
+Permanent lesson:
 
-Transport success alone cannot promote a build to visual baseline.
+`TWO_EYE_TEXTURES != VR`
+
+and
+
+`NON_DUPLICATE_LR != FUSED_STEREO`.
 
 ---
 
-# 2. OLD-PIXELS / NEW-POSE CONTRACT FAILURE
+# 2. EARLY NATIVE x64 HOST LINEAGE — FALSE GOLD CORRECTION
 
-## 2.1 v1.0.4 flat image in front of face
+## 2.1 `194212`: strong XR transport proof, NOT visual GOLD
 
-User verdict:
-"передо мной просто плоская картинка".
+Historical tested package lineage:
+`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.4.1_ZIG_AUTOFIND`
 
-Known semantic error:
-- Crysis render camera was NOT HMD-driven;
-- `XrCompositionLayerProjectionView.pose` used the CURRENT HMD pose anyway.
+Result:
+`CRYSIS2VR_C2_NATIVE_RESULT_20260815_194212.zip`
 
-The compositor was told, semantically, that the submitted image had already been rendered from the current HMD pose even though it had not.
+The run genuinely proved substantial infrastructure:
+- x64 OpenXR session alive;
+- Crysis shared texture opened;
+- native SBS image reached headset;
+- submit/copy counts were live;
+- pose valid;
+- physical Quest IPD present;
+- 19 OpenXR L/R captures existed;
+- later captures were non-identical.
 
-This could produce the observed screen-glued-to-face behavior.
+But the same handoff recorded:
+- `NativeProjectionLock=False`;
+- `CameraLock=False`;
+- `CameraInject=False`;
+- `HORIZON_WORLD_LOCK=No`;
+- user sees a flat image;
+- no true roll/world lock.
+
+Old collectors placed this material under labels such as `EVIDENCE/GOLD` / `MAIN_PROVEN_XR`.
+
+That old label is now formally corrected.
 
 Classification:
-`POSE_RELABEL = HARD STOP`.
+`XR_TRANSPORT_TECHNICAL_PROOF = KEEP`
+`VISUAL_WORLD_LOCK = FAIL`
+`VISUAL_GOLD = NO`.
 
-Permanent rule:
-Never attach a newer/current HMD pose to pixels that were rendered from a different/static/older pose.
-Pixels + render pose + FOV + contract identity are one atomic truth unit.
+Permanent lesson:
+A true L/R headset image can still be a flat non-world-locked presentation.
+
+## 2.2 Pose-relabel semantic failure
+
+The early flat-image behavior exposed a semantic contract error:
+- Crysis render camera was not yet HMD-driven;
+- current HMD pose was nevertheless supplied as the OpenXR projection-view pose for pixels rendered from a different/static camera.
+
+The compositor was therefore told that the pixels had been rendered from the current head pose when they had not.
+
+Permanent STOP:
+
+`OLD/STATIC PIXELS + CURRENT HMD POSE = INVALID CONTRACT`.
+
+Pixels + render pose + FOV + ticket/contract identity are one atomic truth unit.
+
+## 2.3 Physical `v1.0.5 WORLDLOCK_DIRECT_CAMERA` recovered
+
+Exact physical package recovered from Library:
+
+`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.5_WORLDLOCK_DIRECT_CAMERA.zip`
+
+Size:
+`95,604 bytes`
+
+SHA256:
+`6D4D9D7120C43111AAA84FC0A36BE65BE4E83617E321B6FD9F390D26A52727B0`
+
+Runner lineage:
+`START_C2VR_v1.0.5.bat -> tools/Build-And-Run.ps1`.
+
+Intended behavior:
+- before native camera lock, use a frozen/recentered layer pose instead of falsely relabelling static pixels with current HMD pose;
+- after camera lock, use HMD-driven Crysis camera plus current OpenXR eye pose;
+- accept a broader Matrix34 camera fingerprint for camera locking.
+
+Important: package intent is NOT proof of a successful LIVE.
+
+## 2.4 `010051` was NOT a VR test
+
+Physical result recovered:
+
+`CRYSIS2VR_C2_NATIVE_RESULT_20260816_010051.zip`
+
+Size:
+`676 bytes`
+
+SHA256:
+`FC65F37E1B5F70F424866B99650C8B66FEA6A54EAD7C5434FFF32A736FB16216`
+
+Contents:
+- `BUILD_RUN.log`
+- `FAILURE.txt`
+
+Failure:
+`Downloaded Zig failed its version self-test.`
+
+Recorded state:
+`GameFilesTouched=False`.
+
+Therefore:
+- Crysis did not test world-lock;
+- OpenXR did not test the new camera policy;
+- no user visual conclusion exists for this run.
+
+Classification:
+`BUILD/TOOLCHAIN_FAIL / NOT_LIVE / NOT_VISUAL_EVIDENCE`.
+
+## 2.5 Physical `v1.0.5.1_ZIG_PORTABLE_FIX` recovered
+
+Package:
+`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.5.1_ZIG_PORTABLE_FIX.zip`
+
+Size:
+`98,478 bytes`
+
+SHA256:
+`546A5C63D951E9C5A5B7C82922C4DAB14D0B6992B72535A2999154E3EFA2FF21`
+
+Its own README explicitly states that `010051` did not test Crysis or OpenXR at all.
+
+The world-lock/direct-camera experiment remained behaviorally unchanged from v1.0.5; this child repaired Zig/toolchain discovery only.
+
+Classification:
+`BUILD_FIX = KEEP`
+`WORLDLOCK_VISUAL_VERDICT = OPEN`.
+
+No recovered evidence currently promotes v1.0.5/v1.0.5.1 to a user-accepted visual checkpoint.
+
+## 2.6 Physical `v1.0.6_OBSERVATORY_DEEP` recovered
+
+Package:
+`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.6_OBSERVATORY_DEEP.zip`
+
+Size:
+`104,932 bytes`
+
+SHA256:
+`7B4907F04865A7A6E8AFC4B578FB955420123B93C1B12DF4A90EE7556446E1E3`
+
+This was instrumentation around the same v1.0.5 world-lock experiment, not an independently accepted visual architecture.
+
+Classification:
+`OBSERVABILITY_CHILD = KEEP`
+`VISUAL_PASS = NOT ESTABLISHED`.
+
+## 2.7 `011323` cleanroom result was also NOT LIVE
+
+Physical result:
+`CRYSIS2VR_C2_NATIVE_RESULT_20260816_011323.zip`
+
+Size:
+`3,774 bytes`
+
+SHA256:
+`432E36FB784315A74A8BA6245FDC82B249B08877AC57F569CB6434C34601DAFF`
+
+Result belonged to the early cleanroom x64-host lineage.
+
+Failure:
+`No x64 OpenXR loader found in the Crysis2 cache, Windows System32, or Oculus runtime.`
+
+Recorded:
+`GameFilesTouched=False`.
+
+Classification:
+`PREFLIGHT/LOADER_FAIL / NOT_LIVE / NOT_VISUAL_EVIDENCE`.
+
+A later package `CRYSIS2VR_C2_CLEANROOM_OPENXR_X64_v1.1.2_LOADER_SELFPROVISION.zip` exists, but a fresh user visual verdict is not yet bound here.
 
 ---
 
 # 3. CAMERA FEEDBACK FAILURE
 
-## 3.1 `171947` all-SetCamera injection
+## `171947` all-SetCamera injection
 
 Result:
 `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260816_171947.zip`
 
 User observation:
 - eyes nearly collapsed to the same image;
-- camera moved/accumulated incorrectly.
+- camera accumulated/moved incorrectly.
 
 Runtime proof:
 - 52,170 adjacent camera-pair observations;
@@ -110,19 +272,51 @@ Runtime proof:
 - median matrix error 0.
 
 Failure:
+
 `G -> G*HMD -> G*HMD^2 -> G*HMD^3 ...`
 
-Permanent rule:
+Permanent STOP:
 Never apply HMD at every downstream `Renderer::SetCamera`.
 
 Salvage:
-The later single-source discovery around `Crysis2.exe+0x0057AC76` remains a valuable upstream ownership topology reference.
+The later once/logical-frame single-source ownership around `Crysis2.exe+0x0057AC76` remains useful.
 
 ---
 
-# 4. NATIVE / NVIDIA / MONITOR-STEREO FAMILY
+# 4. EXACT EYE MATH WAS NOT A VISUAL PASS
 
-## 4.1 `205430` real Quest IPD/FOV graft
+## `203734 / 204156`
+
+These runs were historically over-promoted because their telemetry looked excellent:
+- real HMD XYZ/6DoF;
+- very accurate Quest IPD propagation;
+- exact XrView FOV propagation.
+
+Saved XR captures later corrected the interpretation.
+
+Critical within-run control from `204156`:
+- `camera_locked=0`: image looked normal;
+- after `camera_locked=1`, even a small HMD rotation produced huge black near/viewmodel blades and broken geometry.
+
+Recovered mechanism:
+- world camera near plane around `0.12`;
+- `FOB_NEAREST` near plane around `0.03`;
+- world-eye asymmetry was inherited into the near camera instead of being recomputed for its near plane;
+- near off-axis effect therefore became roughly 4x too strong;
+- visibility was still prepared from a narrower center frustum before wider Quest eye views, producing culling/popping/disappearing geometry.
+
+Classification:
+`POSE/IPD/FOV MATH = KEEP`
+`SURROUNDING EXACT-EYE RENDERER = VISUAL RED`.
+
+Permanent lesson:
+Perfect pose/IPD/FOV counters do not promote the renderer around them.
+
+---
+
+# 5. NATIVE / NVIDIA / MONITOR-STEREO FAMILY
+
+## `205430`
 
 Result:
 `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260816_205430.zip`
@@ -133,392 +327,415 @@ User verdict:
 - shadows disappeared/changed;
 - eye-dependent lighting/state instability.
 
-Permanent rule:
-Do not turn Crysis monitor stereo into final VR merely by replacing monitor eye separation/FOV with real Quest IPD/XrView values.
+Saved L/R captures corroborated non-parallax disagreement in lighting/shadow/near state.
 
-Shared deferred/screen-space/shadow/temporal state can remain binocularly incoherent even if eye geometry is mathematically different.
+Permanent STOP:
+Do not convert the monitor-oriented native stereo into final VR merely by grafting real Quest IPD/FOV onto it.
 
-## 4.2 `STABLE_CAMERA v2.2.0` / `010329`
+## `STABLE_CAMERA v2.2.0 / 010329`
 
-Result context:
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260817_010329.zip`
+Even after simplifying camera policy heavily, the user still reported severe image flicker. Weapon could move in hand while firing still followed monitor/game center.
 
-The branch simplified camera policy heavily, but user still reported severe flicker.
-Weapon could appear controlled, but firing remained tied to monitor/game center.
+Permanent lesson:
+Simpler camera ownership does not repair a binocularly incoherent renderer by itself.
 
-Permanent rule:
-A simpler camera owner does not repair a broken stereo/render-state architecture by itself.
+## `A1_HISTORY_FIX_RESULT_20260817_175934`
 
-## 4.3 `A1_HISTORY_FIX_RESULT_20260817_175934`
-
-This result is a critical component-separation checkpoint.
-
-User verdict:
-- the only useful thing was the crooked controller weapon/hand that fired along the weapon direction;
-- the image was still the bad two-image Nvidia/CryEngine stereo and flickered;
-- user explicitly ordered the old stereo path thrown away completely.
+User verdict separated two systems very clearly:
+- controller hand/weapon could be crooked but fired along weapon direction;
+- image remained the bad two-image flickering Nvidia/CryEngine stereo;
+- old renderer should be thrown away.
 
 Classification:
-- `WEAPON_DIRECTION_COMPONENT = KEEP`
-- `HAND_RIG_VISUAL = BAD`
-- `NVIDIA/CRY STEREO VISUAL BASELINE = HARD RED`
-
-Permanent rule:
-Never use weapon-direction success as permission to preserve the renderer that surrounded it.
-
-## 4.4 Native/NVIDIA project-direction rejection
-
-The user explicitly rejected the old NVIDIA/3D/native-monitor-stereo route as a final architecture even though head movement had partially worked.
-
-This is not merely an old implementation bug. It is a project-level STOP decision.
+`WEAPON_DIRECTION_COMPONENT = KEEP`
+`SURROUNDING RENDERER = HARD RED`.
 
 ---
 
-# 5. FALSE GOLD: REWRITE v4.0.0
+# 6. FALSE GOLD — REWRITE v4.0.0
 
 Package:
 `CRYSIS2VR_REWRITE_v4.0.0_EXACT_XR_STEREO_GOLD_WEAPON_PORTABLE.zip`
 
-Historical SHA256:
+SHA256:
 `08A8C4238EDC8046C2B46A3BECA1D19A86825DE9FE8C2ACADE62B2CF51047BB6`
 
 Result:
 `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260817_023510.zip`
 
-The package attempted exact XrView pose/IPD/asymmetric FOV on persistent eye-camera shadows while keeping native ProcessScene and separate NEAR handling.
-
-Immediate user verdict:
-"да хуйня полная ... рука тоже из жопы крутится ... изображение ... не настроить"
+Immediate user verdict rejected both image and hand behavior.
 
 Classification:
 `USER_VISUAL_HARD_RED`.
 
-Permanent rule:
-The string `GOLD_WEAPON` in a filename has zero evidentiary value.
-Do not inherit this package as a visual parent.
-021239/A1-era weapon firing may be reused only as a narrow component donor.
+Permanent lesson:
+`GOLD_WEAPON` in a filename has zero evidentiary value.
 
 ---
 
-# 6. A1 NATIVE REPAIR: CAMERA-CLOSER CHECKPOINT
+# 7. A1 NATIVE REPAIR — CAMERA-CLOSER REFERENCE
 
 Result:
 `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
 
 User observation:
-- turning head left/right did move the in-game camera/world;
-- the main remaining problem was the flicker / two-screen behavior;
-- user described the state as very close.
+- head left/right drove the in-game camera/world;
+- main remaining problem was flicker / two-screen behavior;
+- state was described as very close.
 
 Classification:
 `CAMERA_OWNERSHIP_REFERENCE_ONLY`.
 
-This is important because it proves a historically better camera behavior existed before later renderer mutations.
 Do not inherit its native/Nvidia final stereo.
 
 ---
 
-# 7. v6.0.x: WORLD STABILITY / NO-FLICKER CHECKPOINT
+# 8. v6.0.1 — PHYSICALLY RECOVERED WORLD-STABILITY BASELINE
 
-## 7.1 v6.0.0 regression result
+This is now an exact recovered carrier, not a memory fragment.
 
-Historical architecture decision states that v6.0.0 visually restored:
-- normal mono world;
-- normal textures;
-- stable shadows.
+Package:
+`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
 
-Native Cry stereo/SBS remained rejected.
+Exact size:
+`164,221 bytes`
 
-The remaining faults were narrowed to XR pacing and binocular composition.
+Exact SHA256:
+`E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`
 
-## 7.2 v6.0.1 user result
+Exact inherited runner lineage inside the physical archive:
 
-This is one of the strongest partial-green visual checkpoints in project history.
+```text
+20_RUN_C2VR_FULL_VR.bat
+ -> FUTURE_RUNS/CRYSIS2VR_BLACKBOX_ENGINE_TAP_v1.0.0/RUN_FULL_VR.bat
+ -> tools/Build-Run-EngineTap.ps1
+```
 
-Recorded user result:
-- flicker is gone;
-- shadows/textures/objects are stable;
-- eyes still do not fuse.
+Recovery lineage:
 
-The v6.0.1 pacing change kept a local last-good completed frame in XR64 instead of submitting zero projection layers every time Quest requested a frame before the next game Present.
+```text
+19_RECOVER_C2VR_BLACKBOX.bat
+ -> RECOVER_ENGINE_TAP.bat
+ -> tools/Recover-EngineTap.ps1
+```
 
-Important distinction:
-This is NOT final stereo. The world image was still not a correct binocular VR pair.
+This matters because the project must reuse this actual runner, not invent a new BAT/PS1.
+
+Historical user result preserved by its direct descendants:
+- flicker gone;
+- shadows stable;
+- textures stable;
+- objects stable;
+- eyes still did NOT fuse.
 
 Classification:
-`WORLD_STABILITY_NO_FLICKER_REFERENCE = KEEP`
-`BINOCULAR_STEREO = FAIL`
 
-Exact physical v6.0.1 package carrier/hash is still not recovered with enough confidence. Do not invent it.
+`WORLD_STABILITY_NO_FLICKER_REFERENCE = GREEN`
 
-Closest preserved descendant/documentary carrier:
-`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.2_NO_FLICKER_EXACT_SOURCE_PROJECTION_PORTABLE.zip`
-SHA256 `FA9835A71744211F84B84C0923BEF51EC316BD5FD426B3411CEE6AFEA68801D5`
+`BINOCULAR_STEREO = FAIL`.
 
-That descendant contains `ARCHITECTURE_DECISION_v6.0.1.md` and the inherited runner lineage, but it is not automatically the exact visual v6.0.1 package.
+The v6.0.1 change was narrow:
+- XR64 kept/reused the most recent complete frame when Quest requested another frame before the next game Present;
+- it stopped emitting empty projection layers as the normal continuity response;
+- packet/frame metadata publication ordering was corrected before keyed-mutex release.
 
-## 7.3 v6.1.0 A fusion-proof quad
+Important modern restriction:
+Last-good reuse is allowed only with the original render pose/FOV/metadata that produced those pixels. Never relabel reused pixels as a newer HMD contract.
+
+Recovered source identities:
+- `engine_tap.cpp` `60F29B0FAE02BC1E751B5FD916C1B82736D3CAA97EB4A99D3F07DE7379D28CB8`
+- `c2vr_host_client.cpp` `2477C256F9E621DEFFB9F6114FE6275865FA86E9826FD2CD8D8A21143472DDFD`
+- `c2vr_openxr_host.cpp` `21853D54D58C37BC90F0A610CF62475173F2CD942D7F40709FCB3BA6B3608D20`
+- `porous_proxy.cpp` `39A96807DC15EB60AE110EA17C7D2D8A903DD4D8BE81184CCAE1A0A81D83B31E`
+- `c2vr_shared.h` `104E933B47464069D40DE1231B0FA13449B1290AA8CE91F6355F941F4B329508`.
+
+## v6.1.0 A/FUSION_PROOF_QUAD
 
 Package:
 `CRYSIS2VR_CUSTOM_VR_OWNER_v6.1.0_A_FUSION_PROOF_QUAD_PORTABLE.zip`
-SHA256 `1CDF50E1EF1E25A1CCB33C48D0795732CDF1601F586F5F4FFAE75B489913AEFE`
 
-Purpose:
-Change only composition primitive to a single VIEW-space BOTH-eye quad to prove that a stable 2D image can fuse without pretending it is stereo.
+SHA256:
+`1CDF50E1EF1E25A1CCB33C48D0795732CDF1601F586F5F4FFAE75B489913AEFE`
 
-A PASS here would only prove compositor/display fusion, not final stereo.
+This intentionally submitted one VIEW-space BOTH-eye quad as a 2D fusion control.
+
+A PASS could only prove compositor/display fusion, never real stereo.
 
 Classification:
 `COMPOSITOR_CONTROL_ONLY`.
 
 ---
 
-# 8. v8/v9/v10: DO NOT CONFUSE CLEANER IMAGE WITH FULL VR PASS
+# 9. STOCK 65MM STEREO HAD ITS OWN RIGHT-EYE BLUR
 
-Historical v10-era council evidence preserved two important facts:
-- no-flicker behavior was already considered GREEN and must not regress;
-- `r_MotionBlur=0` and `r_PostMSAA=0` corresponded to a cleaner image reported by the user.
+A clean stock-Crysis RenderDoc control is important because it prevents us from blaming every historical eye-quality defect on the C2VR bridge.
 
-But the same era still had user-visible failures including:
-- wrong/strange world scale;
-- first-person weapon counter-rotating against head motion;
-- jitter/blur on side-to-side head motion.
+Control:
+- stock Crysis 2;
+- native 65 mm SBS;
+- no OpenXR;
+- no C2VR DLL;
+- no camera injection.
 
-Result explicitly referenced by v10.1 design:
-`CRYSIS2VR_WORLD_NEAR_DUAL_DEPTH_RESULT_20260818_022454.zip`
+Valid capture:
+`555666.rdc`
 
-Its two user-visible failures were recorded as:
-1. wrong / strange WORLD scale;
-2. first-person weapon counter-rotating against head motion.
+Size:
+`288,668,138 bytes`.
 
-Permanent rule:
-A cleaner/no-flicker image is a component PASS only. It does not establish world scale, near/viewmodel ownership, stereo fusion or comfort.
+Observed resources included:
+`StereoL`, `StereoR`, `MotionBlurData`, `SSAO_BlurKernelP`, `sunshaftsMap`, `ShadowChanMasks*`, `cDeferredAmbient`.
 
-## v8/v9 near ownership
+Visual/measurement result:
+- RIGHT was visibly softer even on static surfaces;
+- approximate sharpness LEFT `328`, RIGHT `162`, roughly 2x worse.
 
-Historical numeric `near_left=55 / near_right=6634` was later proven to be invalid ownership evidence caused by a cross-thread/global active-eye assumption.
+Single-variable controls:
+- `r_MotionBlur=0`: problem remained;
+- `r_SSAO=0`: problem remained, and measured RIGHT/LEFT sharpness did not recover.
 
-Permanent rule:
-Never use a main-thread/global active-eye variable to classify render-thread `FOB_NEAREST` ownership.
+Package for the motion-blur-only control:
+`CRYSIS2VR_STOCK_65MM_MOTIONBLUR_OFF_RENDERDOC_v1.0.0.zip`
+SHA256 `50EB4F2E66EA2CC3F38C6836F9045CD2A11FFCCE1B00F3FD1608DE1720880AFB`.
+
+Permanent lesson:
+Some right-eye blur/asymmetry exists in stock native stereo itself. That does NOT make a later bad VR build acceptable, but it changes causal attribution: not every right-eye softness defect is OpenXR transport corruption.
 
 ---
 
-# 9. FOB_NEAREST OWNER TRUTH: EVIDENCE KEEP, VISUAL REJECT
+# 10. v8/v9/v10 — CLEANER IMAGE WAS NOT FULL VR PASS
 
-Fresh results:
+Historical v10-era evidence preserved that no-flicker behavior must not regress and that disabling some post effects could make the image cleaner.
+
+But user-visible failures remained:
+- wrong/strange world scale;
+- first-person weapon counter-rotating against head motion;
+- jitter/blur under side-to-side head movement.
+
+Result explicitly referenced by later design:
+`CRYSIS2VR_WORLD_NEAR_DUAL_DEPTH_RESULT_20260818_022454.zip`.
+
+Permanent lesson:
+Cleaner image / no flicker is a component PASS only. It does not establish world scale, NEAR ownership, binocular fusion, or comfort.
+
+---
+
+# 11. FOB_NEAREST OWNER TRUTH — EVIDENCE KEEP, VISUAL REJECT
+
+Results:
 - `CRYSIS2VR_FOB_NEAREST_OWNER_TRUTH_RESULT_20260819_012736.zip`
 - `CRYSIS2VR_FOB_NEAREST_OWNER_TRUTH_RESULT_20260819_013107.zip`
 
-The runtime result established a strong technical fact:
-- LEFT/RIGHT CopyToStereo boundary alternation was coherent;
-- near events assigned using render-thread next-eye prediction were balanced;
-- dominant NEAR caller was `+0x000FF456` on both eyes;
-- old v7 near asymmetry evidence was false.
+Useful runtime fact:
+- render-thread next-eye prediction produced balanced NEAR ownership;
+- dominant near caller was `+0x000FF456` for both eyes;
+- old `near_left=55 / near_right=6634` asymmetry was a cross-thread/global-active-eye classification artifact.
 
-But the contemporaneous user visual oracle explicitly says the actual visual result was completely wrong/broken.
+But the contemporaneous user visual verdict remained broken.
 
 Classification:
-`OWNER_TIMING_EVIDENCE = KEEP`
-`VISUAL_BASELINE = REJECT`
+`NEAR_OWNER_TIMING_EVIDENCE = KEEP`
+`VISUAL_BASELINE = REJECT`.
 
-Permanent rule:
-Never promote a diagnostic/oracle package to visual parent just because its causal counter result is excellent.
-
----
-
-# 10. NATIVE_NEAR_PASSTHROUGH: REVERSE CONTROL ONLY
-
-Package family:
+Related reverse control:
 `CRYSIS2VR_NATIVE_NEAR_PASSTHROUGH_v7.0.4_REVERSE_CONTROL.zip`
+SHA256 `EEA8857B1B45D97668EFD09CDB168E7010B223AAD22F2FDE7F01D255074AC8F7`.
 
-Historical SHA256:
-`EEA8857B1B45D97668EFD09CDB168E7010B223AAD22F2FDE7F01D255074AC8F7`
-
-Numeric reverse-control checks passed, but the branch was not accepted as the desired visual baseline.
-
-Classification:
-`CAUSAL_REVERSE_CONTROL = KEEP`
-`VISUAL_PARENT = NO`
+Numeric reverse-control PASS does not make it a visual parent.
 
 ---
 
-# 11. 19 AUGUST GOOD SINGLE-WINDOW REFERENCE
+# 12. CLEAN_NATIVE_EYES v7.0.2 — TECHNICAL, VISUAL STATUS UNBOUND
 
-A dedicated `CRYSIS2VR USER VISUAL ORACLE — 18–19 AUGUST 2026` records the project decision:
+Package:
+`CRYSIS2VR_CLEAN_NATIVE_EYES_v7.0.2_SOURCE_SIZE_XR_TRANSPORT.zip`
 
-RETIRE:
-- SBS/Nvidia path;
-- two-window target;
-- black-headset/moving-monitor interpretations;
-- global active-eye near ownership.
+Result:
+`CRYSIS2VR_CLEAN_NATIVE_SOURCE_SIZE_RESULT_20260819_001036.zip`.
 
-KEEP / RECOVER:
-`last good native single-window branch`
+Known causal scope:
+- host swapchain/source-size transport change;
+- game-side core remained byte-identical to its parent;
+- target was direct source-size private-eye transfer.
 
-Recorded visual characteristics to recover:
+No sufficiently direct user headset verdict is recovered that promotes this exact package to the historical “last good single-window”.
+
+Classification:
+`TECHNICAL_EVIDENCE_KEEP / VISUAL_STATUS_UNBOUND`.
+
+---
+
+# 13. 18–19 AUGUST “LAST GOOD NATIVE SINGLE-WINDOW” PROFILE
+
+A dedicated historical visual oracle explicitly ordered the project to recover the last good native single-window branch and retire the SBS/Nvidia/two-window/black-headset interpretations.
+
+Recorded good behavior profile:
 - one window;
 - native OpenXR dual eye;
 - good world scale;
 - stable head movement;
 - image present in headset;
-- only hand/weapon still visibly wrong.
+- only hand/weapon visibly wrong.
 
-This is one of the most important recovery targets in the entire project.
+This is one of the strongest user-accepted behavior profiles in the project.
 
-Critical archival fact:
-The contemporaneous handoff itself says the exact good single-window lineage/hash was still a blind zone and must be reconstructed before mutation.
+But the same contemporaneous handoff recorded its exact package/hash lineage as a blind zone that had to be reconstructed before mutation.
 
-Therefore classification is:
-`USER_ACCEPTED_BEHAVIOR_PROFILE = KEEP`
-`EXACT_PACKAGE_IDENTITY = OPEN`
+Classification:
+`USER_ACCEPTED_BEHAVIOR_PROFILE = HIGH_PRIORITY_KEEP`
+`EXACT_PACKAGE_IDENTITY = OPEN`.
 
-Do not guess the parent package from temporal adjacency.
+Do not guess the package from temporal adjacency.
 
 ---
 
-# 12. NO-CRY-STEREO TEMPORAL EYES: PRESENT IS NOT EYE AUTHORITY
+# 14. PRESENT WAS NOT AUTHORITATIVE EYE IDENTITY
 
-A later no-Cry-stereo temporal experiment established another structural STOP:
-- two logical eye renders could be scheduled around RenderWorld;
-- Present capture did not preserve that eye identity 1:1;
-- observed scheduling/capture counts included `417/417` planned against `396/264` effectively captured;
-- L/R could therefore represent different moments/cameras rather than a coherent binocular pair;
-- branch also crashed `0xC0000005`.
+A later no-Cry-stereo temporal experiment scheduled logical eye renders but Present did not preserve that identity 1:1.
+
+One control recorded:
+- planned LEFT/RIGHT `417/417`;
+- effectively captured roughly `396/264`;
+- branch also crashed.
 
 Permanent rule:
+
 `PRESENT != AUTHORITATIVE EYE OWNER`.
 
-Never infer eye identity from a main-thread/global marker and expect Present to preserve it.
+Do not infer eye identity from a global/main-thread marker and expect Present to preserve it through the render-thread pipeline.
 
 ---
 
-# 13. `181936`: COUNTERS ALIVE, VISUAL/THREAD PATH DEAD
+# 15. `181936` — ROUTE REACHED, THREAD/COPY POLICY DEAD
 
 Result:
 `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260817_181936.zip`
 
-Historical manifest records:
+Historical evidence:
 - first pair reached OpenXR;
-- then crash `0xC0000005` at `CryRenderD3D11.dll+0x0008A117` after RC copy #3;
-- old RC callback performed `CopyResource/Flush` and copied a near-black swapchain/backbuffer.
+- crash `0xC0000005` after RC copy #3;
+- old RC callback performed `CopyResource/Flush` in an unproven thread/context and copied near-black data.
 
 Classification:
-`ROUTE_REACHED = KEEP AS FORENSIC FACT`
-`RC_CALLBACK_COPYRESOURCE/FLUSH POLICY = HARD STOP`
-`VISUAL BASELINE = HARD RED`
-
-Permanent rule:
-Nonzero L/R/RC/copy counters do not make a renderer path safe or visible.
-Do not perform unsafe D3D copy/flush work from an unproven render-command callback/thread context.
+`ROUTE_REACHED = KEEP`
+`RC_CALLBACK_COPY/FLUSH POLICY = HARD STOP`
+`VISUAL_BUILD = HARD RED`.
 
 ---
 
-# 14. v11/v12 BINOCULAR / TELESCOPE FAMILY
+# 16. v11/v12 BINOCULAR / TELESCOPE FAMILY
 
-User repeatedly described this era as:
-- telescope / binocular view;
-- severe eye misalignment;
-- completely wrong despite technical progress.
+User repeatedly described this era as telescope/binocular, severely misaligned, and completely wrong despite technical counters improving.
+
+Exact single-package binding remains incomplete.
 
 Classification:
 `FAMILY_BOUND_VISUAL_HARD_RED`.
 
-Do not guess one exact neighboring v11/v12 ZIP as the sole cause without binding the exact user RESULT.
+A later `NO_BINOCULAR`-named technical path could make eye-axis and asymmetric-FOV metrics numerically excellent.
 
-## Important later lesson
-A later v15.1-style "NO_BINOCULAR" technical path could report approximately:
-- eye-axis dot near +1;
-- tiny asymmetric FOV numerical errors;
-- hundreds of dual scene pairs;
-
-Yet historical user binocular complaints were not thereby globally closed.
+That does not close the historical headset complaint.
 
 Permanent rule:
-`EYE_AXIS_DOT + FOV_NUMERIC_MATCH != VISUAL_FUSION_PROOF`.
 
-Binocular acceptance requires actual headset fusion and pixel/render-owner coherence.
+`EYE_AXIS_DOT + FOV_NUMERIC_MATCH != BINOCULAR_FUSION_PROOF`.
 
 ---
 
-# 15. DUALWORLD v14 BLACK-HEADSET FAMILY
+# 17. DUALWORLD v14 — BLACK HEADSET FAMILY
 
 ## v14.0.2
+
 Package:
 `CRYSIS2VR_DUALWORLD_CLEANROOM_v14.0.2.zip`
-SHA256 `A8BC46D31EE4A9FB9D34909D0EE5863CDA740A3710914D028C66974977A12F7F`
+
+SHA256:
+`A8BC46D31EE4A9FB9D34909D0EE5863CDA740A3710914D028C66974977A12F7F`
 
 User verdict:
 headset completely black.
 
-Contemporary result files include:
-- `C2VR_DUALWORLD14_RESULT_20260819_162623.zip`
-- `C2VR_DUALWORLD14_RESULT_20260819_162900.zip`
-
-Exact one-to-one binding to the verbal verdict is not strong enough to assign blindly.
+Contemporary result files include `C2VR_DUALWORLD14_RESULT_20260819_162623.zip` and `...162900.zip`, but exact one-to-one verbal binding remains uncertain.
 
 ## v14.0.3 lazy gate
+
 Package:
-`CRYSIS2VR_DUALWORLD_CLEANROOM_v14.0.3_LAZY_GATE_HOTFIX.zip`
+`CRYSIS2VR_DUALWORLD_CLEANROOM_v14.0.3_LAZY_GATE_HOTFIX.zip`.
 
-User again reported startup OpenXR signaling and completely black headset output.
+User again reported startup OpenXR signaling and a black headset.
 
-Permanent rule:
-Do not patch-number-forward from a black-headset parent. Revert to a visible baseline first.
-High-level duplicate-DualWorld is not the preferred final scheduler.
-
----
-
-# 16. GLOBAL ARCHITECTURAL LESSONS RECOVERED FROM USER HISTORY
-
-1. `OPENXR_SESSION_ALIVE != VISIBLE_VR`.
-2. `TWO_EYE_TEXTURES != VR`.
-3. `NON_DUPLICATE_L/R != FUSED_STEREO`.
-4. `CURRENT_HMD_POSE != VALID_LAYER_POSE` unless those pixels were rendered from that pose.
-5. `GOOD_CAMERA_MOTION != GOOD_STEREO`.
-6. `GOOD_WEAPON_DIRECTION != GOOD_RENDERER`.
-7. `NO_FLICKER != CORRECT_STEREO`.
-8. `GOOD_COUNTERS != USER VISUAL PASS`.
-9. `GOOD OWNER ORACLE != GOOD PLAYABLE BUILD`.
-10. `PRESENT != EYE OWNER`.
-11. `EYE AXIS/FOV NUMERIC MATCH != BINOCULAR FUSION`.
-12. `GOLD/CLEAN/NO_BINOCULAR` in a package name is not evidence.
-13. Never simultaneously mutate world stereo + transport + near camera + weapon and then claim causality.
-14. When a user-accepted single-window baseline existed, recover its exact physical lineage before replacing the renderer.
-15. Downstream GPU/constant-buffer camera mutation is a diagnostic/verifier technique, not a default final gameplay-camera owner. CPU camera, culling, shadows, sky, NEAR and gameplay systems may already have consumed a different camera.
+Permanent STOP:
+Do not patch-number forward from a black-headset parent. Revert to a visible baseline first.
 
 ---
 
-# 17. RECOVERY PRIORITY AFTER THIS RECONSTRUCTION
+# 18. FRUSTUM_COHERENCE v1.2.6 — GOOD IDEA, NOT A LIVE PASS
 
-Do not choose the newest package.
-Recover properties independently:
+Package:
+`CRYSIS2VR_FRUSTUM_COHERENCE_FOB_NEAREST_v1.2.6_OVERWRITE_LAB.zip`
 
-### A. World stability reference
-v6.0.1 behavior:
-- no flicker;
-- stable textures/shadows/objects;
-- binocular fusion still unresolved.
+SHA256:
+`E59D1266CDFD12BD7F853813C276CDD65C2C2B3ECA00CE269D50B902D5A692F6`.
 
-### B. Camera ownership reference
-`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` and single-source `+0x0057AC76` lineage.
+Intent was sensible:
+- recompute near-camera XR asymmetry for the near plane;
+- use union L/R frustum for visibility;
+- keep HMD translation disabled while testing.
 
-### C. Historical best complete behavior profile
-19 Aug `last good native single-window branch`:
-- one window;
-- native OpenXR dual eye;
-- good world scale;
-- stable head movement;
-- headset image visible;
-- hand/weapon still wrong.
+But the historical result failed generated-source compilation and did not launch a valid Crysis/OpenXR visual test. v1.2.7 was a build fix with architecture unchanged.
 
-Exact package/hash remains to be recovered before any mutation.
+Classification:
+`ARCHITECTURAL_CANDIDATE / NOT_VISUAL_GOLD / v1.2.6 NOT_LIVE`.
 
-### D. Weapon direction donor
-A1/021239/175934-era controller-to-fire behavior only.
-Do not inherit the surrounding renderer.
+---
 
-### E. True private L/R renderer primitive
-`CUSTOM_DUAL_T1 v1.0.1` technical proof only.
-Do not use it as automatic visual parent after later user HARD RED descendants.
+# 19. GLOBAL LESSONS
 
-The next useful build must be a reproduction/bisect from one recovered accepted/reference lineage, not another multi-system synthesis.
+1. `RESULT ZIP != LIVE`.
+2. `OPENXR_SESSION_ALIVE != VISIBLE_VR`.
+3. `VISIBLE L/R != WORLD-LOCKED VR`.
+4. `NON_DUPLICATE L/R != FUSED STEREO`.
+5. `CURRENT HMD POSE != VALID LAYER POSE` unless those pixels were rendered from that pose.
+6. `GOOD CAMERA MOTION != GOOD STEREO`.
+7. `GOOD WEAPON DIRECTION != GOOD RENDERER`.
+8. `NO FLICKER != CORRECT STEREO`.
+9. `GOOD COUNTERS != USER VISUAL PASS`.
+10. `GOOD OWNER ORACLE != GOOD PLAYABLE BUILD`.
+11. `PRESENT != EYE OWNER`.
+12. `EYE AXIS/FOV NUMERIC MATCH != BINOCULAR FUSION`.
+13. `GOLD/CLEAN/MAIN/NO_BINOCULAR` in a package name is not evidence.
+14. Downstream GPU/CB camera mutation is a diagnostic/verifier technique, not default final gameplay-camera ownership.
+15. Stock native stereo itself contains right-eye postprocess/image-quality asymmetry; causal attribution must use stock controls.
+16. When a user-accepted baseline existed, recover its exact physical carrier and runner before mutation.
+
+---
+
+# 20. RECOVERY PRIORITY
+
+Do not choose by newest version number.
+
+## A. World stability / no flicker
+Use the exact recovered physical v6.0.1 carrier:
+`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+SHA256 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
+
+Reproduce with its real inherited runner. Do not write a replacement launcher.
+
+## B. Camera ownership
+Use:
+- `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`;
+- single-source `+0x0057AC76` topology.
+
+Do not inherit native/Nvidia final stereo.
+
+## C. Historical best complete behavior profile
+Recover the exact package behind the 18–19 Aug “last good native single-window” behavior profile.
+Do not guess it from v7 filenames.
+
+## D. True private L/R mechanics
+Use `CUSTOM_DUAL_T1 v1.0.1` only as a renderer primitive, not automatic visual parent.
+
+## E. Weapon direction
+Preserve `021239/175934` controller-to-fire behavior only after camera/stereo baseline is accepted.
+
+The next useful visual build must come from one exact recovered baseline plus one causal mutation, not another multi-system synthesis.
