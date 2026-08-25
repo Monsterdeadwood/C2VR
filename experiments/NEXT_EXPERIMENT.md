@@ -2,107 +2,68 @@
 
 ## CURRENT GATE
 
-`VISIBLE PRIVATE L/R / STEREO CAUSAL MATRIX`
-
-## R1 CLOSED MECHANICALLY
-
-Result:
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260825_175757.zip`
-SHA256 `E737A348BD60CC479CAC6284023F94D3542D8923D09C04E8D0D822D66810F9BD`.
-
-R1 reached DONE with 824 hidden private L/R pairs, balanced 824/824 eye execution, 824/824 temporal restore, temporal_leak=0, pose_mismatch=0, and no hidden publication/shared copy/OpenXR submit.
-
-Classification:
-`LIVE / MECHANICAL PASS / VISIBLE TRUE STEREO NOT TESTED`.
-
-## R2 v1.0.0 RESULT 194014
-
-`NOT_LIVE`.
-
-Stopped at Stage 3 before x86 compile and before game launch:
-`v6 game client guard failed: custom_vr_transport=MONO_BACKBUFFER_TO_TWO_OPENXR_EYES`
-
-No stereo conclusion is allowed.
-
-## SUPERSEDED PACKAGES
-
-`R2 v1.0.1 GUARDFIX` and `R2 v1.0.2 VALIDATOR_SYNC` are no longer valid next parents.
-
-Reason: the proven R1/v6 build runner should not have been modified to weaken/change its source guard merely because the R2 source removed an inherited marker.
-
-## NEXT RUNTIME
-
-`R2 PRIVATE L/R PHASE MATRIX v1.0.3 CLEAN REBASE`
-
-Package:
-`CRYSIS2VR_V601_PRIVATE_LR_R2_v1.0.3_CLEAN_REBASE_ONECLICK.zip`
-
-Bytes:
-`205897`
-
-SHA256:
-`AD9C28F175E7F300B89334F31F2AB921D24597B415A30C5E8B385A86CFE0DD0C`
-
-Status:
-`PREPARED / UNRUN`.
-
-Validation:
-- clean-rebase static `53/53 PASS`;
-- exact inherited client/host/IPC source guards simulated PASS;
-- analyzer Python compile PASS;
-- ZIP CRC PASS.
-
-Full record:
-`experiments/R2_V103_CLEAN_REBASE_PREPARED_20260825.md`.
+`EXACT HISTORICAL 191032 -> v6.0.1 PRIVATE_RTV REPRODUCTION`
 
 ## PREFLIGHT — exactly 5 lines
 
-MISSING FACT = where visible true-private L/R first becomes wrong: replay/state, eye translation, asymmetric projection, or eye order.
-WHY THIS PARENT = exact proven R1 is the parent again; no guardfix/validator-sync descendant is reused as architecture.
-ONE MUTATION CATEGORY = visible XR source/projection phase mux plus diagnostics only; build/launch/restore/world-owner/IPC remain exact R1.
-PASS = matrix localizes the first bad transition, or PRIVATE_FULL is stable/nonduplicate and user-fused while MONO controls remain stable.
-FAIL = baseline invalid, private publication fails, restore/hash fails, or no phase yields interpretable mechanical/visual evidence.
+MISSING FACT = does the exact one-delta child of user-positive `191032` preserve that good world/camera/texture behavior while finally making the image visible in Quest?
+WHY THIS PARENT = `191032` has a direct positive user verdict; GOODLINE/v7 and R2/T1 are user visual HARD RED or otherwise unsuitable as visual parents.
+ONE MUTATION CATEGORY = XR output bridge only: private typed eye RTs then CopyResource to acquired OpenXR swapchain images.
+PASS = Quest output is visible while world/head/textures/shadows remain stable, RIGHT eye is not blurred, and no binocular/telescope geometry appears.
+FAIL = black headset, broken/moving shadows, RIGHT-eye blur, binocular/telescope geometry, world/head regression, or restore/hash failure.
 
 ## LINEAGE
 
-BASE_PACKAGE = `CRYSIS2VR_V601_HIDDEN_T1_R1_v1.0.0_ONECLICK.zip`
-BASE_SCRIPT = `20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`
-KNOWN_GOOD_RESULT = `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260825_175757.zip`
-WHAT IS REUSED = exact R1 BAT/PS1/recovery, v6 world owner, porous proxy, IPC v5/636, retail guards, backup/restore and result packaging.
-ONLY DELTA = R2 phased private-eye render/publication/composition plus analyzer.
-UNCHANGED LAUNCH PATH = YES, byte-identical to R1.
-UNCHANGED BUILD PATH = YES, byte-identical to R1.
-UNCHANGED RESTORE PATH = YES, byte-identical to R1.
-EXPECTED NEW RESULT = `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_*.zip` containing R2 phase status, captures and analyzer.
+BASE_PACKAGE = `CRYSIS2VR_Z_REPROJECTION_v6.0.0.zip`
+BASE_PACKAGE_SHA256 = `875853652D3A2ACC0E684A2E9BE2118D69FB2252E4B21B677DA4CF5105922656`
+BASE_SCRIPT = `RUN_C2VR_Z_REPROJECTION_v6.0.0.bat`
+KNOWN_USER_POSITIVE_RESULT = `CRYSIS2VR_Z_REPROJECTION_RESULT_20260817_191032.zip`
+KNOWN_USER_POSITIVE_PROPERTIES = one normal monitor image; head drives world; weapon fires; textures normal; user called it "реально неплохой" and "реально хорошо".
+KNOWN_BLOCKER = `XR_RTV_CREATE_FAIL eye=0 image=0 hr=0x80070057`; no Quest image.
 
-## RUN
+CHILD_PACKAGE = `CRYSIS2VR_Z_REPROJECTION_v6.0.1_PRIVATE_RTV_BRIDGE.zip`
+CHILD_SHA256 = `E683FA148794DDA2F671BD6C0ADDF6AF535482FE3F2A43DE23539778608E032A`
+CHILD_SCRIPT = `RUN_C2VR_Z_REPROJECTION_v6.0.1.bat`
+HISTORICAL_CHILD_RESULT = `CRYSIS2VR_Z_REPROJECTION_RESULT_20260817_193132.zip`
+HISTORICAL_CHILD_USER_VERDICT = `UNBOUND`
 
-Use only:
-`20_RUN_C2VR_FULL_VR.bat`
+WHAT IS REUSED = exact historical v6.0.0 world/camera/game-side renderer behavior and its historical runner lineage.
+ONLY DELTA = replace direct RTV creation on Oculus swapchain textures with private typed LEFT/RIGHT RTs, render existing reprojection there, then CopyResource to acquired XR swapchain images.
+UNCHANGED WORLD/CAMERA POLICY = YES.
+UNCHANGED WEAPON/GAMEPLAY POLICY = YES.
+UNCHANGED NATIVE-STEREO-OFF POLICY = YES.
+LATER v6.1+ CHANGES IMPORTED = NO.
 
-Automatic phases:
-```text
-0–10 s   MONO_A
-10–22 s  PRIVATE_ZERO
-22–36 s  PRIVATE_IPD
-36–52 s  PRIVATE_FULL
-52–64 s  PRIVATE_SWAP
-64–74 s  MONO_B
->74 s    DONE
-```
+## EXECUTION
 
-No keys.
+Use a hash-bound wrapper only to locate and launch the exact historical child package. The wrapper must not rewrite the renderer or runner.
 
-After DONE, exit normally so the inherited runner restores retail and packs the RESULT.
+Required historical ZIP SHA256:
+`E683FA148794DDA2F671BD6C0ADDF6AF535482FE3F2A43DE23539778608E032A`
 
-Observe per phase:
-- world/camera stability;
-- binocular fusion/doubling;
-- shadows/light;
-- geometry/object integrity;
-- FULL versus SWAP;
-- MONO_B recovery.
+Inside that package run only:
+`RUN_C2VR_Z_REPROJECTION_v6.0.1.bat`
+
+After the run, collect the generated:
+`CRYSIS2VR_Z_REPROJECTION_RESULT_*.zip`
+
+## OBSERVE
+
+- image visible in Quest left/right;
+- world remains stable under slow and fast yaw;
+- shadows/light do not move per eye;
+- RIGHT eye is not softer than LEFT in the pathological GOODLINE/native-stereo way;
+- textures remain normal;
+- no binocular/telescope geometry;
+- weapon behavior remains at least no worse than the `191032` checkpoint.
 
 ## FORBIDDEN
 
-No K/PosePair/final HEAD/weapon/NEAR/native Nvidia/Cry stereo/new temporal-shadow policy in this LIVE.
+- no GOODLINE descendants;
+- no v7/native ProcessScene headset renderer;
+- no R2/T1 phase matrix;
+- no K/PosePair;
+- no v6.1/v6.2/v6.3/v6.4 imports;
+- no new weapon/NEAR mutation;
+- no new temporal/shadow mutation;
+- no IPD/FOV tuning in this LIVE.
