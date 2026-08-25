@@ -1,40 +1,44 @@
 # Crysis 2 VR — STATE SYNC
 
-## GLOBAL OVERRIDE — 2026-08-25 / 220427 LIVE
+## GLOBAL OVERRIDE — 2026-08-25 / 220427 PARTIAL ACCEPT
 
 Every C2VR branch must read these before choosing a parent, planning a LIVE, writing a BAT/PS1, or changing renderer policy:
 
 1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
-2. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
-3. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-4. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-5. `docs/FALSIFIED.md`
-6. `docs/STATE.md`
-7. `docs/NEXT.md`
-8. `experiments/NEXT_EXPERIMENT.md`
+2. `docs/MONO_QUALITY_ANCHOR_20260818.md`
+3. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
+4. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+5. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+6. `docs/FALSIFIED.md`
+7. `docs/STATE.md`
+8. `docs/NEXT.md`
+9. `experiments/NEXT_EXPERIMENT.md`
 
-For visual/playability acceptance:
-`USER_HEADSET_VERDICT > deterministic captures > raw LIVE logs/status > counters > generated analyzer summary > static validation > design intent`.
-
-Bare `GREEN` remains forbidden.
-
-`RESULT ZIP != LIVE` remains true, and the inverse is also important: a buggy generated summary must not erase raw proof that a LIVE actually executed.
+Evidence law:
+`USER_HEADSET_VERDICT > deterministic captures > raw LIVE logs/status > counters > generated analyzer summary > static validation > package intent`.
 
 ## CURRENT GATE
 
-`220427 V6.0.1 LIVE -> BIND USER HEADSET VERDICT -> VISUAL BASELINE DECISION`
+`220427 PARTIAL VISUAL BASELINE -> CLEAN MONO QUALITY CONTROL -> SCALE / SOURCE-PROJECTION CONTRACT`
 
-Old text that says v6.0.1 PRIVATE_RTV is PREPARED/UNRUN is superseded.
+Fresh direct user verdict:
 
-Old PosePair/K, GOODLINE, R2/T1 visible-matrix, v17-whole-build and broad visual-rewrite gates remain superseded.
+```text
+USER_HEADSET_VERDICT = PARTIAL_ACCEPT / PROMISING
+WORLD_SCALE          = FAIL
+WHOLE_BUILD_RED      = NO
+FULL_USER_VISUAL_GREEN = NO
+```
+
+User says scale is problematic, but otherwise the branch is broadly normal/promising and worth finishing.
+
+Do not demote it to HARD RED.
+Do not promote it to final visual GREEN.
 
 ## FRESH RESULT
 
-Result:
 `CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
-
-SHA256:
-`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
+SHA256 `483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`.
 
 Raw runtime facts:
 
@@ -50,9 +54,9 @@ xr_capture_count           = 33
 raw RESTORE_OK            = True
 ```
 
-This mechanically closes the v6.0.0 direct-XR-RTV failure.
+The old direct-XR-RTV blocker is mechanically closed.
 
-## EXACT ARCHITECTURE OBSERVED
+## CURRENT ARCHITECTURE
 
 Fresh headset source:
 
@@ -62,128 +66,116 @@ CENTER scene color + inverse depth
  -> synthetic LEFT / RIGHT
  -> private typed eye RTs
  -> CopyResource to XR swapchain images
- -> Quest submit
+ -> Quest
 ```
 
-No native/private independent scene-eye records were the source:
+Native/private independent scene-eye rendering was not the source:
 
 ```text
 native_eye_left_records  = 0
 native_eye_right_records = 0
 ```
 
-Classification:
+Keep:
+`PRIVATE_RTV_XR_BRIDGE = MECHANICAL_GREEN`.
+
+Do not call mono+depth reprojection the final renderer.
+
+## RECOVERED CLEAN-MONO QUALITY ANCHOR
+
+Historical result:
+`CRYSIS2VR_FULL_POSE_WORLD_NEAR_RESULT_20260818_030228.zip`
+SHA256 `8EFAE73A7B6E30230D56FC3E66DC6BAE3D78E9118425C79F246748F0FBD26D72`.
+
+Contemporary council record explicitly states:
 
 ```text
-PRIVATE_RTV_XR_BRIDGE          = MECHANICAL_GREEN
-MONO_DEPTH_SYNTHETIC_LR_OUTPUT = MECHANICAL_GREEN
-TRUE_PRIVATE_LR_SCENE_RENDER   = NO
-USER_HEADSET_VERDICT           = UNBOUND
-FULL_USER_VISUAL_GREEN         = NO
+r_MotionBlur=0
+r_PostMSAA=0
 ```
 
-Mono RGB+depth/Z reprojection remains a diagnostic/control path, not the assumed final renderer.
-
-## ANALYZER FALSE NEGATIVE
-
-Fresh generated verdict says `OpenXRTransport=FAIL`, `eyeStageCopies=0`, `Restore=FAIL`, `PRIMARY_RESULT=PIPELINE_INCOMPLETE`.
-
-Raw evidence from the same RESULT says:
-- XR begin occurred;
-- 4691 submits occurred;
-- `ever_submitted=1`;
-- `eye_stage_copies=9382`;
-- raw restore is PASS.
+were retained and corresponded to the cleaner image reported by the user.
 
 Classification:
-`ANALYZER_FALSE_NEGATIVE / SUMMARY_PARSER_BUG`.
+`COMPONENT_VISUAL_GREEN: CLEAN_MONO_IMAGE_QUALITY_SETTINGS`.
 
-Do not repeat the LIVE to satisfy a broken summary parser.
-Do not repair the analyzer together with a renderer mutation.
+Fresh 220427 RESULT does not prove whether these two settings were active.
 
-## CURRENT FIRST MISSING FACT
+Separate stock native-SBS bisection proved MotionBlur OFF alone and SSAO OFF alone did not cure stock RIGHT-eye softness. Do not confuse the two claims.
 
-`WHAT DID THE USER ACTUALLY SEE IN QUEST DURING 220427?`
+## SCALE / SOURCE FACTS
 
-Required direct verdict axes:
-- world stability;
-- camera/world lock;
-- binocular fusion;
-- world scale;
-- shadows/light;
-- RIGHT-eye quality;
-- geometry/weapon behavior;
-- overall ACCEPT/RED.
+Fresh 220427:
 
-Until that is bound:
-`NO NEW VISUAL CHILD`.
+```text
+source_eye / game_texture = 1600x1200
+union_fov_deg             = 114.086
+union_ratio               = 0.963753
+```
 
-## DECISION AFTER USER VERDICT
+Historical 030228:
 
-### ACCEPT
+```text
+calculated target ~= 2032x1968
+actual producer   = 1400x1050
+WORLD union       = 110.747 deg / 1.02737
+FOB_NEAREST       = 55 deg / 1.33333
+```
 
-Freeze the 220427 path as a component visual/control baseline.
-Keep its private-RTV XR bridge unchanged.
-Do not call mono+depth reprojection final.
+This makes scale a projection/source-resolution/reprojection-rectangle contract question first.
 
-Then isolate true-L/R/source-geometry integration as the next single mutation category.
+Do not run arbitrary worldScale/IPD/convergence grids.
 
-### RED
+## NEXT ORDER
 
-Hard-stop v6.0.1 as a whole visual parent.
-Salvage only `PRIVATE_RTV_XR_BRIDGE`.
-Continue exact recovery of the historical user-accepted single-window profile.
-
-Do not patch-number forward through later Z versions automatically.
+1. Recover authoritative 220427 values of `r_MotionBlur` and `r_PostMSAA` from the exact package/config lineage.
+2. If already `0/0`, do not create a redundant quality child.
+3. If not `0/0`, make one minimal quality-only child changing only these two values.
+4. Freeze best quality state.
+5. Instrument exact source/projection/reprojection/XR-rectangle contract.
+6. Correct the first proven scale mismatch only.
+7. Get direct headset verdict after each LIVE.
 
 ## HARD REDS THAT MUST NOT REAPPEAR AS PARENTS
 
-- `C2VR_RC33_V1721_RESULT_20260825_063149.zip`: live pairs but catastrophic camera/world + moving/sliding light/shadow state.
-- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`: user said visually even worse.
-- R2 `201208`: binocular/telescope visual catastrophe.
-- GOODLINE v1.0.0 SHA `566BBBA4C9889DDD5B1F4974DF32330845EEE2F772B7EFD0469A9AF3DEFD07DA`: broken shadows + blurred RIGHT eye.
-- native/NVIDIA/monitor-stereo final renderer.
-- native stereo + real Quest IPD/FOV shortcut.
-- all-SetCamera HMD feedback loop.
+- `063149` catastrophic camera/world + moving/sliding light/shadow state;
+- T1 PosePair K0 visually worse;
+- R2 `201208` binocular/telescope catastrophe;
+- GOODLINE v1.0.0 broken shadows + blurred RIGHT eye;
+- native/NVIDIA/monitor-stereo final renderer;
 - DualWorld black-headset family.
-- later uncontrolled Frankenstein merges.
 
 ## PARTIAL AUTHORITIES TO KEEP SEPARATE
 
-### World stability
-`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
-SHA256 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
+- world stability/no-flicker donor: exact `CUSTOM_VR_OWNER v6.0.1`;
+- camera ownership: `A1_NATIVE_REPAIR 173053` + single-source topology;
+- private-RTV XR bridge: fresh 220427;
+- clean mono image quality: `r_MotionBlur=0 + r_PostMSAA=0` from 030228 lineage;
+- true private L/R mechanics: T1 v1.0.1 / 212003 mechanical donor only;
+- weapon direction: narrow donor only;
+- historical accepted one-window/good-scale/stable-head profile: exact package identity OPEN.
 
-Historical accepted property:
-flicker gone; shadows/textures/objects stable; binocular fusion still failed.
+## ANALYZER FALSE NEGATIVE
 
-### Camera ownership
-`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` plus single-source `Crysis2.exe+0x0057AC76` topology.
+Fresh generated verdict incorrectly reports transport/copy/restore failures despite raw successful evidence.
 
-### True private L/R mechanics
-`CUSTOM_DUAL_T1 v1.0.1 / CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`.
-Technical primitive only, not visual parent authority.
+Do not repeat the LIVE to satisfy the broken summary parser.
+Analyzer repair remains a separate tooling task.
 
-### Weapon direction
-Keep only controller-directed firing donor facts from the accepted narrow evidence.
+## PARKED
 
-### Historical accepted behavior profile
-One window; OpenXR dual eye; good world scale; stable head; headset image present; mainly hand/weapon wrong.
-Exact package/hash remains OPEN. Never guess it from a neighboring version name.
-
-## CROSS-BRANCH RULE
-
-`SYNC -> AUDIT STATUS -> EXACT PARENT -> USER VERDICT -> ONE MISSING FACT -> ONE MUTATION -> LIVE -> USER VERDICT -> KEEP / ADAPT / STOP`
-
-If current fresh user verdict is missing, bind it before creating another visual descendant.
-
-## PARKED NOW
-
+Until clean quality and scale are closed:
+- true-L/R renderer merge;
 - K/PosePair;
 - final HEAD rewrite;
 - weapon/NEAR merge;
 - temporal/shadow mutation;
-- later Z descendants;
-- convergence/IPD/FOV tuning;
+- controller rig;
 - release optimization;
 - broad reverse archaeology.
+
+## CROSS-BRANCH RULE
+
+`SYNC -> EXACT CURRENT CONTROL -> ONE MISSING FACT -> ONE MUTATION -> LIVE -> USER VERDICT -> KEEP / ADAPT / STOP`.
+
+Current control is 220427. Preserve it while fixing quality and scale surgically.
