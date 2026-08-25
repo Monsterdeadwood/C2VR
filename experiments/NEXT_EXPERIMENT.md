@@ -15,65 +15,65 @@ R1 reached DONE with 824 hidden private L/R pairs, balanced 824/824 eye executio
 Classification:
 `LIVE / MECHANICAL PASS / VISIBLE TRUE STEREO NOT TESTED`.
 
-No phase-by-phase user headset PASS is backfilled.
-
 ## R2 v1.0.0 RESULT 194014
 
 `NOT_LIVE`.
 
-The run stopped at Stage 3 before x86 compile and before game launch because the inherited PowerShell source-sanity guard still expected the obsolete v6 mono transport status string.
-
-Exact failure:
+Stopped at Stage 3 before x86 compile and before game launch:
 `v6 game client guard failed: custom_vr_transport=MONO_BACKBUFFER_TO_TWO_OPENXR_EYES`
 
-No R2 phase executed and no headset/stereo conclusion is allowed.
+No stereo conclusion is allowed.
 
-## R2 v1.0.1 GUARDFIX
+## SUPERSEDED PACKAGES
 
-Package:
-`CRYSIS2VR_V601_PRIVATE_LR_R2_v1.0.1_GUARDFIX_ONECLICK.zip`
-SHA256 `42B7CF4E23C794F52912961631BC402E1B9273DA41AA23A32FF11AE2293422EB`.
+`R2 v1.0.1 GUARDFIX` and `R2 v1.0.2 VALIDATOR_SYNC` are no longer valid next parents.
 
-The guardfix itself is valid: dedicated validation `43/43 PASS`, runtime and phase matrix byte-identical to v1.0.0, and the only runner delta is the source-sanity needle.
-
-But the inherited generic `R2_STATIC_VALIDATE.py` still expected the obsolete v1.0.0 PowerShell SHA and therefore printed `66/67 FAIL` on the intentionally changed runner.
-
-Do not run v1.0.1 now; use v1.0.2 with synchronized validation.
+Reason: the proven R1/v6 build runner should not have been modified to weaken/change its source guard merely because the R2 source removed an inherited marker.
 
 ## NEXT RUNTIME
 
-`R2 PRIVATE L/R PHASE MATRIX v1.0.2 VALIDATOR_SYNC`
+`R2 PRIVATE L/R PHASE MATRIX v1.0.3 CLEAN REBASE`
 
 Package:
-`CRYSIS2VR_V601_PRIVATE_LR_R2_v1.0.2_VALIDATOR_SYNC_ONECLICK.zip`
+`CRYSIS2VR_V601_PRIVATE_LR_R2_v1.0.3_CLEAN_REBASE_ONECLICK.zip`
 
 Bytes:
-`205935`
+`205897`
 
 SHA256:
-`2F751F869FC4B4AB8110FA6C893A77EA5B849457BEC21451E1C313D342852242`
-
-Validation:
-- R2 static `67/67 PASS`;
-- inherited guardfix `43/43 PASS`;
-- package hash manifest `81/81 PASS`;
-- ZIP CRC PASS.
+`AD9C28F175E7F300B89334F31F2AB921D24597B415A30C5E8B385A86CFE0DD0C`
 
 Status:
 `PREPARED / UNRUN`.
 
-Compared with v1.0.1, all runtime sources, BAT, PowerShell runner, recovery, analyzer, IPC ABI and phase matrix are byte-identical. Only the generic static validator and package metadata/hash records changed.
+Validation:
+- clean-rebase static `53/53 PASS`;
+- exact inherited client/host/IPC source guards simulated PASS;
+- analyzer Python compile PASS;
+- ZIP CRC PASS.
 
 Full record:
-`experiments/R2_V102_VALIDATOR_SYNC_PREPARED_20260825.md`.
+`experiments/R2_V103_CLEAN_REBASE_PREPARED_20260825.md`.
 
 ## PREFLIGHT — exactly 5 lines
 
 MISSING FACT = where visible true-private L/R first becomes wrong: replay/state, eye translation, asymmetric projection, or eye order.
-WHY THIS PARENT = R1 mechanically proved private L/R replay can execute without temporal leak; R2 preserves the stable v6 world owner and changes only visible private-eye source/projection policy.
-ONE MUTATION CATEGORY = visible XR source/projection phase mux; v1.0.2 adds validation synchronization only and no runtime mutation.
-PASS = phase matrix localizes the first bad transition, or PRIVATE_FULL is stable/nonduplicate and user-fused while MONO controls remain stable.
+WHY THIS PARENT = exact proven R1 is the parent again; no guardfix/validator-sync descendant is reused as architecture.
+ONE MUTATION CATEGORY = visible XR source/projection phase mux plus diagnostics only; build/launch/restore/world-owner/IPC remain exact R1.
+PASS = matrix localizes the first bad transition, or PRIVATE_FULL is stable/nonduplicate and user-fused while MONO controls remain stable.
 FAIL = baseline invalid, private publication fails, restore/hash fails, or no phase yields interpretable mechanical/visual evidence.
+
+## LINEAGE
+
+BASE_PACKAGE = `CRYSIS2VR_V601_HIDDEN_T1_R1_v1.0.0_ONECLICK.zip`
+BASE_SCRIPT = `20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`
+KNOWN_GOOD_RESULT = `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260825_175757.zip`
+WHAT IS REUSED = exact R1 BAT/PS1/recovery, v6 world owner, porous proxy, IPC v5/636, retail guards, backup/restore and result packaging.
+ONLY DELTA = R2 phased private-eye render/publication/composition plus analyzer.
+UNCHANGED LAUNCH PATH = YES, byte-identical to R1.
+UNCHANGED BUILD PATH = YES, byte-identical to R1.
+UNCHANGED RESTORE PATH = YES, byte-identical to R1.
+EXPECTED NEW RESULT = `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_*.zip` containing R2 phase status, captures and analyzer.
 
 ## RUN
 
@@ -93,19 +93,16 @@ Automatic phases:
 
 No keys.
 
+After DONE, exit normally so the inherited runner restores retail and packs the RESULT.
+
 Observe per phase:
-- whether world stays fixed under head movement;
-- whether objects fuse or double;
-- whether shadows/light remain coherent;
-- whether geometry/weapon clips/disappears;
-- whether PRIVATE_FULL or PRIVATE_SWAP fuses more naturally;
-- whether MONO_B restores the initial baseline.
+- world/camera stability;
+- binocular fusion/doubling;
+- shadows/light;
+- geometry/object integrity;
+- FULL versus SWAP;
+- MONO_B recovery.
 
-No K/PosePair/final HEAD/weapon/NEAR/new temporal-shadow policy is added.
+## FORBIDDEN
 
-## RESULT
-
-After DONE, exit normally and preserve the produced:
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_*.zip`.
-
-User headset verdict is mandatory; static/counter PASS cannot auto-promote the build.
+No K/PosePair/final HEAD/weapon/NEAR/native Nvidia/Cry stereo/new temporal-shadow policy in this LIVE.
