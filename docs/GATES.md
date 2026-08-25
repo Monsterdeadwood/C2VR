@@ -14,180 +14,223 @@ Use:
 
 A PASS with absent prerequisites is `VACUOUS_PASS_INVALID`.
 
-See `docs/HISTORICAL_AUDIT_PASS2_20260825.md`.
+Evidence order for visual/playability acceptance:
+`USER_HEADSET_VERDICT > deterministic captures > raw LIVE logs/status > counters > generated analyzer summary > static validation > package intent`.
 
 ---
 
-# G0 — TRUE TWO-EYE RENDERER PRIMITIVE
+# G0 — QUEST / PRIVATE-RTV BRIDGE
 
-**MECHANICAL_GREEN.**
+**MECHANICAL_GREEN on 220427.**
 
-`CUSTOM_DUAL_T1 v1.0.1` executed genuine non-duplicate private LEFT/RIGHT rendering.
-
-This proves a renderer primitive, not a user-accepted whole VR build.
-
-Do not rebuild stereo from scratch.
-
----
-
-# GV — VISUAL BASELINE RECOVERY
-
-**CURRENT GATE.**
-
-`VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
-
-This gate supersedes the old statement that PosePair/cadence is current.
-
-Why:
-- `C2VR_RC33_V1721_RESULT_20260825_063149.zip` is USER VISUAL HARD RED despite live pair transport;
-- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip` is USER VISUAL HARD RED and was reported even worse;
-- therefore timing/HEAD/weapon/temporal/shadow work on those parents is uninterpretable.
-
-## Exact recovered world-stability anchor
-
-`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+Canonical current control result:
+`CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
 
 SHA256:
-`E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`
+`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
 
-Historical user-positive property:
-- flicker gone;
-- shadows/textures/objects stable;
-- eyes still did not fuse.
+Proven raw runtime facts:
+- XR session created and began;
+- `submit_count=4691`;
+- `eye_stage_copies=9382`;
+- `reproject_draws=9382`;
+- 33 XR stereo-pair captures;
+- raw restore PASS.
 
-Classification:
-`COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`.
+The historical direct-XR-RTV creation blocker is closed.
 
-First reproduction of this property must reuse its exact historical runner unchanged.
+Current source is still:
+`CENTER RGB + inverse depth -> x64 depth reprojection -> synthetic LEFT/RIGHT -> private eye RTs -> XR swapchains`.
 
-## Camera ownership reference
+Therefore:
+- `PRIVATE_RTV_XR_BRIDGE = MECHANICAL_GREEN`;
+- `MONO_DEPTH_SYNTHETIC_LR_OUTPUT = MECHANICAL_GREEN`;
+- `TRUE_PRIVATE_LR_SCENE_RENDER = NO` for this control.
 
-`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
-
-Historical user-positive property:
-- head movement drove the real in-game camera/world;
-- remaining major issue was flicker/two-screen behavior.
-
-Classification:
-`COMPONENT_VISUAL_GREEN: CAMERA_OWNERSHIP_REFERENCE`.
-
-## Historical single-window behavior profile
-
-User oracle records:
-- one window;
-- native OpenXR dual eye;
-- good world scale;
-- stable head movement;
-- image present in headset;
-- only hand/weapon visibly wrong.
-
-Exact package/hash remains OPEN.
-Do not guess it from neighboring v7/v10 packages.
-
-## GV PASS
-
-A complete candidate may become the next whole-build visual parent only after an unchanged reproduction or one-variable child receives explicit in-headset acceptance:
-- stationary head -> stationary world;
-- slow yaw -> no fall/jump/shear;
-- fast yaw/reversal -> no camera explosion or eye-time split;
-- lighting/shadows spatially stable;
-- no severe flicker;
-- no monitor-panel/two-screen behavior;
-- world scale credible;
-- L/R coherent and non-duplicate where true stereo is expected;
-- byte-exact restore and retail hashes PASS.
-
-Required classification:
-`FULL_USER_VISUAL_GREEN`.
-
-Counters alone cannot pass GV.
-
-## GV FAIL
-
-Any catastrophic headset verdict immediately marks that exact package `VISUAL_RED` and forbids it as direct visual parent.
+Do not rebuild transport while the current gate is quality/scale closure.
 
 ---
 
-# G1 — POSE/PIXEL CONTRACT
+# G1 — CLEAN MONO QUALITY CONTROL
 
-**PARKED UNTIL GV PASSES.**
+**CURRENT FIRST GATE.**
 
-Goal:
-every submitted LEFT/RIGHT pair carries one immutable render contract: pixels + exact render pose + FOV + pair/ticket identity.
+Fresh direct 220427 user verdict:
+- world scale is wrong/problematic;
+- otherwise the branch is broadly normal/promising and worth finishing;
+- whole build is not a visual HARD RED;
+- it is not yet `FULL_USER_VISUAL_GREEN`.
+
+Historical quality donor:
+`CRYSIS2VR_FULL_POSE_WORLD_NEAR_RESULT_20260818_030228.zip`
+SHA256 `8EFAE73A7B6E30230D56FC3E66DC6BAE3D78E9118425C79F246748F0FBD26D72`.
+
+Recovered accepted property:
+```text
+r_MotionBlur=0
+r_PostMSAA=0
+```
+
+Classification:
+`COMPONENT_VISUAL_GREEN: CLEAN_MONO_IMAGE_QUALITY_SETTINGS`.
+
+Fresh 220427 RESULT does not prove whether those two values were active.
+
+## G1 procedure
+
+1. Recover authoritative 220427 values of `r_MotionBlur` and `r_PostMSAA` from the exact package/config lineage.
+2. If both are already `0`, do not create a redundant quality child.
+3. Otherwise create one child whose only mutation category is those known image-quality CVars.
+4. Keep source dimensions, projection, IPD, worldScale, reprojection math, weapon/NEAR, shadows, temporal policy and cadence unchanged.
+5. Require direct headset verdict.
+
+## G1 PASS
+
+```text
+same world/head behavior
+same scale defect, not worse
+image at least as clean as 220427
+no new blur/regression
+XR bridge unchanged
+restore/hash baseline holds
+```
+
+G1 does not claim scale fixed.
+
+---
+
+# G2 — SCALE / SOURCE-PROJECTION CONTRACT
+
+**CURRENT SECOND GATE, immediately after G1.**
+
+Known 220427 facts:
+```text
+source_eye / game_texture = 1600x1200
+union_fov_deg             = 114.086
+union_ratio               = 0.963753
+```
+
+Historical 030228 already exposed:
+```text
+calculated source target ~= 2032x1968
+actual producer          = 1400x1050
+WORLD union projection   = 110.747 deg / 1.02737
+FOB_NEAREST              = 55 deg / 1.33333
+```
+
+The scale defect is therefore treated first as a projection/source-resolution/reprojection-rectangle contract problem.
+
+Before mutation map:
+- actual producer dimensions;
+- center RenderWorld projection/FOV/ratio;
+- packed-depth projection;
+- XR LEFT/RIGHT FOV;
+- reprojection sampling rectangle;
+- XR swapchain dimensions;
+- submitted `subImage` rectangle.
+
+Then change the first proven mismatch only.
+
+## G2 PASS
+
+```text
+world scale natural
+world/head remains stable
+image quality preserved
+no binocular/telescope catastrophe
+XR bridge unchanged
+restore/hash baseline holds
+```
+
+Forbidden:
+- arbitrary `worldScale` grid;
+- arbitrary IPD/convergence sweep;
+- renderer-family rewrite in the same test.
+
+---
+
+# G3 — TRUE PRIVATE L/R RENDERER INTEGRATION
+
+**PARKED UNTIL G1 + G2.**
+
+Technical primitive remains proven:
+`CUSTOM_DUAL_T1 v1.0.1 / 212003 = MECHANICAL_GREEN: TRUE_PRIVATE_LR_RENDERER`.
+
+This is a donor primitive, not current whole-build visual parent authority.
+
+Do not resurrect as parent:
+- `C2VR_RC33_V1721_RESULT_20260825_063149.zip` lineage;
+- T1 PosePair K0 visual descendant;
+- GOODLINE/R2 whole-build branches;
+- native/NVIDIA/monitor-stereo final renderer;
+- DualWorld black-headset family.
+
+Any future merge must start from the accepted post-G2 control and import only the required true-L/R mechanism.
+
+---
+
+# G4 — POSE / PIXEL CONTRACT + HEAD 1:1
+
+**PARKED UNTIL G3.**
+
+Every submitted pair must carry one immutable render contract:
+`pixels + exact render pose + FOV + pair/ticket identity`.
 
 Rules:
-- stale/mismatched pairs are never relabelled;
-- one fresh eye + one stale eye is invalid;
-- cached last-good pixels retain the metadata that actually rendered them.
+- never relabel stale pixels with current pose;
+- one fresh eye plus one stale eye is invalid;
+- last-good reuse retains the metadata that actually rendered it;
+- HEAD belongs upstream of visibility/list selection;
+- EYES belong in the per-eye render transaction.
 
-A future G1 PASS requires both mechanical identity and user-visible coherence.
+PASS requires direct user-visible coherence, not counters alone.
 
-The old PosePair K0 package is NOT the parent for this gate.
-
----
-
-# G2 — HEAD 1:1 + VISIBILITY ENVELOPE
-
-**PARKED UNTIL GV + G1.**
-
-PASS:
-- yaw/pitch 1:1;
-- no doubled angle;
-- head stop -> world stops;
-- return HMD -> world returns;
-- no accumulated translation;
-- no culling pop;
-- stable light/shadow behavior;
-- survives active head motion.
-
-Known topology reference:
-HEAD high before visibility/list selection; EYES low in per-eye render transaction.
-
-Do not restart broad HEAD archaeology before recovering visual baseline.
+Old PosePair/P6 timing work remains causal evidence only, not the current gate.
 
 ---
 
-# G3 — WEAPON / FOB_NEAREST
+# G5 — WEAPON / FOB_NEAREST
 
 **PARKED.**
 
-Known anchors:
-- owner region `+0x000FF340`
-- NEAR SetCamera return `+0x000FF456`
-- restore `+0x000FF4A3`
-- object owner `+0x00102100`
-- `Renderer::SetCamera +0x00148340`
+Preserved anchors:
+- owner region `+0x000FF340`;
+- NEAR SetCamera return `+0x000FF456`;
+- restore `+0x000FF4A3`;
+- object owner `+0x00102100`;
+- `Renderer::SetCamera +0x00148340`.
+
+Historical controller-directed firing is a weapon-direction donor only.
 
 PASS:
 - head still -> weapon still;
 - controller only -> weapon moves, WORLD does not;
-- head only -> no weapon counter-motion;
+- head only -> no counter-motion;
 - both eyes coherent;
-- no flicker.
-
-Historical weapon-direction behavior is a donor component only, not permission to import its old renderer.
+- no flicker;
+- firing direction follows intended weapon/controller authority.
 
 ---
 
-# G4 — TEMPORAL / SHADOW STABILITY
+# G6 — TEMPORAL / SHADOW STABILITY
 
 **PARKED.**
 
-Serial candidate order only after earlier visual gates:
-1. TAA/AA OFF control if needed;
-2. LEFT-authoritative temporal / RIGHT isolated;
-3. separate eye histories if required;
-4. reset/freeze-restore only if required.
+Only after renderer/head/weapon visual gates are stable.
 
-Never use `SHDF_ZPASS_ONLY` as the normal RIGHT scene policy.
+Never use `SHDF_ZPASS_ONLY` as normal RIGHT-eye scene policy.
+
+Do not reopen temporal/shadow mutation to explain the current scale defect.
 
 ---
 
-# G5 — REGRESSION
+# G7 — REGRESSION
 
 PASS all:
 - normal mono launch;
-- stereo L/R alive;
+- Quest output alive;
+- coherent stereo;
+- natural world scale;
 - head 1:1;
 - weapon correct;
 - shadows/light coherent;
@@ -196,13 +239,22 @@ PASS all:
 - menu -> gameplay;
 - cutscene transitions;
 - no accumulating drift/state corruption;
-- byte-exact d3d11 restore;
+- byte-exact D3D11 restore;
 - retail hashes unchanged.
 
 ---
 
-# G6 — RELEASE CANDIDATE
+# G8 — RELEASE CANDIDATE
 
 At least 10 minutes actual gameplay with head motion, movement, weapon use and traversal, with no tearing, drift, eye divergence, black eye, crash or state corruption.
 
 PASS -> STOP FORENSICS -> RELEASE CANDIDATE.
+
+---
+
+## CURRENT ORDER
+
+`220427 CONTROL -> G1 QUALITY -> G2 SCALE -> G3 TRUE L/R -> G4 POSE/HEAD -> G5 WEAPON/NEAR -> G6 TEMPORAL/SHADOW -> G7 REGRESSION -> G8 RELEASE`
+
+Current rule:
+`SYNC -> EXACT CURRENT CONTROL -> ONE MISSING FACT -> ONE MUTATION -> LIVE -> USER VERDICT -> KEEP / ADAPT / STOP`.
