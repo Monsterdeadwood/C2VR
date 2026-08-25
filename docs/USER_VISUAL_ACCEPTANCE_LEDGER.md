@@ -12,7 +12,7 @@ For visual/playability questions use this order:
 
 A package can have perfect counters and still be a HARD VISUAL RED.
 
-Words such as "пиздец", "моргает", "камера уезжает/проваливается", "тени пропадают/ездят", "неправильное стерео", "экран перед лицом" are hard rejection evidence when attached to a known run/package.
+Words such as "пиздец", "моргает", "камера уезжает/проваливается", "тени пропадают/ездят", "неправильное стерео", "экран перед лицом", "бинокуляр/подзорная труба", "в очках всё чёрное" are hard rejection evidence when attached to a known run/package.
 
 ## PARENT SELECTION LAW
 1. A `USER_VISUAL_HARD_RED` package MUST NOT be used as the direct parent of another visual/camera/stereo descendant.
@@ -22,6 +22,8 @@ Words such as "пиздец", "моргает", "камера уезжает/п�
 5. One new visual LIVE = one causal mutation from the nearest non-red or partially accepted checkpoint.
 6. If exact package/result identity is missing, record `UNBOUND_VISUAL_RED`; never guess the package from neighboring chat messages.
 7. A technical renderer proof is not automatically a visual-parent proof.
+8. A black headset result is a hard execution/transport/render failure even if the desktop/game process is alive.
+9. Telescope/binocular geometry is a visual architecture failure, not a cosmetic convergence problem to tune indefinitely.
 
 ---
 
@@ -82,6 +84,53 @@ User explicitly rejected continuing the old NVIDIA/3D/native-monitor-stereo rout
 PERMANENT STOP:
 - do not resurrect driver/NVIDIA/native-monitor-stereo as the final renderer because an old counter or source path looks convenient;
 - old native stereo may be used only as archaeology/control evidence.
+
+## 2026-08-19 — telescope / binocular geometry HARD RED
+Recovered user verdict on the Crysis v11/v12-era renderer family: headset view behaved like looking through a telescope/binocular and was rejected as completely wrong.
+
+A later verdict in the same family described the renderer as fully bad, again binocular, and visually misaligned.
+
+Exact single package/result binding is not recovered with enough confidence from chat history, although the physical library contains the contemporary v11/v12 families, including `CRYSIS2VR_RT_SEAM_FRAME_OWNERSHIP_v11.x` and `CRYSIS2VR_POROUS_COMMAND_FORK_v12.0.0_DIAGNOSTIC_TWIN.zip`.
+
+Classification:
+`FAMILY_BOUND_VISUAL_HARD_RED / EXACT_PACKAGE_UNBOUND`.
+
+PERMANENT STOP:
+- do not revive telescope/binocular/stale-pair style eye composition;
+- do not solve this class by arbitrary eye-spacing/convergence tuning;
+- do not promote a contemporary v11/v12 package merely because it is temporally adjacent to the user verdict. Recover exact identity first.
+
+## 2026-08-19 — DualWorld Cleanroom v14.0.2 black headset
+Package family is exact:
+`CRYSIS2VR_DUALWORLD_CLEANROOM_v14.0.2.zip`
+
+Recovered package SHA256:
+`A8BC46D31EE4A9FB9D34909D0EE5863CDA740A3710914D028C66974977A12F7F`.
+
+User verdict: headset output was completely black.
+
+Contemporary result artifacts include `C2VR_DUALWORLD14_RESULT_20260819_162623.zip` and `C2VR_DUALWORLD14_RESULT_20260819_162900.zip`, but the exact one-to-one chat binding is not strong enough to assign either result blindly.
+
+Classification:
+`USER_VISUAL_HARD_RED / PACKAGE_BOUND / RESULT_UNBOUND`.
+
+PERMANENT STOP:
+- do not use high-level DualWorld duplication as a preferred final scheduler;
+- black headset output is not a camera-quality baseline;
+- do not call a package working because engine-side calls/counters are alive while no usable headset image exists.
+
+## 2026-08-19 — DualWorld Cleanroom v14.0.3 still black
+Package:
+`CRYSIS2VR_DUALWORLD_CLEANROOM_v14.0.3_LAZY_GATE_HOTFIX.zip`.
+
+User verdict: OpenXR signaled during startup again and the headset was still completely black.
+
+Classification:
+`USER_VISUAL_HARD_RED / PACKAGE_BOUND / RESULT_UNBOUND`.
+
+PERMANENT STOP:
+- lazy-gating the same DualWorld architecture did not establish visual recovery;
+- do not continue patch-number iteration on a black-headset parent without first reverting to a visible baseline.
 
 ## 2026-08-22 — UNBOUND severe geometry/image-quality RED
 Recovered user visual verdict: extreme lateral separation, blur and heavily compressed/bad-looking image.
