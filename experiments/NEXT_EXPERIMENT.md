@@ -1,177 +1,144 @@
 # Crysis 2 VR — NEXT EXPERIMENT
 
-## DECISION
-
-**STOP direct descendants of current USER VISUAL HARD-RED builds. The next runtime is not a new experiment. It is an unchanged reproduction of an exact recovered historical property baseline.**
-
-Authoritative state:
-- `docs/HISTORICAL_AUDIT_PASS2_20260825.md`
-- `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-- `docs/FALSIFIED.md`
-- `docs/GATES.md`
-- `docs/NEXT.md`
-
 ## CURRENT GATE
 
 `VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
 
-Do NOT run K/HEAD/weapon/NEAR/temporal/shadow work while this gate is open.
+## NEXT RUNTIME
 
-## CURRENT HARD REDS
+`R1 HIDDEN T1 REPLAY`
 
-Do not derive a visual child from:
-- `C2VR_RC33_V1721_RESULT_20260825_063149.zip` lineage;
-- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`.
+Status:
+`PREPARED / UNRUN`.
 
-T1 K0 SHA256:
-`7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`.
-
-Both are user visual rejects.
-
-## EXACT RECOVERED BASE PACKAGE
-
-`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+Package:
+`CRYSIS2VR_V601_HIDDEN_T1_R1_v1.0.0_ONECLICK.zip`
 
 Bytes:
-`164221`
+`191925`
 
 SHA256:
-`E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
+`330382153381C01CDE23FA15D777A6F54796F761D8DEC3F0A2BC2D07AC78EC79`.
 
-Exact runner lineage:
+Static validation only:
+`R1_STATIC=PASS (70/70)`.
 
-```text
-20_RUN_C2VR_FULL_VR.bat
- -> FUTURE_RUNS/CRYSIS2VR_BLACKBOX_ENGINE_TAP_v1.0.0/RUN_FULL_VR.bat
- -> tools/Build-Run-EngineTap.ps1
-```
+No runtime PASS is claimed.
 
-Historical user-positive property:
-- flicker gone;
-- shadows/textures/objects stable;
-- eyes still did not fuse.
-
-Classification:
-`COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`.
-
-## MISSING FACT
-
-Can the exact physical v6.0.1 package, executed unchanged through its original runner lineage on the frozen retail target, reproduce the historical world-stability/no-flicker behavior today?
-
-Nothing else is being tested.
+Full experiment record:
+`experiments/R1_HIDDEN_T1_REPLAY_PREPARED_20260825.md`.
 
 ## PREFLIGHT — exactly 5 lines
 
-**MISSING FACT:** does exact physical v6.0.1 unchanged still reproduce stable textures/shadows/objects and no periodic XR blank/flicker behavior?
-**WHY THIS PARENT:** its exact ZIP/hash/runner are physically recovered and its user-positive property is specifically bounded; later parents are visually red or unbound.
-**PASS:** exact package/runner identity matches, unchanged reproduction launches/restores correctly, and the user confirms the historical no-flicker/stable-world property is reproduced.
-**FAIL:** identity mismatch, runner mismatch, runtime/preflight failure, or the unchanged package no longer reproduces its bounded property; record exact failure without adding a mutation.
-**BASELINE MUST HOLD:** frozen retail hashes, x86 game+x64 host architecture, no new camera/stereo/weapon/temporal/shadow code, no new BAT/PS1 scaffold.
+**MISSING FACT:** does hidden T1 private-eye replay itself perturb the historically stable v6 visible camera/world/shadow/temporal state?
+**WHY THIS PARENT:** exact physical v6.0.1 is the strongest bounded world-stability anchor; exact T1 v1.0.1 is the proven private-L/R mechanical donor.
+**PASS:** OFF_A stable, hidden replay mechanically executes during SPARSE/FULL, visible v6 output remains stable through SPARSE/FULL/OFF_B, isolation counters stay 0/0/0.
+**FAIL:** OFF_A stable but replay phases trigger camera/world/shadow instability, or only FULL fails, or hidden isolation/mechanical execution fails.
+**BASELINE MUST HOLD:** v6 x64 host/IPC/Present-cache/launch/build/restore are byte-identical; no PosePair/K/HEAD/weapon/NEAR/new temporal/shadow/submission policy.
 
 ## LINEAGE
 
 BASE_PACKAGE:
 `CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+SHA256 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
+
+T1 DONOR:
+`CRYSIS2VR_CUSTOM_DUAL_RENDER_TEST_T1_v1.0.1_HOSTFIX.zip`
+SHA256 `9271A002F8DE7875EDDD72AC2C2C307748A922883365F05FEFFC18FA05D2EECF`.
 
 BASE_SCRIPT:
-`20_RUN_C2VR_FULL_VR.bat` through the inherited `RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1` chain.
-
-KNOWN_GOOD_RESULT:
-historical user property is known; exact old result ZIP identity is not required to invent a new runner and must not be guessed.
-
-WHAT IS REUSED:
-all files and launch/build/restore behavior byte-for-byte from the physical recovered package.
-
-ONLY DELTA:
-**NONE.** This is an unchanged reproduction.
+`20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`.
 
 UNCHANGED LAUNCH PATH:
-YES.
+YES, byte-identical.
 
 UNCHANGED BUILD PATH:
-YES.
+YES, byte-identical.
 
 UNCHANGED RESTORE PATH:
-YES.
-
-EXPECTED NEW RESULT:
-fresh raw result + explicit user headset verdict for the v6.0.1 property only.
+YES, byte-identical.
 
 ## PATCH
 
-NONE.
+Only hidden x86 renderer replay is added.
 
-No source edits.
-No BAT edits.
-No PS1 edits.
-No IPC edits.
-No camera edits.
-No stereo edits.
-No weapon edits.
-No temporal/shadow edits.
+Quest-visible output remains:
+`V601_MONO_PRESENT_CACHE_UNCHANGED`.
+
+Hidden private-eye contract:
+```text
+private_eye_publication=0
+private_eye_shared_copy=0
+private_eye_openxr_submit=0
+```
+
+No private T1 eye can become the headset image in R1.
 
 ## BUILD
 
-Use the exact historical package's own build path only.
+Use only inherited:
+`20_RUN_C2VR_FULL_VR.bat`.
 
-If the historical runner fails because a tool path has become unavailable, classify `LINEAGE/ENVIRONMENT FAILURE`; do not silently rewrite infrastructure in the same causal run.
+No new launcher and no new PowerShell build path.
 
 ## RUN
 
-User observes only:
-- periodic flicker/blanking;
-- texture/object stability;
+Automatic phases after the first valid scene/center snapshot:
+
+```text
+0–10 s   OFF_A
+10–25 s  SPARSE_1_OF_10
+25–45 s  FULL
+45–55 s  OFF_B
+>55 s    DONE
+```
+
+Audio:
+- 1 beep: SPARSE;
+- 2 beeps: FULL;
+- 3 beeps: OFF_B;
+- long beep: DONE.
+
+Use comparable head movement in every phase and judge only:
+- world/camera stability;
 - shadow/light stability;
-- whether the image remains judgeable.
+- textures/objects;
+- flicker/blanking.
 
-Record stereo fusion separately as expected unresolved behavior.
-
-Do not evaluate weapon polish or cadence tuning in this run.
+If OFF_A is already bad, classify `R1_INVALID_BASELINE`.
+If catastrophic corruption appears later, user may exit immediately; partial result is still evidence.
 
 ## RESULT_TEMPLATE
 
 ```text
 LIVE_STATUS=LIVE/NOT_LIVE
-PACKAGE_SHA_MATCH=PASS/FAIL
-RUNNER_IDENTITY=PASS/FAIL
-RETAIL_HASHES_PRE=PASS/FAIL
-WORLD_STABILITY=PASS/FAIL/UNTESTED
-FLICKER_BLANKING=PASS/FAIL/UNTESTED
-SHADOW_LIGHT_STABLE=PASS/FAIL/UNTESTED
-BINOCULAR_FUSION=PASS/FAIL/UNTESTED
+OFF_A_VISUAL=STABLE/BAD/UNTESTED
+SPARSE_VISUAL=STABLE/BAD/UNTESTED
+FULL_VISUAL=STABLE/BAD/UNTESTED
+OFF_B_VISUAL=STABLE/BAD/UNTESTED
+PRIVATE_PUBLICATION=0/FAIL
+PRIVATE_SHARED_COPY=0/FAIL
+PRIVATE_OPENXR_SUBMIT=0/FAIL
+REPLAY_PAIRS=<n>
+SPARSE_PAIRS=<n>
+FULL_PAIRS=<n>
+TEMPORAL_LEAK=<n>
+CENTER_RESTORE_COMMANDS=<n>
 RESTORE=PASS/FAIL
 RETAIL_HASHES_POST=PASS/FAIL
-USER_HEADSET_VERDICT=ACCEPT_PROPERTY/RED/NOT_TESTED
+USER_HEADSET_VERDICT=R1_INVALID_BASELINE/R1_REPLAY_POISONS_STATE/R1_FULL_RATE_ONLY_BAD/R1_REPLAY_VISUALLY_INERT/UNTESTED
 ```
 
 ## PASS / FAIL
 
-PASS means only:
-`v6.0.1 WORLD_STABILITY_NO_FLICKER property reproduced`.
+`R1_REPLAY_VISUALLY_INERT` authorizes R2 only: expose already-rendered private L/R under the same game-owned v6 contract.
 
-It does NOT mean:
-- stereo fusion solved;
-- camera ownership solved;
-- T1 ready to merge;
-- K ready;
-- weapon ready.
+`R1_REPLAY_POISONS_STATE` sends work back inside the x86 T1 replay/state restore transaction.
 
-After PASS, freeze this exact reproduction and choose one single next causal axis.
+`R1_FULL_RATE_ONLY_BAD` sends work to replay scheduling/cadence/cost, not XR submission.
 
-Primary separate camera reference remains:
-`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` plus the single-source `+0x0057AC76` topology.
-
-True private-L/R reference remains:
-`CUSTOM_DUAL_T1 v1.0.1`.
+`R1_INVALID_BASELINE` invalidates the bisect and requires exact v6 baseline recovery first.
 
 ## FORBIDDEN
 
-- K=1/K=2;
-- final HEAD composition;
-- weapon/NEAR integration;
-- temporal-history mutation;
-- second-eye shadow mutation;
-- coordinate-sign LIVE;
-- new BAT/PS1 scaffold;
-- any analyzer PASS whose prerequisites are absent;
-- calling this reproduction whole-build GOLD if only the no-flicker/stable-world property passes.
+No K=1/K=2, final HEAD, weapon/NEAR, coordinate-sign LIVE, new temporal/shadow policy, new x64 host ownership, or PosePair descendant in this run.
