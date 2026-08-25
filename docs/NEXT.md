@@ -2,85 +2,105 @@
 
 ## CURRENT GATE
 
-`EXACT HISTORICAL 191032 -> v6.0.1 PRIVATE_RTV REPRODUCTION`
+`220427 V6.0.1 LIVE -> BIND USER HEADSET VERDICT`
+
+The exact Z-reprojection v6.0.1 PRIVATE_RTV recovery has now executed. Do not rerun it merely because older STATE/NEXT text called it the next runtime.
 
 Read first:
-1. `docs/LATEST_OVERRIDE_20260825_GOODLINE_HARD_RED_V601_RECOVERY.md`
-2. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-3. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-4. `docs/FALSIFIED.md`
-5. `experiments/NEXT_EXPERIMENT.md`
+1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
+2. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
+3. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+4. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+5. `docs/FALSIFIED.md`
 
-## WHY
+## LATEST RESULT
 
-GOODLINE v1.0.0 is now `USER_VISUAL_HARD_RED`: user reported broken/unstable shadows and a blurred RIGHT eye. No descendants.
-
-The strongest directly user-positive checkpoint recovered is:
-`CRYSIS2VR_Z_REPROJECTION_RESULT_20260817_191032.zip`.
-
-User described that run as "реально неплохой" / "выглядит реально хорошо": one normal monitor image, head-driven world, firing weapon, normal-looking textures. Its narrow blocker was `XR_RTV_CREATE_FAIL eye=0 image=0 hr=0x80070057`, so the image never reached Quest.
-
-## NEXT RUNTIME
-
-Run the exact one-delta historical child unchanged:
-
-`CRYSIS2VR_Z_REPROJECTION_v6.0.1_PRIVATE_RTV_BRIDGE.zip`
+`CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
 
 SHA256:
-`E683FA148794DDA2F671BD6C0ADDF6AF535482FE3F2A43DE23539778608E032A`
+`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
 
-Original runner:
-`RUN_C2VR_Z_REPROJECTION_v6.0.1.bat`
+Mechanical result:
+- XR session ran;
+- 4691 submits;
+- private eye staging active;
+- 9382 eye-stage copies;
+- 9382 depth-reprojection draws;
+- 33 XR pair captures;
+- raw restore PASS.
 
-Historical result:
-`CRYSIS2VR_Z_REPROJECTION_RESULT_20260817_193132.zip`
+This closes the narrow old `XR_RTV_CREATE_FAIL` blocker.
 
-Known direct headset verdict for `193132` is UNBOUND, so it must be freshly reproduced before promotion.
+## IMPORTANT LIMIT
 
-## ONLY DELTA FROM USER-POSITIVE v6.0.0
+The fresh output is synthetic stereo from one center color+depth source, not true independent L/R scene rendering.
 
-XR output bridge only:
-- do not create RTV directly on Oculus/OpenXR swapchain image;
-- render existing reprojection into private typed LEFT/RIGHT RTs;
-- CopyResource into acquired XR swapchain images;
-- submit normally.
+Therefore:
 
-Do not change world camera, renderer source behavior, shadows, weapon, NEAR, pose policy, or later v6.1+ behavior in this LIVE.
+```text
+PRIVATE_RTV_XR_BRIDGE          = KEEP / MECHANICAL_GREEN
+MONO_DEPTH_SYNTHETIC_LR_OUTPUT = MECHANICAL_GREEN
+FINAL_RENDERER                 = NOT PROVEN
+USER_HEADSET_VERDICT           = UNBOUND
+```
 
-## RUN POLICY
+Do not turn a transport success into a visual-GOLD claim.
 
-Preferred launcher is a hash-bound recovery wrapper that searches the machine for the exact historical ZIP, verifies SHA256, extracts it unchanged, and invokes its original BAT.
+## ANALYZER NOTE
 
-No F-key matrix. No tuning.
+Generated `Z_REPROJECTION_VERDICT.txt` contains false-negative summary fields for XR transport, eye-stage copies and restore. Raw logs/status are authoritative for those executed facts.
 
-## PASS
+Analyzer repair is a later isolated tooling task, not a reason to rerun or redesign the renderer now.
 
-Candidate PASS only if the fresh Quest run preserves the `191032` good properties and adds visible XR output:
-- stable world/head;
-- normal-looking textures;
-- no broken/moving shadows;
-- no RIGHT-eye softness regression;
-- image visible in both Quest eyes;
-- no binocular/telescope geometry.
+## NEXT ACTION
 
-## FAIL
+Bind the direct headset verdict for the already executed 220427 run.
 
-Any of:
-- black headset;
-- broken/moving shadows;
-- RIGHT-eye blur;
-- binocular/telescope geometry;
-- world/head regression;
-- restore/hash failure.
+Needed visual fields:
 
-On FAIL, hard-stop this whole-build parent and do not jump automatically to v6.1/v6.2/v6.3/v6.4.
+```text
+WORLD_STABILITY       = ?
+CAMERA_WORLD_LOCK     = ?
+BINOCULAR_FUSION      = ?
+WORLD_SCALE           = ?
+SHADOW_LIGHT_STABLE   = ?
+RIGHT_EYE_QUALITY     = ?
+WEAPON_VISIBLE_STATE  = ?
+USER_HEADSET_VERDICT  = ACCEPT / RED
+```
 
-## PARKED
+No new code is required to answer this gate.
 
-- R2/T1 visible descendants;
-- PosePair/K;
-- final HEAD rewrite;
-- weapon/NEAR merge;
-- new temporal/shadow policies;
-- later Z-reprojection descendants;
-- release optimization.
+## DECISION TREE
+
+### If ACCEPT
+
+Freeze 220427 as a component visual/control baseline and preserve the proven private-RTV XR bridge unchanged.
+
+Next scientific gate:
+`TRUE L/R SOURCE GEOMETRY WITHOUT LOSING ACCEPTED WORLD/CAMERA OUTPUT`.
+
+That future child must be one mutation category only. It must not simultaneously rewrite HEAD, weapon, NEAR, temporal, shadow and cadence.
+
+### If RED
+
+Mark v6.0.1 whole visual parent `VISUAL_RED`.
+
+Keep only:
+`PRIVATE_RTV_XR_BRIDGE`.
+
+Then continue exact archival recovery of the historical user-accepted single-window behavior profile rather than tuning Z-reprojection or resurrecting rejected parents.
+
+## DO NOT DO NOW
+
+- no GOODLINE descendant;
+- no R2/T1 visible descendant;
+- no v17 whole-build descendant;
+- no K/PosePair;
+- no later Z v6.1/v6.2/v6.3/v6.4 jump;
+- no arbitrary IPD/FOV/convergence tuning;
+- no weapon/NEAR merge;
+- no temporal/shadow mutation;
+- no broad reverse.
+
+One executed LIVE is already on the table. Bind what the user actually saw before touching the machine again.
