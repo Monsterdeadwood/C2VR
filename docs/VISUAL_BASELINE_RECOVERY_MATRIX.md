@@ -2,66 +2,82 @@
 
 ## WHY THIS EXISTS
 
-C2VR repeatedly lost useful behavior because entire packages were labelled `PASS`/`GOLD` even when the headset result was bad, then later branches inherited the whole package.
+C2VR repeatedly lost useful behavior because entire packages were labelled `PASS`/`GOLD`/`GREEN` even when the headset result was bad, untested, or only one subsystem worked.
 
 Recover **properties**, not version numbers.
 
-A package may be GREEN for one property and RED for another.
+A package may be GREEN for one property and RED or UNBOUND for another.
 
-Legend:
-- `GREEN` — keep/recover this property.
-- `RED` — explicitly rejected/falsified.
-- `YELLOW` — technically useful/proven, but not a visual-parent PASS.
-- `OPEN` — exact package/user binding remains unresolved.
-- `NOT_LIVE` — package/result existed, but claimed runtime experiment never executed.
-
-| Property | Best recovered reference | Status | What to keep | What must NOT be inherited |
-|---|---|---|---|---|
-| XR process architecture | x86 Crysis2 + x64 OpenXR host | GREEN | process split, Quest session in x64 host | in-process x86 OpenXR session attempts |
-| Early true headset transport | `194212` | YELLOW technical | x64 session, shared texture, real captured L/R, submit/copy transport | old `GOLD/MAIN_PROVEN_XR` visual label, flat non-world-locked camera |
-| Visible headset output | historical single-window profile | GREEN behavior / OPEN identity | one visible headset image path | black-headset parents |
-| World stability / no flicker | exact physical `v6.0.1 NO_FLICKER_FUSIONLOCK` | GREEN property | stable textures/shadows/objects, no empty-layer flicker, atomic packet publication | its mono/fake binocular composition as final stereo |
-| Camera ownership | `A1_NATIVE_REPAIR_RESULT_173053` + single-source `+0x0057AC76` | YELLOW/GREEN property | head-driven game-camera behavior, one upstream injection | native/Nvidia final stereo; all-SetCamera feedback |
-| Pose/IPD/FOV math | `203734/204156` | YELLOW forensic | HMD pose propagation, accurate eye/IPD/FOV math | exact-eye renderer policy, inherited near asymmetry, old center culling |
-| Near-camera owner identity | `FOB_NEAREST OWNER TRUTH` | YELLOW | render-thread owner timing, dominant `+0x000FF456` | visual build, global active-eye classification |
-| Weapon firing direction | `021239 / A1_HISTORY_FIX_175934` | YELLOW/GREEN component | controller-to-fire direction behavior | crooked hand rig and surrounding Nvidia renderer |
-| True private retail L/R renderer primitive | `CUSTOM_DUAL_T1 v1.0.1 / 212003` | YELLOW technical | private RT transaction, true L/R execution, RC33 mechanics | automatic visual-parent status; later T1 PosePair K0 visual policy |
-| Source-size direct L/R transport | `CLEAN_NATIVE_EYES v7.0.2 / 001036` | YELLOW | exact causal host sizing/direct-eye evidence | promotion to “last good single-window” without user verdict |
-| Compositor fusion control | `v6.1.0 A/FUSION_PROOF_QUAD` | YELLOW control | one 2D image fusion/display control | calling it real stereo or quality baseline |
-| Binocular fusion | none currently bound as accepted final | OPEN | must be proven in headset | telescope/binocular families, numeric-only eye-axis/FOV PASS |
-| World scale | 18–19 Aug “last good native single-window” profile | GREEN behavior / OPEN identity | good world scale behavior | v10-era wrong/strange-scale branches |
-| Stable head motion | same single-window profile + A1 camera reference | GREEN behavior / OPEN exact parent | world stays stable under head motion | screen-glued pose relabel, mouse-look, camera collapse |
-| Shadows / lighting coherence | exact v6.0.1 stable-world property | GREEN property | stable textures/shadows/objects | `205430`, `063149`, moving/sliding L/R light/shadow state |
-| Temporal continuity | v6.0.1 packet/cache ordering | YELLOW/GREEN mechanism | complete last-good continuity, metadata before mutex release | stale pixels relabelled with new/current HMD pose |
-| Stock native stereo right-eye quality | stock 65mm RenderDoc `555666.rdc` | YELLOW baseline defect | stock control proving RIGHT softness exists before C2VR | blaming every right-eye blur on XR transport |
-| High-level DualWorld scheduler | v14.0.2/v14.0.3 | RED | forensic lessons only | direct descendants; black-headset lineage |
-| Native/Nvidia/monitor stereo final transport | A1/native era | RED | archaeology/controls only | final renderer authority |
-| Current T1 PosePair K0 | `CUSTOM_DUAL_T1 v1.0.2 POSEPAIR_ONLY K0` | RED | source diff only as forensic evidence | K1/K2/HEAD/weapon/temporal/shadow descendants |
-| v1.0.5 WORLDLOCK intended camera policy | physical v1.0.5 / v1.0.5.1 | OPEN / first result NOT_LIVE | package/source/runner for archaeology | treating `010051` as a world-lock test |
-| Cleanroom v1.1.1 result `011323` | physical result | NOT_LIVE | loader/preflight lesson only | any visual/runtime conclusion |
+Read together with:
+- `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+- `docs/HISTORICAL_VISUAL_ORACLES_20260815_19.md`
+- `docs/HISTORICAL_AUDIT_PASS2_20260825.md`
+- `docs/FALSIFIED.md`
 
 ---
 
-# EXACT RECOVERY TARGETS
+# STATUS LANGUAGE
 
-## Target A — historical last-good native single-window
+Do not write bare `GREEN` for historical evidence.
 
-Known user-accepted behavior profile:
-- one window;
-- native OpenXR dual eye;
-- good world scale;
-- stable head movement;
-- image present in headset;
-- hand/weapon still visibly wrong.
+Use:
+- `NOT_LIVE` — claimed runtime experiment never executed.
+- `LIVE_VISUAL_UNBOUND` — runtime executed, direct headset verdict not bound.
+- `MECHANICAL_GREEN` — one mechanism proven, no visual acceptance implied.
+- `COMPONENT_VISUAL_GREEN` — user accepted one visible property only.
+- `FULL_USER_VISUAL_GREEN` — complete build accepted as current visual parent.
+- `VISUAL_RED` — explicit user headset rejection.
+- `COMPONENT_ONLY` — donor/oracle fact only.
+- `UNBOUND_VISUAL_RED` — rejection known, exact package/result binding incomplete.
+- `VACUOUS_PASS_INVALID` — PASS printed without required evidence.
 
-State:
-`EXACT_PACKAGE/HASH = OPEN`.
+Package-name words such as `GOLD`, `GREEN`, `CLEAN`, `MAIN`, `PROVEN`, `WORKING`, `SAFE_VISUAL`, `NO_BINOCULAR`, `ONE_WINDOW`, `LIVE_BACKBUFFER_GREEN`, `EXACT`, `FINAL` have zero acceptance authority.
 
-Do not guess from neighboring filenames.
+---
 
-## Target B — exact v6.0.1 no-flicker baseline
+# PROPERTY MATRIX
 
-Physical carrier recovered:
+| Property | Best recovered reference | Status | Keep | Never infer |
+|---|---|---|---|---|
+| XR process architecture | x86 Crysis2 + x64 OpenXR host | `MECHANICAL_GREEN` / infrastructure | process split, Quest session in x64 host | visual correctness |
+| Early live headset transport | `194212` | `MECHANICAL_GREEN` | real x64 session, shared texture, captured non-identical L/R, submit/copy | world lock or visual GOLD |
+| Early world lock | `194212` | `VISUAL_RED/FAIL` | failure evidence | old `EVIDENCE/GOLD` label |
+| Exact v1.0.5 WORLDLOCK package | physical v1.0.5 | package recovered, visual status OPEN | source/runner archaeology | `010051` as LIVE proof |
+| `010051` | physical RESULT | `NOT_LIVE` | Zig/toolchain failure lesson | any Crysis/OpenXR visual conclusion |
+| `011323` | physical RESULT | `NOT_LIVE` | loader/preflight failure lesson | any visual conclusion |
+| World stability / no flicker | exact physical `v6.0.1 NO_FLICKER_FUSIONLOCK` | `COMPONENT_VISUAL_GREEN` | stable textures/shadows/objects, no empty-layer flicker, atomic publication | stereo fusion solved |
+| v6.1 A/FUSION quad | exact physical A control | `MECHANICAL_GREEN` control | compositor/display 2D fusion control | true stereo / quality baseline |
+| v6.1 Z reprojection `201832` | exact LIVE result | `VISUAL_RED` | failure/counter-motion evidence | “v6.1 worked” |
+| Z reprojection v6.2/v6.3/v6.4 | `205523 / 221628 / 013731` | `LIVE_VISUAL_UNBOUND` | genuine runtime evidence | `SAFE_VISUAL` or other filename as acceptance |
+| Camera ownership | `A1_NATIVE_REPAIR_RESULT_173053` + single-source `+0x0057AC76` | `COMPONENT_VISUAL_GREEN` / ownership reference | head-driven game-camera behavior, one upstream injection topology | old Nvidia/native stereo around it |
+| Pose/IPD/FOV math | `203734/204156` | `MECHANICAL_GREEN` forensic | HMD pose, IPD/FOV propagation | surrounding renderer visual PASS |
+| Near-camera owner identity | `FOB_NEAREST OWNER TRUTH` | `MECHANICAL_GREEN` | render-thread owner timing, dominant `+0x000FF456` | visual baseline |
+| Weapon firing direction | `021239 / A1_HISTORY_FIX_175934` | `COMPONENT_VISUAL_GREEN` donor | controller-to-fire direction behavior | hand rig or renderer acceptance |
+| v7 source-size direct L/R transport | `v7.0.2 / 001036` | `MECHANICAL_GREEN + LIVE_VISUAL_UNBOUND` | exact source-size transport evidence | historical good single-window identity |
+| v8/v9 world/near experiments | council/result set | `COMPONENT_ONLY` | useful union/culling/depth facts | complete physical-stereo success |
+| v10 unified near `034749` | exact LIVE result | `MECHANICAL_GREEN`; visual improvement only secondary-bound | WorldCenter/Union/FOBNearest/XR/restore structural facts | whole-build visual GOLD |
+| v10.2 ZERO_NATIVE_ONE_WINDOW `020117` | exact LIVE result | `LIVE_VISUAL_UNBOUND` | runtime evidence | `ONE_WINDOW` name as accepted baseline |
+| v11 CADENCE_FASTPATH | `133603` | `COMPONENT_ONLY` / arbiter rejected whole-fix claim | narrow cadence/structural evidence | visual GREEN |
+| v11/v12 binocular/telescope family | historical user oracle | `UNBOUND_VISUAL_RED` / family-bound | rejection evidence | guessing one exact neighboring ZIP |
+| v13 COMMAND_FORK_IDENTITY | `065321` | `LIVE_VISUAL_UNBOUND` | runtime/oracle evidence | visual success from name |
+| v13.1 XR_NATIVE_IK_HANDS | `071102` | `LIVE_VISUAL_UNBOUND` | runtime/IK oracle evidence | playable hands or visual baseline |
+| v14 DualWorld scheduler | v14.0.2/v14.0.3 | `VISUAL_RED` package/family, exact result binding partly OPEN | black-headset failure lesson | direct descendants as visual parent |
+| v15.1 NO_BINOCULAR | physical package + CommandTwin15 runtime | `MECHANICAL_GREEN / VISUAL_NOT_TESTED` | dual scene mechanics, eye-axis/FOV numerical evidence | binocular issue fixed |
+| True private retail L/R primitive | `CUSTOM_DUAL_T1 v1.0.1 / 212003` | `MECHANICAL_GREEN` | private RT transaction, real L/R execution, RC33 mechanics | visual parent authority |
+| T1 PosePair K0 v1.0.2 | current user run | `VISUAL_RED` | forensic diff only | K1/K2/HEAD/weapon descendants |
+| `063149` v17/P7 lineage | raw user run | `VISUAL_RED` | proof pair transport could be alive | visual transport/camera acceptance |
+| Binocular fusion | none securely bound as accepted final | OPEN | must be proven in headset | eye-axis/FOV numbers alone |
+| World scale | 18–19 Aug last-good single-window behavior profile | `COMPONENT/FULL-BEHAVIOR PROFILE`, exact identity OPEN | good-scale target | guessing package |
+| Stable head motion | same profile + A1 reference | behavior proven historically, exact parent OPEN | world-lock target | screen-glued pose relabel / mouse-look |
+| Shadows/light stability | exact v6.0.1 property | `COMPONENT_VISUAL_GREEN` | stable world materials/light/shadow behavior | later moving/sliding shadow states |
+| Stock native stereo right-eye softness | `555666.rdc` | baseline defect control | causal stock comparison | blaming all RIGHT blur on XR transport |
+| Analyzer PASS with missing prerequisites | historical v17 analyzers | `VACUOUS_PASS_INVALID` | analyzer-bug lesson | any evidence value |
+
+---
+
+# EXACT RECOVERY ANCHOR A — v6.0.1 WORLD STABILITY
+
+Physical carrier:
 
 `CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
 
@@ -71,7 +87,7 @@ Exact size:
 Exact SHA256:
 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
 
-Exact runner lineage inside the recovered archive:
+Exact runner lineage:
 
 ```text
 20_RUN_C2VR_FULL_VR.bat
@@ -79,7 +95,7 @@ Exact runner lineage inside the recovered archive:
  -> tools/Build-Run-EngineTap.ps1
 ```
 
-Recovery lineage:
+Exact recovery lineage:
 
 ```text
 19_RECOVER_C2VR_BLACKBOX.bat
@@ -87,7 +103,7 @@ Recovery lineage:
  -> tools/Recover-EngineTap.ps1
 ```
 
-Recovered v6.0.1 source hashes:
+Recovered source hashes:
 - `engine_tap.cpp` `60F29B0FAE02BC1E751B5FD916C1B82736D3CAA97EB4A99D3F07DE7379D28CB8`
 - `c2vr_host_client.cpp` `2477C256F9E621DEFFB9F6114FE6275865FA86E9826FD2CD8D8A21143472DDFD`
 - `c2vr_openxr_host.cpp` `21853D54D58C37BC90F0A610CF62475173F2CD942D7F40709FCB3BA6B3608D20`
@@ -96,172 +112,151 @@ Recovered v6.0.1 source hashes:
 
 Historical user state:
 - flicker gone;
-- textures/shadows/objects stable;
-- eyes still did not fuse.
+- shadows/textures/objects stable;
+- eyes still did NOT fuse.
 
-Use it to recover WORLD STABILITY only. Do not call stereo solved.
+This is the strongest exact physical reproduction anchor currently recovered for world stability.
 
-## Target C — camera ownership
+It is not final stereo.
+
+---
+
+# RECOVERY ANCHOR B — CAMERA OWNERSHIP
 
 Primary references:
 - `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`;
 - `CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`;
 - once/logical-frame landmark `Crysis2.exe+0x0057AC76`.
 
-Goal:
-recover real head-driven game-camera behavior without importing native/Nvidia final stereo.
+User-positive historical property:
+head turning drove the in-game camera/world and the remaining dominant failure was flicker/two-screen behavior rather than catastrophic camera collapse.
 
-## Target D — true private L/R execution
+Do not inherit the old native/Nvidia final stereo around this reference.
+
+---
+
+# RECOVERY ANCHOR C — TRUE PRIVATE L/R
 
 Technical reference:
 `CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`.
 
-Reuse only proven private-eye transaction/restoration mechanics.
-Do not inherit current T1 PosePair K0 visual policy.
+Reuse only proven private-eye renderer transaction/restoration mechanics.
 
-## Target E — weapon direction
+Do not promote T1 v1.0.1 to whole-build visual parent and do not descend from visually rejected T1 PosePair K0.
+
+---
+
+# RECOVERY ANCHOR D — WEAPON DIRECTION
 
 References:
 - `CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260817_021239.zip`;
 - `CRYSIS2VR_A1_HISTORY_FIX_RESULT_20260817_175934.zip`.
 
-Preserve controller-directed firing only after camera/stereo baseline is accepted.
+Preserve controller-directed firing only after world/camera/stereo baseline is accepted.
 
 ---
 
-# CORRECTED EARLY NATIVE LINEAGE
+# HISTORICAL SINGLE-WINDOW BEHAVIOR PROFILE
 
-## `194212`
-
-Keep as technical XR transport evidence only:
-- real x64 OpenXR session;
-- real headset submits/copies;
-- real captured L/R.
-
-Reject its old visual-GOLD interpretation:
-- `CameraLock=False`;
-- `CameraInject=False`;
-- `HORIZON_WORLD_LOCK=No`;
-- user sees flat image.
-
-## v1.0.5 WORLDLOCK physical package
-
-`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.5_WORLDLOCK_DIRECT_CAMERA.zip`
-
-SHA256:
-`6D4D9D7120C43111AAA84FC0A36BE65BE4E83617E321B6FD9F390D26A52727B0`.
-
-The package is useful for source/runner archaeology, but its first result did not execute the experiment.
-
-## `010051`
-
-`CRYSIS2VR_C2_NATIVE_RESULT_20260816_010051.zip`
-SHA256 `FC65F37E1B5F70F424866B99650C8B66FEA6A54EAD7C5434FFF32A736FB16216`.
-
-Only build failure:
-`Downloaded Zig failed its version self-test.`
-
-`GameFilesTouched=False`.
+18–19 Aug user oracle records:
+- one window;
+- native OpenXR dual eye;
+- good world scale;
+- stable head movement;
+- image present in headset;
+- only hand/weapon visibly wrong.
 
 Classification:
-`NOT_LIVE`.
+`USER_ACCEPTED_BEHAVIOR_PROFILE`.
 
-## v1.0.5.1 Zig fix
+Exact package/hash:
+`OPEN`.
 
-`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.5.1_ZIG_PORTABLE_FIX.zip`
-SHA256 `546A5C63D951E9C5A5B7C82922C4DAB14D0B6992B72535A2999154E3EFA2FF21`.
+Do not guess it from v7/v10 filenames.
 
-World-lock code unchanged; toolchain discovery fixed.
-No recovered user visual PASS currently bound.
-
-## v1.0.6 observatory
-
-`CRYSIS2VR_C2_NATIVE_OPENXR_X64_v1.0.6_OBSERVATORY_DEEP.zip`
-SHA256 `7B4907F04865A7A6E8AFC4B578FB955420123B93C1B12DF4A90EE7556446E1E3`.
-
-Instrumentation child only. Do not infer world-lock acceptance from its existence.
-
-## `011323`
-
-`CRYSIS2VR_C2_NATIVE_RESULT_20260816_011323.zip`
-SHA256 `432E36FB784315A74A8BA6245FDC82B249B08877AC57F569CB6434C34601DAFF`.
-
-Loader/preflight failure:
-`No x64 OpenXR loader found...`
-
-`GameFilesTouched=False`.
-
-Classification:
-`NOT_LIVE`.
+Also do not invent a mythical historical build that contained every later independent success. The recovered record supports several separate wins across different lineages.
 
 ---
 
-# STOCK NATIVE STEREO QUALITY CONTROL
+# VACUOUS PASS RULE
 
-Clean stock 65 mm SBS RenderDoc capture:
-`555666.rdc`, `288,668,138 bytes`.
+A PASS is invalid unless its prerequisites are proven present.
 
-No OpenXR, no C2VR DLL, no camera injection.
+Examples of invalid historical analyzer behavior include PASS-like output with:
+- `None/None/None` frame/pose inputs;
+- zero RightTouch/hand samples;
+- empty no-fault fields where the target path never ran.
 
-Measured/observed:
-- LEFT sharpness roughly `328`;
-- RIGHT roughly `162`;
-- RIGHT visibly softer even on static surfaces.
+Future analyzer contract:
 
-Motion-blur-only control package:
-`CRYSIS2VR_STOCK_65MM_MOTIONBLUR_OFF_RENDERDOC_v1.0.0.zip`
-SHA256 `50EB4F2E66EA2CC3F38C6836F9045CD2A11FFCCE1B00F3FD1608DE1720880AFB`.
+```text
+PREREQUISITE_EVIDENCE_COUNT > 0
+TARGET_PATH_EXECUTED = YES
+REQUIRED_FIELDS_PRESENT = YES
+```
 
-`r_MotionBlur=0` did not remove the issue.
-`r_SSAO=0` also did not remove it.
+If any prerequisite fails, verdict must be `NA/NOT_EXECUTED` or FAIL, never PASS.
 
-Use this as a causal baseline: stock native stereo has its own eye-quality asymmetry. Do not automatically blame every historical right-eye blur on the OpenXR transport.
+---
+
+# CURRENT OPEN ITEMS
+
+Do not fill these by inference:
+
+1. Exact physical ZIP/hash for the 18–19 Aug last-good native single-window behavior profile.
+2. Direct user headset verdicts for Z-reprojection v6.2/v6.3/v6.4.
+3. Direct adjacent primary user message for v10 `034749`; current visual-improvement attribution is secondary historical summary.
+4. Direct user visual verdict for v7.0.2 `001036`.
+5. Direct user visual verdicts for v13 `065321` and v13.1 `071102`.
+6. Exact raw-result timestamp binding for v14.0.2/v14.0.3 black-headset reports.
+7. Exact package binding inside the v11/v12 binocular/telescope family.
+
+An OPEN label outranks a guessed conclusion.
 
 ---
 
 # REQUIRED RESULT IDENTITY GATE
 
-Before a RESULT can enter the visual lineage, report:
+Before any RESULT enters visual lineage:
 
 ```text
-PACKAGE_EXISTS       = YES/NO
-BUILD_SUCCESS        = YES/NO
-GAME_LAUNCHED        = YES/NO
-XR_SESSION_RAN       = YES/NO
-TARGET_CODE_EXECUTED = YES/NO
-HEADSET_IMAGE_EXISTED= YES/NO/UNKNOWN
-USER_HEADSET_VERDICT = ACCEPT/RED/NOT_TESTED
+PACKAGE_EXISTS        = YES/NO
+BUILD_SUCCESS         = YES/NO
+GAME_LAUNCHED         = YES/NO
+XR_SESSION_RAN        = YES/NO
+TARGET_CODE_EXECUTED  = YES/NO
+HEADSET_IMAGE_EXISTED = YES/NO/UNKNOWN
+USER_HEADSET_VERDICT  = ACCEPT/RED/NOT_TESTED
 ```
-
-If `GAME_LAUNCHED=NO` or the target runtime code never executed, the result is `NOT_LIVE` and cannot prove or falsify visual architecture.
 
 ---
 
 # REQUIRED VISUAL PROPERTY TABLE FOR NEW PARENTS
 
 ```text
-WORLD_STABILITY      = PASS/FAIL/UNTESTED
-CAMERA_WORLD_LOCK    = PASS/FAIL/UNTESTED
-BINOCULAR_FUSION     = PASS/FAIL/UNTESTED
-TRUE_LR              = PASS/FAIL/UNTESTED
-WORLD_SCALE          = PASS/FAIL/UNTESTED
-SHADOW_LIGHT_STABLE  = PASS/FAIL/UNTESTED
-WEAPON_DIRECTION     = PASS/FAIL/UNTESTED
-RESTORE_HASHES       = PASS/FAIL
-USER_HEADSET_VERDICT = ACCEPT/RED/NOT_TESTED
+LIVE_STATUS           = LIVE/NOT_LIVE
+WORLD_STABILITY       = PASS/FAIL/UNTESTED
+CAMERA_WORLD_LOCK     = PASS/FAIL/UNTESTED
+BINOCULAR_FUSION      = PASS/FAIL/UNTESTED
+TRUE_LR               = PASS/FAIL/UNTESTED
+WORLD_SCALE           = PASS/FAIL/UNTESTED
+SHADOW_LIGHT_STABLE   = PASS/FAIL/UNTESTED
+WEAPON_DIRECTION      = PASS/FAIL/UNTESTED
+RESTORE_HASHES        = PASS/FAIL
+USER_HEADSET_VERDICT  = ACCEPT/RED/NOT_TESTED
 ```
 
-A catastrophic visual RED forbids direct-parent promotion even when other rows are PASS.
+Only a `FULL_USER_VISUAL_GREEN` whole-build result may become the next complete visual parent.
 
 ---
 
 # RECOVERY ORDER
 
-1. Reproduce exact physical v6.0.1 unchanged with its actual inherited runner to recover WORLD STABILITY / no-flicker behavior.
-2. Continue recovering the exact package behind the historical last-good native single-window behavior profile.
+1. Reproduce the exact physical v6.0.1 unchanged to re-establish world/no-flicker stability with its real runner.
+2. Continue exact recovery of the historical last-good native single-window identity without guessing.
 3. Reproduce camera ownership separately from A1/single-source lineage.
 4. Reintroduce true private L/R mechanics separately from T1.
 5. Prove actual binocular fusion in headset.
-6. Only then reopen HEAD translation, weapon/NEAR, temporal/shadow polish, and cadence optimization.
+6. Only then reopen HEAD translation, weapon/NEAR, temporal/shadow polish and cadence optimization.
 
-This matrix outranks version-number recency and old package labels for parent selection.
+This matrix outranks version-number recency, package names, and analyzer PASS labels for parent selection.
