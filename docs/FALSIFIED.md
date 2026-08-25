@@ -2,7 +2,20 @@
 
 Do not repeat these without new independent evidence.
 
-- **Rebuild stereo from scratch** — STOP. `CUSTOM_DUAL_T1 v1.0.1` already proves true private L/R retail rendering.
+## USER VISUAL HARD-RED GUARD
+
+These stops are bound to recovered user headset verdicts, not only engineering inference. See `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md` for the chronological evidence and salvage checkpoints.
+
+- **`CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip` as a visual parent** — HARD STOP. SHA256 `7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`. User ran it on 2026-08-25 and reported it visually even worse than the already-rejected predecessor. No K=1/K=2/HEAD/weapon/temporal/shadow descendants from this package.
+- **`C2VR_RC33_V1721_RESULT_20260825_063149.zip` lineage as a visual parent** — HARD STOP. Pair transport was alive but the user reported catastrophic camera/world instability and light/shadow motion. Do not convert counter PASS into visual PASS.
+- **Native/NVIDIA/monitor-stereo as the final Crysis 2 VR renderer** — HARD STOP. User explicitly rejected this direction after repeated flashes/flicker. It remains archaeology/control evidence only.
+- **Native stereo + real Quest IPD/XrView FOV as a final shortcut** — HARD STOP. `205430` user verdict: wrong stereo, flicker, shadows disappearing/changing. Saved L/R evidence showed lighting/shadow and near-geometry disagreement. Do not assume culling-only repair makes shared deferred/screen-space state binocularly correct.
+- **STABLE_CAMERA v2.2.0 as proof that simplifying to one world-camera owner fixes the renderer** — FALSIFIED visually. `010329` still flickered badly; weapon motion did not establish real firing ownership.
+- **All-SetCamera HMD injection** — HARD STOP with direct runtime/user evidence from `171947`: eyes collapsed toward equality and the camera accumulated the same HMD transform recursively. Keep only the single-upstream-owner lesson.
+- **A package name containing `GOLD`, `CLEAN`, `MAIN`, or a technically authoritative source label as sufficient visual-parent evidence** — REJECTED. User headset verdict and captures outrank naming and counters.
+- **Guessing a package identity for an old user visual failure when the exact result/package was not recovered** — STOP. Preserve it as `UNBOUND_VISUAL_RED` until exact identity is recovered.
+
+- **Rebuild stereo from scratch** — STOP. `CUSTOM_DUAL_T1 v1.0.1` already proves true private L/R retail rendering. This is a technical primitive, not automatic visual-parent approval.
 - **Second top-level `RenderWorld` / second `EF_StartEf`** — forbidden. One prepared render-list executes twice.
 - **Apply HMD transform at every `Renderer::SetCamera`** — FALSIFIED by cumulative feedback (`G -> G*HMD -> G*HMD^2 ...`).
 - **Fake/partial CCamera as authoritative camera object** — unsafe; earlier partial shadow broke native stereo semantics. Use a real full CCamera or a fully verified shadow with exact lifetime/layout.
@@ -26,16 +39,17 @@ Do not repeat these without new independent evidence.
 - **Automatic squeeze/grip-edge rebaseline as default weapon policy** — STOP. It can create discontinuous weapon snaps; next weapon proof must use fixed bind except explicit recenter/equip/rebind.
 - **AIM-vs-GRIP pose-family hunt** — STOP unless new evidence appears. AIM is canonical; GRIP is only a low-priority control.
 - **Gameplay aim/ballistics work during visual weapon gate** — STOP. Historical servo fallback is preserved, but ballistics remains a later blocker.
-- **Broad weapon reverse now** — STOP while PosePair is current gate.
-- **Broad HEAD/camera archaeology now** — STOP while PosePair is current gate. HEAD cold finalists are already prepared.
-- **Temporal/shadow mutation now** — STOP until PosePair, HEAD and weapon/NEAR visual gates pass serially.
+- **Broad weapon reverse now** — STOP while visual baseline recovery is current gate.
+- **Broad HEAD/camera archaeology now** — STOP while visual baseline recovery is current gate. Recover and reproduce the nearest user-positive camera checkpoint first.
+- **Temporal/shadow mutation now** — STOP until a stable visual baseline is recovered and later serial gates explicitly open it.
 - **New broad symbol/corpus census for weapon functions** — STOP. When weapon gate opens, do a narrow `CryGameCrysis2.pdb/source -> retail` bridge for only `PostUpdateView`, `UpdateFPPosition`, `UpdateFPCharacter` (and ballistic symbols only if later required).
-- **Repeating the old broad WAVE3 cadence gate instrumentation before P6** — STOP. P4/P5 already causally isolated exact-pair wait/deadline as a major contributor. Add phase timestamps only if P6 still misses materially.
-- **Increasing wait beyond P6 after timeout starvation is closed** — STOP. If P6 drives timeouts near zero, the next timing tool is future-target pipeline lead, not a larger watchdog.
-- **Full GPU fence / synchronous GPU wait as the first fix for persistent eye-RT overwrite** — STOP. Source review does not prove a canonical-path overwrite race; close primary-Present/render-thread publication ownership first if P6 leaves this class active.
+- **Repeating the old broad WAVE3 cadence gate instrumentation before visual baseline recovery** — STOP. Cadence K is no longer the next gate after the 2026-08-25 user HARD REDs.
+- **Increasing wait beyond P6 after timeout starvation is closed** — STOP. A larger watchdog cannot repair a visually wrong camera/world renderer.
+- **Full GPU fence / synchronous GPU wait as the first fix for persistent eye-RT overwrite** — STOP. Source review does not prove a canonical-path overwrite race; close publication ownership only if a future visually valid baseline reaches that blocker.
 - **Double/triple-buffering or ring-buffering engine eye RTs before publication ownership is closed** — STOP. It expands renderer mutation surface and can mask the actual owner. See `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
 
 Historical resource `20500` / 320-byte per-view carrier work remains supporting archaeology, not authorization to restart broad GPU/resource searches.
 
 Coordinate-basis conflict provenance is in `research/COORDINATE_BASIS_CONFLICT_20260824.md`.
 Publication-ownership provenance is in `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md`.
+User visual precedence and parent-selection policy are in `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`.
