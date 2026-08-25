@@ -2,95 +2,125 @@
 
 ## CURRENT GATE — 2026-08-25
 
-`EXACT HISTORICAL 191032 -> v6.0.1 PRIVATE_RTV REPRODUCTION`
+`220427 V6.0.1 LIVE -> BIND USER HEADSET VERDICT -> VISUAL BASELINE DECISION`
 
-This supersedes the R2/private-LR matrix and GOODLINE/v7 visual-parent attempts.
+The exact historical Z-reprojection v6.0.1 PRIVATE_RTV recovery is no longer merely PREPARED/UNRUN. It has now executed in the target environment.
 
 Read first:
-1. `docs/LATEST_OVERRIDE_20260825_GOODLINE_HARD_RED_V601_RECOVERY.md`
-2. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-3. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-4. `docs/FALSIFIED.md`
-5. `experiments/NEXT_EXPERIMENT.md`
+1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
+2. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
+3. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+4. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+5. `docs/FALSIFIED.md`
 6. `docs/NEXT.md`
+7. `experiments/NEXT_EXPERIMENT.md`
 
 Evidence law:
-`USER_HEADSET_VERDICT > captures > raw LIVE logs > counters > static validation > package intent`.
+`USER_HEADSET_VERDICT > captures > raw LIVE logs/status > counters > generated analyzer summary > static validation > package intent`.
 
-## NEW HARD RED
-
-`CRYSIS2VR_GOODLINE_NATIVE_SINGLE_WINDOW_v1.0.0_ONECLICK.zip`
-SHA256 `566BBBA4C9889DDD5B1F4974DF32330845EEE2F772B7EFD0469A9AF3DEFD07DA`.
-
-Direct user headset verdict:
-- shadows broken/unstable;
-- RIGHT eye blurred;
-- whole build rejected.
-
-Classification:
-`USER_VISUAL_HARD_RED`.
-
-No direct visual descendants. Do not patch GOODLINE or revive v7/native ProcessScene stereo as the next baseline.
-
-## STRONGEST DIRECT USER-POSITIVE RECOVERED CHECKPOINT
+## LATEST LIVE
 
 Result:
-`CRYSIS2VR_Z_REPROJECTION_RESULT_20260817_191032.zip`
+`CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
 
-Parent:
-`CRYSIS2VR_Z_REPROJECTION_v6.0.0.zip`
-SHA256 `875853652D3A2ACC0E684A2E9BE2118D69FB2252E4B21B677DA4CF5105922656`.
+SHA256:
+`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
 
-Direct historical user-positive properties:
-- user called it "реально неплохой" and said it looked "реально хорошо";
-- one normal image on monitor;
-- head motion drove the viewed world;
-- weapon fired;
-- textures looked normal.
+Raw mechanical facts:
 
-Only critical blocker in that run:
-`XR_RTV_CREATE_FAIL eye=0 image=0 hr=0x80070057`
-so the image never reached Quest.
+```text
+XR session creation/begin       = YES
+submit_count                    = 4691
+ever_submitted                  = 1
+eye_stage_ready                 = 1,1
+eye_stage_copies                = 9382
+reproject_ready                 = 1
+reproject_draws                 = 9382
+xr_capture_count                = 33
+raw RESTORE_OK                  = True
+native eye records L/R          = 0/0
+```
+
+Historical v6.0.0 blocker `XR_RTV_CREATE_FAIL eye=0 image=0 hr=0x80070057` is mechanically closed by private typed eye staging + CopyResource to XR swapchains.
+
+## ARCHITECTURE CLASSIFICATION
+
+Actual headset source in 220427:
+
+`ONE CENTER RGB + inverse depth -> x64 depth reprojection -> synthetic LEFT/RIGHT -> private eye RTs -> XR swapchains`.
+
+Therefore:
+
+```text
+LIVE_STATUS                         = LIVE
+PRIVATE_RTV_XR_BRIDGE               = MECHANICAL_GREEN
+MONO_DEPTH_SYNTHETIC_LR_OUTPUT      = MECHANICAL_GREEN
+TRUE_PRIVATE_LR_SCENE_RENDER        = NO
+USER_HEADSET_VERDICT                = UNBOUND
+FULL_USER_VISUAL_GREEN              = NO
+```
+
+Mono RGB+depth/Z reprojection remains forbidden as the assumed final renderer. It may be retained as a narrow transport/control component.
+
+## ANALYZER CORRECTION
+
+Fresh generated `Z_REPROJECTION_VERDICT.txt` incorrectly reports:
+- `OpenXRTransport=FAIL` despite 4691 submits and `ever_submitted=1`;
+- `eyeStageCopies=0` despite raw `eye_stage_copies=9382`;
+- `Restore=FAIL` despite raw `RESTORE_OK=True`.
 
 Classification:
-`COMPONENT_VISUAL_GREEN: WORLD/CAMERA/TEXTURE/WEAPON-BEHAVIOR ON DESKTOP`
-`XR_VISIBLE_OUTPUT = FAIL`.
+`ANALYZER_FALSE_NEGATIVE / SUMMARY_PARSER_BUG`.
 
-## CURRENT NEXT RUNTIME
+Do not downgrade the executed runtime to PIPELINE_INCOMPLETE based on those contradicted summary fields.
 
-Exact historical child:
-`CRYSIS2VR_Z_REPROJECTION_v6.0.1_PRIVATE_RTV_BRIDGE.zip`
-SHA256 `E683FA148794DDA2F671BD6C0ADDF6AF535482FE3F2A43DE23539778608E032A`.
+## CURRENT NEXT
 
-Historical runner:
-`RUN_C2VR_Z_REPROJECTION_v6.0.1.bat`.
+No new build yet.
 
-Historical result exists:
-`CRYSIS2VR_Z_REPROJECTION_RESULT_20260817_193132.zip`.
+First bind the user's direct headset verdict for 220427:
+- world/head stability;
+- binocular/fusion quality;
+- shadows/light;
+- RIGHT-eye quality;
+- scale/geometry;
+- general usability.
 
-Direct user headset verdict for `193132` remains UNBOUND.
+Then:
 
-The next LIVE must execute the exact v6.0.1 package unchanged. Its only intended delta from the user-positive v6.0.0 is XR output: private typed eye RTs -> CopyResource into acquired XR swapchain images.
+### If ACCEPT
+Freeze 220427 as a component visual/control baseline, preserve its XR bridge, and isolate the next question to true-L/R/source geometry.
 
-Do not import later v6.1+ changes.
+### If RED
+Hard-stop v6.0.1 as a whole visual parent, salvage only the PRIVATE_RTV_XR_BRIDGE, and continue recovery of the exact historical user-accepted single-window profile.
 
-## PRESERVED COMPONENT GREENS
+## EXISTING HARD REDS REMAIN HARD RED
 
-`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
-SHA256 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`
-remains a separate `COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER` donor only. Do not confuse it with Z-reprojection v6.0.1 PRIVATE_RTV.
+No direct visual descendants from:
+- `C2VR_RC33_V1721_RESULT_20260825_063149.zip` lineage;
+- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`;
+- `CRYSIS2VR_GOODLINE_NATIVE_SINGLE_WINDOW_v1.0.0_ONECLICK.zip`;
+- R2 `201208` binocular/telescope path;
+- native/NVIDIA monitor-stereo final-renderer paths;
+- black-headset DualWorld family.
 
-`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` remains a camera-ownership component reference.
+## PRESERVED COMPONENT AUTHORITIES
+
+- `CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip` = `COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`, fusion still failed.
+- `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` = camera ownership reference.
+- `CUSTOM_DUAL_T1 v1.0.1 / 212003` = `MECHANICAL_GREEN: TRUE_PRIVATE_LR_RENDERER`, not a whole visual parent.
+- controller-directed firing evidence remains a weapon-direction donor only.
+- historical one-window / good-scale / stable-head / headset-visible behavior profile remains valuable, exact package identity still OPEN.
 
 ## PARKED
 
-Until an accepted headset visual baseline exists:
-- R2/T1 visible descendants;
+Until 220427 receives a direct headset verdict:
 - PosePair/K;
 - final HEAD rewrite;
 - weapon/NEAR merge;
 - temporal/shadow mutation;
-- later Z v6.1/v6.2/v6.3/v6.4;
+- later Z v6.1+ descendants;
+- arbitrary IPD/FOV/convergence tuning;
 - release optimization.
 
 ## RETAIL IDENTITY
