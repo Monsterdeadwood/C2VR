@@ -2,73 +2,145 @@
 
 Native VR integration research for **Crysis 2 retail 1.9 / CryEngine DX11**.
 
-## Current status
-**ACTIVE — WORKING BUILD FIRST.**
+## 🚨 CURRENT STATUS — VISUAL SAFETY OVERRIDE ACTIVE
 
-Main renderer parent: `CUSTOM_DUAL_T1 v1.0.1`.
+**ACTIVE — WORKING BUILD FIRST, USER VISUAL VERDICT FIRST.**
 
-True private LEFT/RIGHT retail rendering is PROVEN. The active project gate is **PosePair / projection-layer exact-pair cadence**, not stereo discovery, HEAD reverse, weapon reverse, temporal work or shadow work.
+The project is **NOT currently in cadence K, HEAD, weapon, temporal or shadow integration**.
 
-Latest completed causal timing result: `v17.2.5 WAIT45` reached `269 exact_pair_consumes / 269 host_submits`, `53 misses`, exact ratio `83.5404%`, `pair_wait_ms_max=47`, with flashes/dropouts still visible.
+Current gate:
 
-The authorized next LIVE is already built and untested:
-`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
-SHA256 `8385f6aaad668e40058eb368e4593f53a3489ce7c24ef19521c4c8deb0eca89e`.
+`VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
 
-Exact P5->P6 package comparison is now closed COLD. All game/in-process runtime source is byte-identical. The only changed first-party runtime file is the x64 host: one causal policy mutation changes the exact-pair watchdog `45 ms -> 120 ms`, and P6 additionally adds passive timeout/latency histogram telemetry. `120 ms` remains a fail-closed ceiling, not a forced sleep.
+Two recent descendants are now hard visual rejects:
 
-Current finish ladder:
-`POSEPAIR -> HEAD 1:1 -> WEAPON / NEAR -> TEMPORAL / SHADOW STABILITY -> REGRESSION -> RELEASE CANDIDATE`
+1. `C2VR_RC33_V1721_RESULT_20260825_063149.zip`
+   - pair transport alive;
+   - user reported catastrophic camera/world instability and moving/sliding light/shadow state;
+   - **USER_VISUAL_HARD_RED**.
 
-Do not restart broad renderer/stereo/camera/weapon archaeology unless the serial gate requires it.
+2. `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`
+   - SHA256 `7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`;
+   - user ran it and reported it visually even worse;
+   - **USER_VISUAL_HARD_RED / RESULT_ZIP_NOT_BOUND**.
+
+Therefore:
+- **DO NOT build K=1/K=2 from that T1 K0 package**;
+- **DO NOT promote `063149` or its direct descendants**;
+- **DO NOT treat source cleanliness, hashes, counters, or technical L/R proof as visual acceptance**.
+
+The permanent parent-selection authority is:
+
+**`docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`**
+
+A `USER_VISUAL_HARD_RED` package may not be used as a direct visual parent again unless a future exact causal revert/bisect explicitly removes the failed policy and the user re-accepts the resulting baseline in-headset.
+
+## SOURCE AUTHORITY ≠ VISUAL PARENT AUTHORITY
+
+Main renderer source authority remains:
+`CUSTOM_DUAL_T1 v1.0.1`.
+
+True private LEFT/RIGHT retail rendering is technically PROVEN. That remains valuable.
+
+But after the v1.0.2 user HARD RED, the T1 source authority **must not be confused with a visually accepted parent**.
+
+Likewise v17.2.x remains a selective donor family, not a wholesale parent.
+
+## HISTORICAL VISUAL GUARDS NOW FROZEN
+
+Recovered Crysis 2 user verdicts permanently stop several repeated mistakes:
+- all-`SetCamera` HMD injection caused recursive camera multiplication and eye collapse;
+- native/NVIDIA monitor stereo was explicitly rejected as final VR;
+- real Quest IPD/XrView FOV grafted onto native monitor stereo produced flicker and L/R light/shadow disagreement;
+- `STABLE_CAMERA v2.2.0` still flickered and did not establish correct firing ownership;
+- counters alone never override a headset RED.
+
+See:
+- `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+- `docs/FALSIFIED.md`
+- `docs/LATEST_OVERRIDE_20260825_T1_K0_HARD_RED.md`
+
+## CURRENT RECOVERY ANCHORS
+
+These are **component/reference checkpoints**, not whole-build GOLD unless explicitly stated:
+
+- `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
+  - user reported real head-driven camera/world behavior;
+  - remaining problem was flicker/two-screen behavior;
+  - useful camera-ownership reference.
+
+- `CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
+  - HMD applied once at `Crysis2.exe+0x0057AC76`;
+  - all downstream `SetCamera` calls pass through;
+  - useful HEAD ownership topology reference, not visual GOLD.
+
+- `191909`
+  - historical lower-divergence orientation/native-stereo control;
+  - control only, not final VR geometry.
+
+- `203734 / 204156`
+  - useful HMD 6DoF/IPD/FOV propagation evidence;
+  - renderer policy not accepted because `205430` subsequently failed visually.
+
+- `021239`
+  - weapon/muzzle component donor only;
+  - do not inherit monitor-stereo as final VR.
+
+- x86 game + x64 OpenXR host split
+  - infrastructure GOLD.
+
+- `CUSTOM_DUAL_T1 v1.0.1`
+  - true-L/R renderer technical proof only until a user-accepted visual baseline is restored.
+
+## NEXT
+
+Before another visual build:
+
+1. recover the **exact physical package + exact runner** associated with the nearest user-positive/near-normal Crysis camera checkpoint;
+2. reproduce that baseline unchanged;
+3. bind fresh RESULT + explicit in-headset verdict;
+4. freeze it;
+5. add **one causal visual mutation per child**.
+
+Do not resume cadence K until stationary world, slow yaw, fast yaw/reversal and light/shadow stability are visually acceptable.
 
 ## Start here
-1. `docs/SYNC.md` — canonical cross-branch runtime snapshot, offsets, current finalists, unresolved questions
-2. `research/SOURCE_CORPUS_CURRENT_STATUS_20260825.md` — current authoritative overlay for source/beta/mod/donor availability and recently closed archival gaps
-3. `research/SOURCE_CORPUS_REGISTRY.md` — detailed registry of retail, beta/dev, ModSDK, Crysis2Coop, PDB, CryEngine source, VR/stereo donors, public pinned repos, RDC/TTD/RESULT carriers
-4. `research/P5_TO_P6_EXACT_DELTA_20260825.md` — exact physical-package proof of P5->P6 causal scope
-5. `research/T1_CARRIER_RECOVERY_20260825.md` — exact T1 HOSTFIX source carrier and scientific RESULT carrier recovery
-6. `research/T1_TO_P6_SOURCE_LINEAGE_20260825.md` — exact source genealogy proving the inherited T1 camera core and later transaction evolution
-7. `research/BETA_PDB_IDENTITY_CONFLICT_20260825.md` — RESOLVED: historical PDB size conflict is Bin32 vs Bin64 of the same 5620 tree, with exact path/size/SHA identities
-8. `research/CRYSIS2_MODSDK64_IDENTITY_20260825.md` — exact local C2 x64/SDK donor module identities
-9. `tools/C2VR_EXTERNAL_CORPUS_IDENTITY.ps1` — optional read-only hash/PE-machine re-verifier for local beta/PDB identities; no game launch, hooks, network, or writes to the game tree
-10. `docs/STATE.md` — active state and exact CURRENT GATE / NEXT
-11. `docs/NEXT.md` — authorized P6 handoff and post-P6 decision tree
-12. `experiments/NEXT_EXPERIMENT.md` — exact five-line P6 PREFLIGHT and runtime acceptance criteria
-13. `docs/EXPERIMENTS.md` — compact causal experiment lineage and do-not-repeat map
-14. `docs/PROVEN.md` — facts that must not be re-researched
-15. `docs/FALSIFIED.md` — dead/stopped paths
-16. `docs/GATES.md` — serial acceptance ladder
-17. `research/RESULT_INDEX.md` — result/build lineage
-18. `research/POSEPAIR_PACKET_ATOMICITY_PACING_20260824.md` — historical pixel/metadata atomicity, pacing and last-good-frame evidence
-19. `research/POSEPAIR_PUBLICATION_OWNERSHIP_20260824.md` — source-proven Present publication topology and unresolved ownership risk
-20. `research/COORDINATE_BASIS_CONFLICT_20260824.md` — preserved `003329` vs retail/v10 local-X evidence conflict; COLD-only, not current LIVE gate
-21. `research/WEAPON_NEAR.md` — parked weapon/NEAR state for its later gate
+1. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md` — permanent headset-verdict ledger, blacklist, salvage whitelist and parent-selection law
+2. `docs/LATEST_OVERRIDE_20260825_T1_K0_HARD_RED.md` — newest state override
+3. `docs/FALSIFIED.md` — permanent stopped paths
+4. `docs/STATE.md` — detailed project state and current gate
+5. `docs/SYNC.md` — canonical cross-branch runtime snapshot and offsets
+6. `runtime/main/CUSTOM_DUAL_T1_v1.0.1/README.md` — technical T1 renderer source authority, not automatic visual authority
+7. `runtime/donors/v17.2.1/POSEPAIR_TRANSPLANT.md` — selective v17.2.1 donor map and STOP list
+8. `research/SOURCE_CORPUS_CURRENT_STATUS_20260825.md` — authoritative source/beta/mod/donor availability overlay
+9. `research/SOURCE_CORPUS_REGISTRY.md` — detailed corpus registry
+10. `research/RESULT_INDEX.md` — result/build lineage
+11. `docs/PROVEN.md` — facts that must not be re-researched
+12. `docs/GATES.md` — serial acceptance ladder
 
 Before downloading, rescanning, or calling a beta/mod/donor “new”, check the current-status overlay and corpus registry. Existing exact/local corpora must be re-harvested narrowly when possible instead of duplicated.
 
-A PDB filename is not an identity. For beta-derived mappings carry the stable architecture/root label plus relative path and SHA256. The current 5620 families are explicitly separated as `BETA5620_BIN32`, `BETA5620_BIN64`, and `BETA5620_BIN32_NO_PROTECT`.
+## Canonical renderer facts that remain useful
 
-## Canonical renderer architecture
-One prepared render-list executes twice for the two eyes. Do not add a second high-level `RenderWorld` / `EF_StartEf`.
+One prepared render-list may execute twice for the two eyes. Do not add a second high-level `RenderWorld` / `EF_StartEf`.
 
 `SetCamera(L) -> EF_Scene3D -> SetCamera(R) -> EF_Scene3D`
 
-Current RT transaction:
+RT transaction:
 `RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`.
 
 Pixel data and the render pose/FOV/contract metadata that produced it are one atomic publication unit. Stale pixels must never be relabelled as a newer XR contract.
 
 ## Working model
-`SYNC -> THINK -> KEEP/ADAPT/STOP -> BATCH HARVEST -> CONVERGE -> PROVEN/FALSIFIED -> NEXT GATE -> SYNC`
+`SYNC -> USER VISUAL LEDGER -> THINK -> KEEP/ADAPT/STOP -> ONE CAUSAL MUTATION -> LIVE -> USER VERDICT -> PROVEN/FALSIFIED -> SYNC`
 
 **PARALLELIZE EVIDENCE — SERIALIZE MUTATION.**
 
 ## Repository map
-- `docs/` — canonical state, proven/falsified facts, gates, workflow and policy
-- `research/` — evidence indexes, current corpus status, source/beta/mod/donor registry and focused blocker research
+- `docs/` — canonical state, user visual acceptance ledger, proven/falsified facts, gates, workflow and policy
+- `research/` — evidence indexes, source/beta/mod/donor registry and focused blocker research
 - `experiments/` — reproducible causal experiments
-- `runtime/` — accepted main/donor source authority
+- `runtime/` — accepted technical source authorities and selective donors
 - `tools/` — deterministic extraction/build/analysis tooling
 
 ## Exact retail baseline
