@@ -1,145 +1,193 @@
 # Crysis 2 VR — STATE SYNC
 
-## 🚨 GLOBAL VISUAL OVERRIDE — 2026-08-25
+## GLOBAL VISUAL OVERRIDE — 2026-08-25
 
-Every C2VR branch must read these before planning a LIVE or choosing a parent:
+Every C2VR branch must read these before choosing a parent or planning a LIVE:
 
 1. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-2. `docs/LATEST_OVERRIDE_20260825_T1_K0_HARD_RED.md`
-3. `docs/FALSIFIED.md`
-4. `docs/STATE.md`
-5. `docs/NEXT.md`
+2. `docs/HISTORICAL_AUDIT_PASS2_20260825.md`
+3. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+4. `docs/FALSIFIED.md`
+5. `docs/STATE.md`
+6. `docs/NEXT.md`
+7. `docs/GATES.md`
 
-The user's in-headset visual verdict outranks counters/static validation for camera/stereo/playability acceptance.
+User headset verdict outranks counters/static validation for visual/playability acceptance.
+
+Bare `GREEN` is forbidden. Qualify as `MECHANICAL_GREEN`, `COMPONENT_VISUAL_GREEN`, or `FULL_USER_VISUAL_GREEN`.
+
+`RESULT ZIP != LIVE` and `VACUOUS_PASS` is invalid evidence.
 
 ## CURRENT GATE
 
 `VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
 
-The old current-gate text `POSEPAIR / cadence K` is superseded.
+Old PosePair/cadence-K current-gate text is superseded.
 
-Do NOT run cadence K, HEAD, weapon/NEAR, temporal or shadow descendants until an exact historical near-normal visual baseline is recovered, reproduced unchanged, and accepted again in headset.
+Do not run cadence K, final HEAD, weapon/NEAR, temporal or shadow descendants until visual baseline recovery succeeds.
+
+## FIRST EXACT REPRODUCTION ANCHOR
+
+Physical package recovered:
+
+`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+
+SHA256:
+`E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
+
+Exact inherited runner:
+
+`20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`.
+
+Historical user-positive property:
+- flicker gone;
+- shadows/textures/objects stable;
+- eyes still did not fuse.
+
+Classification:
+`COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`.
+
+This is the first exact unchanged reproduction target.
+It is not final stereo.
+
+## CAMERA OWNERSHIP REFERENCE
+
+`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
+
+Historical user-positive property:
+head motion drove the actual game camera/world; old renderer still had flicker/two-screen behavior.
+
+Classification:
+`COMPONENT_VISUAL_GREEN: CAMERA_OWNERSHIP_REFERENCE`.
+
+Single-source topology reference:
+`CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
+SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
+
+HMD x1 at `Crysis2.exe+0x0057AC76`; downstream SetCamera pass-through.
+
+## TRUE-L/R TECHNICAL REFERENCE
+
+`CUSTOM_DUAL_T1 v1.0.1 / CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
+
+Classification:
+`MECHANICAL_GREEN: TRUE_PRIVATE_LR_RENDERER`.
+
+Do not rebuild stereo and do not confuse source authority with visual-parent authority.
 
 ## CURRENT HARD-RED BUILDS
 
 ### `063149`
-Raw result:
 `C2VR_RC33_V1721_RESULT_20260825_063149.zip`
 
-Pair transport was alive, but user visual verdict was catastrophic camera/world instability with light/shadow state visibly moving/sliding.
+Pair transport alive; user reported catastrophic camera/world instability with moving/sliding light/shadow state.
 
-Classification:
-`USER_VISUAL_HARD_RED`.
+`VISUAL_RED`.
 
 ### T1 PosePair-only K0
-Package:
 `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`
 
 SHA256:
-`7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`
+`7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`.
 
-User ran it and reported it visually even worse than the prior rejected build.
+User reported it visually even worse.
+
+`VISUAL_RED / RESULT_ZIP_NOT_BOUND`.
+
+Absolute rule:
+NO direct K1/K2/HEAD/weapon/temporal/shadow descendants from either.
+
+## CORRECTED P6 STATUS
+
+P6 is LIVE, not merely statically verified.
+
+Package:
+`CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip`
+SHA256 `8385F6AAAD668E40058EB368E4593F53A3489CE7C24EF19521C4C8DEB0ECA89E`.
+
+Raw result:
+`C2VR_RC33_V1721_RESULT_20260825_012454.zip`.
+
+It produced:
+- host contract publication;
+- zero exact hits/consumes/submits;
+- zero queued/completed eye pairs;
+- game RenderWorld/scene activity alive;
+- fault `NO_LATCHED_RENDER_CONTRACT`;
+- restore/hash PASS.
 
 Classification:
-`USER_VISUAL_HARD_RED / RESULT_ZIP_NOT_BOUND`.
+`LIVE_RUNTIME_RED_BEFORE_PAIR_PRODUCTION`.
 
-Absolute branch rule:
-**NO direct K=1/K=2/HEAD/weapon/temporal/shadow descendants from either hard-red parent.**
+Do not state P6 as “not LIVE-proven”.
+Do not interpret 120 ms as successful cadence improvement.
 
-## HISTORICAL HARD-RED CLASSES IMPORTED INTO GLOBAL SYNC
+## HISTORICAL EVIDENCE CORRECTIONS
 
-### All-SetCamera HMD feedback
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260816_171947.zip`.
+### `194212`
+Real XR transport proof, but `CameraLock=False`, `CameraInject=False`, `HORIZON_WORLD_LOCK=No`, flat image.
 
-Recovered proof:
-- eyes collapsed toward equality after intervention;
-- 52,170 adjacent camera-pair observations;
-- 99.837% next input equalled previous injected output;
-- cumulative `G * HMD^n` feedback.
+`MECHANICAL_GREEN: transport`, NOT visual GOLD.
 
-STOP forever: do not apply HMD transform at every Renderer::SetCamera.
+### `010051 / 011323`
+Both are `NOT_LIVE` preflight/build failures. No visual conclusion.
 
-### Real Quest IPD/FOV grafted onto native monitor stereo
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260816_205430.zip`.
+### v6.1 lines
+- A/FUSION_PROOF_QUAD = compositor control only.
+- Z-reprojection `201832` = direct user VISUAL RED: blur + weapon counter-motion.
 
-User reported flicker, wrong stereo and shadows disappearing/changing. Saved L/R captures showed lighting/shadow and near-geometry disagreement.
+Do not merge these into “v6.1 worked”.
 
-STOP forever as final VR shortcut.
+### v7.0.2 `001036`
+Genuine technical LIVE, direct user visual verdict unbound.
 
-### STABLE_CAMERA v2.2.0
-Known result context:
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_RESULT_20260817_010329.zip`.
+### v10 `034749`
+Strong structural/mechanical result. Primary arbiter says `READY_FOR_VISUAL_TEST`; whole-build visual GREEN is not proven. Later weapon/world improvement attribution is secondary historical summary only.
 
-Even after simplifying camera ownership and disabling several rewrites, user still reported severe image flicker. Weapon motion also did not establish correct firing direction.
+### v10.2 `020117`
+Genuine LIVE, user visual verdict unbound.
 
-STOP: do not treat single-camera simplification + native stereo as sufficient VR.
+### v11 CADENCE_FASTPATH
+Local PASS counters exist, but own arbiter says `REJECT_DO_NOT_CALL_FIXED` and visual verdict unresolved.
 
-### Native/NVIDIA monitor-stereo final direction
-User explicitly rejected this as a final project direction after repeated flashes/flicker.
+### v13 / v13.1
+Genuine runtime LIVE; user visual verdicts unbound.
 
-STOP: archaeology/control only.
+### v15.1 `NO_BINOCULAR`
+Dual-scene mechanics ran, but host submitted zero visual projection layers. `MECHANICAL_GREEN / VISUAL_NOT_TESTED` only.
 
-### 2026-08-22 severe unbound visual RED
-Recovered verdict: extreme lateral separation, blur and heavily compressed/bad-looking image.
+## HISTORICAL SINGLE-WINDOW PROFILE
 
-Exact package identity not recovered with sufficient confidence.
+18–19 Aug user oracle records:
+- one window;
+- native OpenXR dual eye;
+- good world scale;
+- stable head movement;
+- headset image present;
+- only hand/weapon visibly wrong.
 
-Keep as `UNBOUND_VISUAL_RED`; never guess lineage.
+Exact package/hash remains OPEN.
 
-## SALVAGE / REFERENCE CHECKPOINTS
+Do not guess it from v7/v10 names and do not back-project later independent wins into it.
 
-These are scoped donors/references, not automatic whole-build GOLD.
+## PROVEN TECHNICAL FACTS THAT SURVIVE VISUAL RESET
 
-### `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
-User reported real head-driven in-game camera/world motion and described the state as very close; the main remaining problem was flicker/two-screen behavior.
-
-Use as:
-`CAMERA_OWNERSHIP_REFERENCE_ONLY`.
-
-### `CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
-SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
-
-Use as:
-`HEAD_OWNERSHIP_TOPOLOGY_REFERENCE`.
-
-Key topology:
-HMD x1 at `Crysis2.exe+0x0057AC76`; downstream SetCamera pass-through.
-
-### `191909`
-Use as low-divergence orientation/native-stereo control only.
-
-### `203734 / 204156`
-Use as 6DoF/IPD/FOV propagation component evidence only. Do not promote surrounding renderer policy because `205430` later failed visually.
-
-### `021239`
-Use as weapon/muzzle component donor only.
-
-### x86 game + x64 OpenXR host
-Infrastructure GOLD.
-
-### `CUSTOM_DUAL_T1 v1.0.1`
-Technical true-private-L/R proof only. Source authority does not equal visual-parent authority.
-
-## PROVEN TECHNICAL FACTS THAT SURVIVE THE VISUAL RESET
-
-- Exact retail target remains GOG Crysis 2 1.9 x86 DX11.
-- `Crysis2.exe` SHA256 `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`.
-- `CryRenderD3D11.dll` SHA256 `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`.
-- x86 game/proxy + x64 OpenXR host split remains the infrastructure baseline.
-- One prepared render-list may execute LEFT then RIGHT; do not add a second high-level RenderWorld or EF_StartEf.
-- `CUSTOM_DUAL_T1 v1.0.1` proves true private retail L/R rendering as a primitive.
-- stale pixels must never be relabelled as a new XR pose/FOV/ticket.
-- counters alone are not visual proof.
-- `FOB_NEAREST` is a separate near/camera-space family.
+- exact target remains GOG Crysis 2 1.9 x86 DX11;
+- x86 game/proxy + x64 OpenXR host split remains infrastructure baseline;
+- one prepared render-list may execute LEFT then RIGHT; no second high-level RenderWorld/EF_StartEf;
+- T1 proves private retail L/R renderer mechanics;
+- stale pixels must never be relabelled with new pose/FOV/ticket;
+- `FOB_NEAREST` is a separate near/camera-space family;
+- counters, names and analyzer PASS alone are not visual proof.
 
 ## RETAIL ANCHORS
 
 Crysis2.exe:
 - `C3DEngine::RenderWorld +0x005E2360`
 - `RenderInternal +0x005DEF10`
-- direct RenderWorld call seam `+0x005E2476`
+- direct RenderWorld seam `+0x005E2476`
 - `C3DEngine::SetupCamera +0x0057A730`
-- once/logical-frame camera lineage return `+0x0057AC76`
+- once/logical-frame camera lineage `+0x0057AC76`
 
 CryRenderD3D11.dll:
 - `EF_RenderScene +0x00101270`
@@ -159,21 +207,18 @@ CryRenderD3D11.dll:
 
 ## CROSS-BRANCH RULE
 
-Before any new build/patch/LIVE:
+`SYNC -> AUDIT STATUS -> EXACT PARENT -> KNOWN USER VERDICT -> UNCHANGED REPRO -> ONE MUTATION -> LIVE -> USER VERDICT -> KEEP/ADAPT/STOP`
 
-`SYNC -> USER VISUAL LEDGER -> EXACT PARENT -> KNOWN USER VERDICT -> ONE MUTATION -> LIVE -> USER VERDICT -> KEEP/ADAPT/STOP`
-
-A branch must not import a visually rejected policy from another branch merely because the donor has newer counters or a newer version number.
-
-If the direct parent is `USER_VISUAL_HARD_RED`, STOP and choose an older accepted/reference checkpoint instead.
+If a direct parent is `VISUAL_RED`, STOP.
+If a historical verdict is `UNBOUND`, do not promote it by inference.
 
 ## NEXT RECOVERY ACTION
 
-Recover the exact physical package and exact working runner for the nearest user-positive/near-normal Crysis camera checkpoint, starting with the A1 native-repair / single-source camera lineage.
+First reproduce the exact v6.0.1 package unchanged with its recovered runner to restore the known world-stability/no-flicker property.
 
-First LIVE after recovery must reproduce that baseline unchanged.
+Then treat A1/single-source as a separate camera-ownership axis and T1 as a separate true-L/R axis.
 
-Only after a fresh headset acceptance may one causal renderer mutation be introduced.
+Continue archival recovery of the old single-window package in parallel, but never guess its identity.
 
 ## PARKED
 
@@ -186,4 +231,6 @@ Until visual baseline recovery passes:
 - second-eye shadow policy;
 - release optimization.
 
-Detailed historical research remains in `research/`, `docs/PROVEN.md`, `research/RESULT_INDEX.md` and archived prior state commits. This sync intentionally changes authorization/gating, not historical evidence.
+Retail hashes:
+- Crysis2.exe `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`
+- CryRenderD3D11.dll `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`
