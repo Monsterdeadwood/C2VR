@@ -2,33 +2,76 @@
 
 Native VR integration research for **Crysis 2 retail 1.9 / CryEngine DX11**.
 
-## CURRENT STATUS - VISUAL BASELINE RECOVERY
+## CURRENT STATUS - 220427 LIVE / VISUAL VERDICT GATE
 
 **WORKING BUILD FIRST. USER VISUAL VERDICT FIRST.**
 
 Current gate:
 
-`VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
+`220427 V6.0.1 LIVE -> BIND USER HEADSET VERDICT -> VISUAL BASELINE DECISION`
+
+The recovered historical Z-reprojection v6.0.1 PRIVATE_RTV path is no longer PREPARED/UNRUN. It executed on 2026-08-25 and produced real Quest submissions.
+
+Read first:
+1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
+2. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
+3. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
+4. `docs/HISTORICAL_AUDIT_PASS2_20260825.md`
+5. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
+6. `docs/FALSIFIED.md`
+7. `docs/STATE.md`
+8. `docs/NEXT.md`
+9. `docs/SYNC.md`
 
 The project is NOT currently in cadence K, final HEAD, weapon/NEAR, temporal or shadow integration.
 
-Read first:
-1. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-2. `docs/HISTORICAL_AUDIT_PASS2_20260825.md`
-3. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-4. `docs/FALSIFIED.md`
-5. `docs/STATE.md`
-6. `docs/NEXT.md`
-7. `docs/GATES.md`
+## LATEST LIVE — Z-REPROJECTION v6.0.1 / 220427
+
+Result:
+`CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
+
+SHA256:
+`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
+
+Raw result proves:
+- XR session ran;
+- `submit_count=4691`;
+- `ever_submitted=1`;
+- both private eye staging targets became ready;
+- `eye_stage_copies=9382`;
+- `reproject_draws=9382`;
+- 33 XR stereo pair captures were recorded;
+- raw restore says PASS.
+
+The old v6.0.0 `XR_RTV_CREATE_FAIL eye=0 image=0 hr=0x80070057` blocker is therefore mechanically closed.
+
+Actual headset source was still:
+
+`CENTER RGB + inverse depth -> synthetic LEFT/RIGHT depth reprojection -> private eye RT -> XR swapchains`.
+
+So this is:
+
+```text
+MECHANICAL_GREEN: PRIVATE_RTV_XR_BRIDGE
+MECHANICAL_GREEN: MONO_DEPTH_SYNTHETIC_LR_OUTPUT
+TRUE_PRIVATE_LR_SCENE_RENDER = NO
+USER_HEADSET_VERDICT = UNBOUND
+FULL_USER_VISUAL_GREEN = NO
+```
+
+Mono RGB+depth/Z reprojection remains a control/transport path, not the assumed final renderer.
+
+The generated verdict file contains false-negative summary fields (`OpenXRTransport=FAIL`, `eyeStageCopies=0`, `Restore=FAIL`) contradicted by raw logs/status. Do not use `PRIMARY_RESULT=PIPELINE_INCOMPLETE` to erase the executed runtime facts.
 
 ## EVIDENCE LAW
 
 For visual/playability acceptance:
 
-`USER_HEADSET_VERDICT > XR/LR captures > raw LIVE RESULT > counters > static validation > design intent`
+`USER_HEADSET_VERDICT > XR/LR captures > raw LIVE RESULT/status > counters > generated analyzer summary > static validation > design intent`
 
 Permanent guards:
 - `RESULT ZIP != LIVE`;
+- a broken analyzer summary also does not erase a proven LIVE;
 - package names such as GOLD/GREEN/CLEAN/NO_BINOCULAR/ONE_WINDOW are not acceptance evidence;
 - bare `GREEN` is forbidden, qualify the exact property;
 - `VACUOUS_PASS` with missing/zero/None prerequisites is invalid;
@@ -53,12 +96,27 @@ User reported it visually even worse.
 
 `VISUAL_RED / RESULT_ZIP_NOT_BOUND`.
 
+### R2 visible matrix `201208`
+Fresh user verdict was binocular/telescope catastrophe despite strong counters.
+
+`VISUAL_RED`.
+
+### GOODLINE v1.0.0
+`CRYSIS2VR_GOODLINE_NATIVE_SINGLE_WINDOW_v1.0.0_ONECLICK.zip`
+
+SHA256:
+`566BBBA4C9889DDD5B1F4974DF32330845EEE2F772B7EFD0469A9AF3DEFD07DA`.
+
+User reported broken/unstable shadows and a blurred RIGHT eye.
+
+`USER_VISUAL_HARD_RED`.
+
 Therefore:
 - no K1/K2 descendant;
-- no final HEAD descendant;
-- no weapon/NEAR descendant;
-- no temporal/shadow descendant;
-- no more watchdog tuning as a visual fix.
+- no final HEAD descendant from rejected visual parents;
+- no weapon/NEAR descendant from rejected visual parents;
+- no temporal/shadow descendant from rejected visual parents;
+- no more watchdog/IPD/FOV tuning as a substitute for a good visual parent.
 
 ## CORRECTED P6 STATUS
 
@@ -101,8 +159,7 @@ Historical user-positive property:
 Classification:
 `COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`.
 
-This is the first exact unchanged reproduction target.
-It is not final stereo.
+This is not final stereo.
 
 ## CAMERA OWNERSHIP REFERENCE
 
@@ -165,12 +222,19 @@ Do not guess it from v7/v10 names and do not invent an old mythical build contai
 
 ## NEXT
 
-1. Reproduce exact physical v6.0.1 unchanged with its recovered runner.
-2. Bind a fresh RESULT and explicit headset verdict for the no-flicker/stable-world property.
-3. Freeze that property baseline.
-4. Treat A1/single-source camera ownership as a separate axis.
-5. Treat T1 true-private-L/R mechanics as a separate axis.
-6. Add only one causal visual mutation per child after unchanged reproduction.
+**No new renderer build before the direct user headset verdict for 220427 is bound.**
+
+If 220427 is visually accepted enough to serve as a control:
+1. freeze its exact private-RTV XR bridge;
+2. freeze the accepted world/camera properties;
+3. next isolate true-L/R/source geometry as one mutation category;
+4. do not simultaneously touch HEAD, weapon, NEAR, temporal, shadow or cadence.
+
+If 220427 is visually rejected:
+1. mark v6.0.1 whole visual path `VISUAL_RED`;
+2. salvage only `PRIVATE_RTV_XR_BRIDGE`;
+3. continue exact recovery of the historical accepted single-window package identity;
+4. do not jump automatically to later Z versions or rejected GOODLINE/R2/T1/v17 parents.
 
 Do not resume cadence K until a whole visual candidate is explicitly accepted again in headset.
 
@@ -195,7 +259,7 @@ Pixel data and the render pose/FOV/contract metadata that produced it are one at
 
 - `docs/` - canonical state, visual ledger, historical audit, proven/falsified facts, gates and policy
 - `research/` - evidence indexes, source/beta/mod/donor registry and focused blocker research
-- `experiments/` - reproducible causal experiments
+- `experiments/` - reproducible causal experiments and executed result records
 - `runtime/` - technical source authorities and selective donors
 - `tools/` - deterministic extraction/build/analysis tooling
 
