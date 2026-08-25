@@ -2,168 +2,112 @@
 
 ## CURRENT GATE
 
-**VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT.**
+`VISUAL BASELINE RECOVERY / CAMERA-WORLD OWNERSHIP BISECT`
 
-This replaces the old P6/PosePair/cadence-K next step.
+Old P6/PosePair/cadence-K direction remains cancelled.
 
 Read first:
 1. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
 2. `docs/HISTORICAL_AUDIT_PASS2_20260825.md`
 3. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
 4. `docs/FALSIFIED.md`
-5. `docs/GATES.md`
+5. `experiments/R1_HIDDEN_T1_REPLAY_PREPARED_20260825.md`
+6. `experiments/NEXT_EXPERIMENT.md`
 
-## WHY THE OLD NEXT IS CANCELLED
+## CURRENT NEXT RUNTIME
 
-Two recent descendants are user HARD RED:
+`R1 HIDDEN T1 REPLAY`
 
-- `C2VR_RC33_V1721_RESULT_20260825_063149.zip`
-  - pair transport alive;
-  - catastrophic camera/world instability and moving/sliding light/shadows in headset.
+Status:
+`PREPARED / UNRUN`.
 
-- `CRYSIS2VR_CUSTOM_DUAL_T1_v1.0.2_POSEPAIR_ONLY_K0_ONECLICK.zip`
-  - SHA256 `7A2F3B832A36D58DB66325B635896D485F78943CD8958D76FE6893ECBB8AD1B1`;
-  - user reported it visually even worse;
-  - no fresh RESULT ZIP is bound to that user verdict.
+Package:
+`CRYSIS2VR_V601_HIDDEN_T1_R1_v1.0.0_ONECLICK.zip`
 
-Therefore:
-- NO K=1/K=2 child;
-- NO HEAD child;
-- NO WEAPON/NEAR child;
-- NO temporal/shadow child;
-- NO watchdog tuning as visual fix.
-
-## FIRST EXACT RECOVERY ACTION
-
-The strongest physically recovered, user-positive visual property baseline is now exact:
-
-`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+Bytes `191925`.
 
 SHA256:
-`E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
+`330382153381C01CDE23FA15D777A6F54796F761D8DEC3F0A2BC2D07AC78EC79`.
 
-Historical user verdict:
-- flicker gone;
-- shadows/textures/objects stable;
-- eyes still did not fuse.
+Static only:
+`R1_STATIC=PASS (70/70)`.
 
-Classification:
-`COMPONENT_VISUAL_GREEN: WORLD_STABILITY_NO_FLICKER`.
+No runtime/visual PASS exists yet.
 
-Exact historical runner is recovered inside the physical package:
+## WHY R1 NOW
 
-`20_RUN_C2VR_FULL_VR.bat -> RUN_FULL_VR.bat -> tools/Build-Run-EngineTap.ps1`.
+Exact v6.0.1 is a bounded world-stability reference:
+`CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`
+SHA256 `E113BF37B0D8B8377F8A08C03739D530059A814274505478A980D8E8BA5BBA96`.
 
-**The first reproduction should be this exact package unchanged, using this exact runner lineage.**
+Historical accepted property:
+- no flicker;
+- stable shadows/textures/objects;
+- binocular fusion still failed.
 
-Purpose:
-re-establish the known stable-world/no-flicker property before mixing in a different camera or eye renderer.
+Exact T1 v1.0.1 is a mechanical private-L/R donor:
+`CRYSIS2VR_CUSTOM_DUAL_RENDER_TEST_T1_v1.0.1_HOSTFIX.zip`
+SHA256 `9271A002F8DE7875EDDD72AC2C2C307748A922883365F05FEFFC18FA05D2EECF`.
 
-This is NOT a claim that v6.0.1 has correct stereo fusion.
+The key missing edge is now:
 
-## SECOND RECOVERY AXIS — CAMERA OWNERSHIP
+`stable v6 visible owner -> hidden T1 private replay -> does visible v6 state break?`
 
-### A1 native-repair camera checkpoint
+This is more informative than another direct v6+T1+PosePair/HEAD integration.
 
-`CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip`
+## BUILT-IN BASELINE CONTROL
 
-Historical user-positive property:
-- head left/right drove the real in-game camera/world;
-- remaining major problem was flicker/two-screen behavior;
-- state was described as very close.
+R1 folds the unchanged-baseline check into its first and final OFF phases:
 
-Use as:
-`COMPONENT_VISUAL_GREEN: CAMERA_OWNERSHIP_REFERENCE`.
+```text
+0–10 s   OFF_A
+10–25 s  SPARSE_1_OF_10
+25–45 s  FULL
+45–55 s  OFF_B
+>55 s    DONE
+```
 
-### Single-source upstream camera owner
+OFF_A already bad -> `R1_INVALID_BASELINE`; do not interpret replay phases.
 
-`CRYSIS2VR_BLACKBOX_ENGINE_TAP_SINGLE_SOURCE_v1.0.4_OVERWRITE_LAB.zip`
-SHA256 `6885E24A050A182E11996DE3CA6E9D6705FB2E8F09E3623CACF27E684A7C7385`.
+Therefore a separate R0 launch is no longer required before this prepared run.
 
-Use as ownership topology reference:
-- HMD x1 at `Crysis2.exe+0x0057AC76`;
-- downstream SetCamera pass-through.
+## ISOLATION
 
-Do not inherit old native/NVIDIA final stereo.
+Quest-visible output remains the inherited v6.0.1 mono Present/cache path for every phase.
 
-## THIRD RECOVERY AXIS — TRUE PRIVATE L/R
+Required hidden counters:
+```text
+private_eye_publication=0
+private_eye_shared_copy=0
+private_eye_openxr_submit=0
+```
 
-`CUSTOM_DUAL_T1 v1.0.1 / CRYSIS2VR_CUSTOM_DUAL_T1_RESULT_20260819_212003.zip`
+Exact v6 x64 host, host client, IPC ABI and BAT/PowerShell launch/build/restore chain are byte-identical.
 
-Use as:
-`MECHANICAL_GREEN: TRUE_PRIVATE_LR_RENDERER`.
+## DECISION TREE
 
-Do not use later T1 PosePair K0 as parent.
+- OFF_A good, SPARSE/FULL bad -> `R1_REPLAY_POISONS_STATE`; bisect x86 renderer-state restore only.
+- OFF_A/SPARSE good, FULL bad -> `R1_FULL_RATE_ONLY_BAD`; investigate replay scheduling/cadence/cost.
+- all phases stable + hidden replay counters active -> `R1_REPLAY_VISUALLY_INERT`; authorize R2 only.
+- OFF_A bad -> `R1_INVALID_BASELINE`; recover exact v6 behavior before further mutation.
 
-## HISTORICAL SINGLE-WINDOW TARGET
+## R2 IF AUTHORIZED
 
-The 18–19 Aug user oracle records a useful behavior profile:
-- one window;
-- native OpenXR dual eye;
-- good world scale;
-- stable head movement;
-- headset image present;
-- only hand/weapon visibly wrong.
+R2 changes only the headset image source from stable v6 center to already-rendered private T1 L/R while preserving the game-owned v6 world contract.
 
-Exact physical package/hash remains OPEN.
-
-Continue archival recovery, but **do not block the exact v6.0.1 unchanged reproduction on guessing this package identity**.
-
-Do not infer that this unknown old build already contained every later independent win.
-
-## HISTORICAL COMPONENTS THAT ARE NOT PARENTS
-
-- `191909`: low-divergence/native-stereo control only.
-- `203734/204156`: pose/IPD/FOV math only; surrounding renderer visually rejected.
-- `021239/175934`: weapon firing-direction donor only.
-- `v7.0.2 / 001036`: technical source-size transport, user visual status UNBOUND.
-- `v10 034749`: structural/mechanical green; direct primary user verdict not recovered, whole-build visual status not GREEN.
-- `v10.2 020117`: genuine LIVE, visual verdict UNBOUND.
-- `v13/13.1`: genuine LIVE, visual verdict UNBOUND.
-- `v15.1 NO_BINOCULAR`: mechanical dual-scene proof only; host submitted zero visual projection layers.
-
-## NEXT LIVE RULE
-
-No new visual child before exact chosen baseline reproduction.
-
-Sequence:
-
-`EXACT HISTORICAL PACKAGE -> UNCHANGED REPRO -> USER HEADSET VERDICT -> FREEZE PROPERTY -> ONE CAUSAL MUTATION`
-
-No multi-policy integration.
-
-## PASS FOR v6.0.1 REPRO
-
-The reproduction succeeds only if the historically accepted property returns:
-- no periodic blank/flicker behavior;
-- textures/objects stable;
-- shadows/light stable enough to judge;
-- byte-exact restore and retail hashes PASS.
-
-Stereo fusion is expected to remain unresolved and must be recorded as such, not silently promoted.
-
-## PASS FOR A FUTURE WHOLE-BUILD PARENT
-
-Only explicit headset acceptance can classify `FULL_USER_VISUAL_GREEN`:
-- stationary head -> stationary world;
-- slow yaw no fall/jump/shear;
-- fast yaw/reversal no catastrophic eye split;
-- stable light/shadows;
-- credible world scale;
-- no severe monitor-panel/two-screen behavior;
-- coherent non-duplicate L/R;
-- restore/hashes PASS.
-
-## FAIL
-
-Catastrophic camera motion, severe flicker, sliding shadows/lights, wrong two-screen stereo, extreme lateral separation or unusable blur => exact package becomes `VISUAL_RED` and cannot be the direct future visual parent.
+Still forbidden in R2 unless independently required later:
+- host-driven PosePair request ownership;
+- K lead;
+- final HEAD rewrite;
+- weapon/NEAR mutation;
+- new temporal/shadow policy.
 
 ## PARKED
 
-Until visual baseline recovery succeeds:
+Until R1 closes:
 - cadence K;
 - final HEAD composition;
+- A1 camera merge;
 - weapon/NEAR integration;
-- temporal isolation;
-- second-eye shadow policy;
-- coordinate-sign LIVE experiments.
+- coordinate-sign LIVE experiments;
+- temporal/shadow policy work.
