@@ -10,9 +10,9 @@ Fresh direct user verdict:
 - 220427 is not a whole-build visual HARD RED.
 
 Read first:
-1. `docs/Z_V601_OFFLINE_SCALE_QUALITY_AUDIT_20260827.md`
-2. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
-3. `docs/MONO_QUALITY_ANCHOR_20260818.md`
+1. `docs/Z_V601_GEOMETRY_DEFECT_MAP_20260827.md`
+2. `docs/Z_V601_OFFLINE_SCALE_QUALITY_AUDIT_20260827.md`
+3. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
 4. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
 5. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
 6. `docs/FALSIFIED.md`
@@ -30,67 +30,37 @@ current broadly usable visual control KEEP
 
 Do not rebuild transport.
 
-## COLD PROOF — SCALE ROOT FOUND
+## FIRST ROOT — WORLD SCALE
 
-Fresh `ENGINE_TAP_CAMERA.tsv` directly proves the downstream WORLD renderer camera for the union path is:
-
-```text
-vfov  = 1.991177 rad
-ratio = 0.963753
-near  = 0.12
-far   = ~2000
-```
-
-There are 74,347 such Renderer::SetCamera observations in 220427, including exactly 4,160 at the proven primary game-camera lineage `0x0057AC76`, matching the 4,160 successful world/union injections.
-
-But the same run's depth packer repeatedly logs:
+Fresh same-run evidence:
 
 ```text
-near=0.24000
-far=2000.0
+DOWNSTREAM WORLD Renderer::SetCamera:
+  vfov  = 1.991177 rad
+  ratio = 0.963753
+  near  = 0.12
+  far   = ~2000
+
+DEPTH PACKER:
+  near  = 0.24
+  far   = 2000
 ```
 
-Exact v6.0.1 source explains the mismatch: it publishes projection metadata upstream immediately after RenderWorld union-frustum mutation, then later packs the final DSV using that stale upstream near plane.
+Exact v6.0.1 publishes projection metadata upstream before the final renderer projection exists. Present later linearizes MAIN_DSV with stale upstream `near=0.24`.
 
-Therefore:
-
-```text
-ACTUAL DOWNSTREAM WORLD DSV near = 0.12
-PACK-DEPTH LINEARIZER near        = 0.24
-```
-
-This is direct same-run evidence.
-
-## WHY THIS FITS THE USER SCALE FAILURE
-
-The pack shader reconstructs linear Z from raw depth using the wrong near plane and then stores `invZ=1/Z`.
-
-With true near 0.12 but assumed near 0.24, ordinary world distances reconstruct almost exactly 2x too far:
-
-```text
-0.5 m  -> ~1.00 m
-1.0 m  -> ~1.999 m
-2.0 m  -> ~3.996 m
-5.0 m  -> ~9.976 m
-10 m   -> ~19.90 m
-```
-
-This is effectively the same for standard-Z and reversed-Z.
-
-The reprojection shader multiplies physical eye translation by `invZ`, so disparity is approximately halved. Expected perceptual direction: world reads too large/far despite correct ~62.85 mm IPD.
+At ordinary gameplay distances this reconstructs WORLD Z almost 2x too far and roughly halves synthetic stereo disparity.
 
 Classification:
-
 `SCALE_ROOT_CAUSE = STRONGLY PROVEN: DEPTH_PROJECTION_OWNER_MISMATCH`.
 
 ## NEXT CHILD — ONE MUTATION ONLY
 
-Use the exact 220427 lineage.
+Use exact 220427 lineage.
 
 Only mutation category:
-`DEPTH PROJECTION METADATA OWNER`.
+`DEPTH_PROJECTION_METADATA_OWNER`.
 
-At the existing proven primary downstream `Renderer::SetCamera` observation, read and publish the live CCamera:
+At the existing proven primary downstream `Renderer::SetCamera` observation (`0x0057AC76` lineage), publish live:
 
 ```text
 +0x30 vfov
@@ -99,81 +69,135 @@ At the existing proven primary downstream `Renderer::SetCamera` observation, rea
 +0x60 far
 ```
 
-into the pack-depth contract before Present packs the final DSV.
+into the existing pack-depth contract before Present.
 
-Do not hardcode `0.12`; publish the actual downstream renderer-camera tuple and log:
+Safety gate:
+- primarySite only;
+- readable valid camera;
+- actual FOV within ~0.08 rad of current WORLD union FOV;
+- sane ratio/near/far;
+- reject FOB_NEAREST and other camera families.
+
+Do not hardcode `0.12` as architecture.
+
+Log and require:
 
 ```text
 UPSTREAM_RENDERWORLD_PROJECTION
-DOWNSTREAM_RENDERER_PROJECTION
+DOWNSTREAM_WORLD_RENDERER_PROJECTION
 PACKED_DEPTH_PROJECTION
+DOWNSTREAM_WORLD == PACKED_DEPTH
 ```
 
-PASS mechanically requires downstream == packed for WORLD frames.
+Keep upstream publish as startup/fallback. The downstream primary WORLD camera becomes the authoritative final overwrite before pack.
 
-## DO NOT CHANGE IN SCALE CHILD
+## USER PASS TARGET FOR SCALE CHILD
 
-- no source-resolution change;
-- no MotionBlur/PostMSAA change;
-- no union-FOV algorithm change;
-- no IPD/worldScale/convergence change;
-- no reprojection shader rewrite;
-- no weapon/FOB_NEAREST handling;
-- no temporal/shadow/cadence change;
-- no true-L/R merge;
-- no XR bridge change.
-
-## USER PASS TARGET
+Judge stationary WORLD first, not weapon:
 
 ```text
 WORLD_SCALE          = natural / materially corrected
+WALLS_ROOMS_PEOPLE   = believable size/depth
+DISTANT_WORLD        = believable scale
 WORLD_HEAD_BEHAVIOR  = no regression
-IMAGE                = otherwise retains 220427 behavior
 XR_OUTPUT             = stable
 ```
 
-Weapon/FOB_NEAREST may remain imperfect; it is not part of this scale verdict.
+Then move head slowly/quickly only as a regression check.
 
-## QUALITY COMES AFTER SCALE
+Weapon/FOB_NEAREST is explicitly outside this primary verdict.
 
-Exact v6.0.1 runner does not force MotionBlur/PostMSAA. It inherits the existing user `system.cfg`.
+## DO NOT CHANGE IN SCALE CHILD
 
-Correct status:
+- no eye-basis correction yet;
+- no packed-frame temporal rewrite;
+- no depth sampler change;
+- no source-resolution change;
+- no MotionBlur/PostMSAA change;
+- no union-FOV change;
+- no IPD/worldScale/convergence tuning;
+- no weapon/FOB_NEAREST handling;
+- no true-L/R merge;
+- no XR bridge change.
 
-`220427_QUALITY_CVARS = NONDETERMINISTIC_INHERITANCE_FROM_EXISTING_SYSTEM_CFG`.
+## COLD-KNOWN DEFECTS AFTER SCALE
 
-Historical donor remains:
+These are already proven enough that no broad archaeology is needed later, but they remain parked until the scale verdict:
 
 ```text
-r_MotionBlur=0
-r_PostMSAA=0
+B EYE BASIS
+  v6.0.1 rotates eye offsets by fixed recenter orientation.
+  Current/render-head-local basis is required.
+  Fresh logged eye X half-baseline collapses from ~31 mm to ~3.8 mm under head motion while physical IPD stays ~62.85 mm.
+
+C FRAME CONTRACT
+  4691 XR submits vs 4109 fresh packed frames means >=582 reused XR submits (~12.4%).
+  v6.0.1 can reuse old pixels/depth with newer current pose/FOV metadata.
+
+D DEPTH SAMPLING
+  v6.0.1 linearly filters packed inverse-Z alpha across silhouettes.
+  Later line split color filtering from POINT depth.
+
+E QUALITY CONFIG
+  exact v6.0.1 does not deterministically set MotionBlur/PostMSAA.
+
+F SOURCE RAY DENSITY
+  1600x1200 is too sparse for ~114-degree union FOV; later live-XR-derived target was about 2032x1968.
 ```
 
-which corresponded to the cleaner mono image reported by the user.
+## CORRECTED BRANCH HISTORY
 
-After scale truth is visually checked:
+Do not call v11 a descendant regression from v10.1 depth-truth.
 
-1. quality-CVar-only child pins `0/0`;
-2. then source-ray-density-only child raises the mono producer toward the proven ~1:1 angular-density target around `2032x1968` derived from live Quest FOV.
+Actual evidence is sibling-like:
 
-Do not combine those with the scale fix.
+```text
+v10 visual line 034749
+  WORLD + FOB_NEAREST projection alignment improved
+  2032x1968 source active
+  user-recorded weapon counter-motion improvement
+  depth contract still from old near=0.24 family
 
-## BLUR IS NOW SEPARATE FROM SCALE
+v11 133603
+  working XR submit
+  cadence/ray-density/frame-contract work
+  runtime mono_camera still near=0.24
 
-Fresh 1600x1200 center source covers the ~114-degree union frustum with insufficient angular density. Relative to current 1600x1200 eye output it is effectively upsampled around 1.34x X / 1.29x Y; relative to the Quest recommended eye density the vertical source density is only about 58%.
+v10.1 134133
+  downstream renderer near=0.12 == packed near=0.12 numerically
+  XR shader compile failed
+  submit=0
+```
 
-That strongly explains blur, but it does not replace the proven depth-scale defect.
+Therefore:
+
+`WORKING_XR + CORRECT_DOWNSTREAM_DEPTH_TRUTH HAS NOT YET BEEN PROVEN TOGETHER IN ONE LIVE.`
+
+That is exactly why the next scale-only child has high information value.
+
+## POST-SCALE LADDER
+
+If scale improves without regression, freeze it and proceed one mutation category at a time:
+
+1. `EYE_BASIS_ONLY` - current/render-head-local eye vector;
+2. `ATOMIC_PACKED_FRAME_CONTRACT_ONLY` - pixels+depth+render pose+FOV+display time as one transaction;
+3. `DEPTH_SAMPLER_ONLY` - POINT inverse-Z, filtered color;
+4. `QUALITY_CVARS_ONLY` - deterministic `r_MotionBlur=0 + r_PostMSAA=0`;
+5. `SOURCE_RAY_DENSITY_ONLY` - raise actual producer toward XR-derived ~2032x1968 target;
+6. only then decide how accepted properties migrate into final true/private L/R architecture.
+
+Each LIVE gets its own direct headset verdict.
 
 ## PARKED
 
-- true private/native L/R renderer merge;
+- true private/native L/R merge;
 - K/PosePair;
 - final HEAD rewrite;
-- weapon/NEAR merge;
-- temporal/shadow mutation;
-- controller work;
+- weapon/NEAR/controller work;
+- temporal/shadow mutation beyond the explicitly ordered contract test;
 - arbitrary worldScale/IPD/convergence sweeps;
-- broad reverse.
+- broad reverse;
+- release optimization.
 
-Current goal:
-**fix the one proven wrong number-owner in the otherwise promising 220427 path, then ask the headset only one question: did world scale become natural?**
+Current goal remains deliberately narrow:
+**make the working 220427 Quest path use the projection that actually generated its WORLD depth, then ask the headset one question: did static world scale become natural?**
