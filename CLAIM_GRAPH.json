@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": "C2VR",
   "claims": [
-    {"id":"C2-DEPTH-PROJECTION-OWNER","status":"ACTIVE","summary":"publish the actual downstream WORLD Renderer SetCamera projection tuple into packed depth","aliases":["downstream depth projection truth on 220427"],"fingerprints":["downstream depth projection owner"],"evidence_ids":["C2-EV-220427","C2-EV-STATE-DEPTH-MISMATCH"]},
+    {"id":"C2-DEPTH-PROJECTION-OWNER","status":"ACTIVE","summary":"publish the actual downstream WORLD Renderer SetCamera projection tuple into packed depth","aliases":["downstream depth projection truth on 220427"],"fingerprints":["downstream depth projection owner"],"state_anchor":"WORLD DEPTH PROJECTION OWNER","evidence_ids":["C2-EV-220427","C2-EV-STATE-DEPTH-MISMATCH"]},
     {"id":"C2-EYE-BASIS","status":"QUEUED","summary":"replace fixed recenter eye basis with current render-head-local eye basis","aliases":["eye basis correction"],"fingerprints":["current head local eye basis"],"evidence_ids":[]},
     {"id":"C2-PACKED-FRAME-TRANSACTION","status":"QUEUED","summary":"make packed pixels depth pose FOV and display time one immutable frame transaction","aliases":["non atomic packed frame reuse"],"fingerprints":["packed frame transaction"],"evidence_ids":[]},
     {"id":"C2-DEPTH-EDGE-SAMPLING","status":"QUEUED","summary":"separate filtered color from point-sampled inverse depth at silhouettes","aliases":["depth edge sampling"],"fingerprints":["point inverse depth sampling"],"evidence_ids":[]},
