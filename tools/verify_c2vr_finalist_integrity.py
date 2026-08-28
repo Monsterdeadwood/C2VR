@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the frozen C2VR P6 finalist representation.
+"""Verify the frozen historical C2VR P6 artifact representation.
 
 CI mode:
     python tools/verify_c2vr_finalist_integrity.py
@@ -8,8 +8,9 @@ Full archive mode:
     python tools/verify_c2vr_finalist_integrity.py \
         CRYSIS2VR_RC33_TRUE_LR_WEAPON_v17.2.6_EXACT_BLOCK120_P6_ONECLICK.zip
 
-CI proves repository metadata did not drift. Full archive mode additionally proves
-that the physical package is the audited 42/42 P6 carrier.
+CI proves that the preserved P6 repository artifact did not drift. It deliberately
+DOES NOT require P6 to remain the current project gate; current research authority
+lives in docs/STATE.md and is enforced separately by research_integrity.py.
 """
 
 from __future__ import annotations
@@ -63,10 +64,9 @@ def verify_repo() -> dict[str, str]:
     readme = (P6 / "README.md").read_text(encoding="utf-8")
     manifest_text = (P6 / "PACKAGE_FILES_SHA256.txt").read_text(encoding="utf-8")
     preflight = (P6 / "PREFLIGHT.txt").read_text(encoding="utf-8")
-    sync = (ROOT / "docs" / "SYNC.md").read_text(encoding="utf-8")
 
     assert EXPECTED_ARCHIVE in readme.upper(), "P6 archive SHA drift"
-    assert "CURRENT UNTESTED LIVE FINALIST" in readme, "P6 status drift"
+    assert "CURRENT UNTESTED LIVE FINALIST" in readme, "preserved P6 README identity drift"
     assert P5_HOST in readme, "P5 parent host identity missing"
 
     rows = parse_manifest(manifest_text)
@@ -86,8 +86,6 @@ def verify_repo() -> dict[str, str]:
     for line, prefix in zip(nonblank, prefixes):
         assert line.startswith(prefix), f"PREFLIGHT order drift: expected {prefix}"
 
-    assert "v17.2.6 EXACT_BLOCK120 P6" in sync, "P6 missing from STATE SYNC"
-    assert "Run `v17.2.6 EXACT_BLOCK120 P6` unchanged." in sync, "NEXT gate drift"
     return rows
 
 
@@ -123,7 +121,7 @@ def main() -> int:
     try:
         rows = verify_repo()
         print(f"P6_REPO_MANIFEST={len(rows)}/{EXPECTED_ROWS} PASS")
-        print("P6_NEXT_GATE=UNCHANGED PASS")
+        print("P6_HISTORICAL_ARTIFACT_INTEGRITY=PASS")
         if len(sys.argv) > 2:
             raise AssertionError("usage: verify_c2vr_finalist_integrity.py [P6.zip]")
         if len(sys.argv) == 2:
