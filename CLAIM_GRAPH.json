@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "project": "C2VR",
+  "claims": [
+    {"id":"C2-DEPTH-PROJECTION-OWNER","status":"ACTIVE","summary":"publish the actual downstream WORLD Renderer SetCamera projection tuple into packed depth","aliases":["downstream depth projection truth on 220427"],"fingerprints":["downstream depth projection owner"],"evidence_ids":["C2-EV-220427","C2-EV-STATE-DEPTH-MISMATCH"]},
+    {"id":"C2-EYE-BASIS","status":"QUEUED","summary":"replace fixed recenter eye basis with current render-head-local eye basis","aliases":["eye basis correction"],"fingerprints":["current head local eye basis"],"evidence_ids":[]},
+    {"id":"C2-PACKED-FRAME-TRANSACTION","status":"QUEUED","summary":"make packed pixels depth pose FOV and display time one immutable frame transaction","aliases":["non atomic packed frame reuse"],"fingerprints":["packed frame transaction"],"evidence_ids":[]},
+    {"id":"C2-DEPTH-EDGE-SAMPLING","status":"QUEUED","summary":"separate filtered color from point-sampled inverse depth at silhouettes","aliases":["depth edge sampling"],"fingerprints":["point inverse depth sampling"],"evidence_ids":[]},
+    {"id":"C2-SOURCE-RAY-DENSITY","status":"QUEUED","summary":"raise center source angular ray density after geometry defects are closed","aliases":["source ray density"],"fingerprints":["source angular ray density"],"evidence_ids":[]},
+    {"id":"C2-P6-FINALIST-GATE","status":"SUPERSEDED","summary":"v17.2.6 P6 as the current untested LIVE finalist gate","aliases":["P6 current gate"],"fingerprints":["P6 finalist gate"],"evidence_ids":["C2-EV-P6-ARCHIVE"]},
+    {"id":"C2-XR-BRIDGE-220427","status":"PROVEN","summary":"220427 private typed eye staging RTV to XR swapchain transport bridge","aliases":["220427 XR bridge"],"fingerprints":["220427 XR bridge"],"evidence_ids":["C2-EV-220427"]}
+  ],
+  "evidence": [
+    {"id":"C2-EV-220427","class":"RESULT","ref":"CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip"},
+    {"id":"C2-EV-STATE-DEPTH-MISMATCH","class":"CANONICAL_STATE","ref":"docs/STATE.md downstream WORLD near 0.12 versus packer near 0.24","repo_path":"docs/STATE.md"},
+    {"id":"C2-EV-P6-ARCHIVE","class":"FROZEN_ARTIFACT","ref":"runtime/finalists/v17.2.6_P6","repo_path":"runtime/finalists/v17.2.6_P6/README.md"}
+  ]
+}
