@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "project": "C2VR",
+  "canonical_state": "docs/STATE.md",
+  "workflow": "docs/WORKFLOW.md",
+  "active_gate_anchor": "CURRENT GATE",
+  "protected_baseline_anchor": "CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip",
+  "evidence_globs": [
+    "research/*EVIDENCE*.md",
+    "docs/*EVIDENCE*.md",
+    "docs/*AUDIT*.md",
+    "experiments/*RESULT*.md"
+  ],
+  "pending_evidence_refs": [],
+  "block_live_when_pending": true
+}
