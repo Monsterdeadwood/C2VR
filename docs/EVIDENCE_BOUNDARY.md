@@ -1,6 +1,6 @@
 # Crysis2VR / C2VR — EVIDENCE BOUNDARY
 
-Updated: 2026-08-31.
+CONTROL_PLANE_REV: 1
 
 This file defines the hard boundary between locked knowledge and ongoing COLD research across global quality/scale control and role-specific R1/R2/R3/R4 lines.
 
