@@ -1,26 +1,28 @@
-# Crysis2VR / C2VR — ACTIVE CLAIMS REGISTRY
+# Crysis2VR / C2VR - ACTIVE COLD LANES REGISTRY
 
-CONTROL_PLANE_ONLY. This file records concurrency/branch ownership only. It is not evidence and cannot promote a claim.
+CONTROL_PLANE_ONLY. The filename `docs/ACTIVE_CLAIMS.md` is retained for compatibility, but this file does **not** own canonical claim status.
+
+Canonical `ACTIVE / PENDING / QUEUED / PROVEN / FALSIFIED / SUPERSEDED` status is owned only by `CLAIM_GRAPH.json` together with `RESEARCH_CONTRACT.yaml` and the canonical state. This registry only records isolated COLD branches currently being worked.
 
 ## Active COLD lanes
 
-| ROLE | CLAIM_ID | BRANCH | BASE_MAIN_SHA | PRIMARY FACT | SCOPE |
-|---|---|---|---|---|---|
-| R2 | UNASSIGNED | `cold/r2/replay-ownership` | `c38a6bf2f9c61a6218ce3594757b0e84cf75973d` | close selective per-eye ownership/history under the one-RenderWorld same-frame replay architecture without reopening a second RenderWorld | COLD_ONLY |
-| R3 | UNASSIGNED | `cold/r3/render-graph` | `c38a6bf2f9c61a6218ce3594757b0e84cf75973d` | classify CryEngine renderer domains as PAIR-SHARED, EYE-LOCAL and EYE-HISTORY using exact retail evidence while keeping execution substrate separate | COLD_ONLY |
+| ROLE | COLD_LANE | CANONICAL_BINDING | BRANCH | BASE_MAIN_SHA | PRIMARY FACT | SCOPE |
+|---|---|---|---|---|---|---|
+| R2 | `C2-R2-REPLAY-OWNERSHIP` | `UNBOUND_COLD_LANE` | `cold/r2/replay-ownership` | `c38a6bf2f9c61a6218ce3594757b0e84cf75973d` | close selective per-eye ownership/history under the one-RenderWorld same-frame replay architecture without reopening a second RenderWorld | COLD_ONLY |
+| R3 | `C2-R3-RENDER-GRAPH` | `UNBOUND_COLD_LANE` | `cold/r3/render-graph` | `c38a6bf2f9c61a6218ce3594757b0e84cf75973d` | classify CryEngine renderer domains as PAIR-SHARED, EYE-LOCAL and EYE-HISTORY using exact retail evidence while keeping execution substrate separate | COLD_ONLY |
 
-Global quality/scale control is not silently absorbed into R2 or R3.
+Global quality/scale control and the canonical claim currently marked ACTIVE in `CLAIM_GRAPH.json` are not silently absorbed into R2 or R3. `UNBOUND_COLD_LANE` has no canonical claim-status authority.
 
 ## Claim collision law
-Before creating a new C2VR research branch, search this registry and existing branches. If the same ROLE + PRIMARY FACT already exists, REUSE/ADAPT/FIX/EXTEND that lane.
+Before creating a new C2VR COLD branch, inspect both this registry and `CLAIM_GRAPH.json`. Same ROLE + PRIMARY FACT means REUSE / ADAPT / FIX / EXTEND. A future canonical binding requires explicit promotion.
 
 ## Main drift law
 `BASE_MAIN_SHA` pins the accepted world the COLD lane started from.
 
 Before any COLD conclusion is used to authorize LIVE or promotion:
 1. compare `BASE_MAIN_SHA..main`;
-2. classify changes touching protected transport/quality baseline, same claim, replay substrate, temporal/history ownership or exact target identity;
-3. relevant drift => `DRIFT_RECONCILE` before promotion;
+2. classify changes touching protected transport/quality baseline, any future canonical binding, replay substrate, temporal/history ownership or exact target identity;
+3. relevant drift means `DRIFT_RECONCILE` before promotion;
 4. no blind semantic rebase.
 
 Governance-only/non-overlapping drift may be acknowledged as `MAIN_DRIFT_ACK`.
