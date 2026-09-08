@@ -8,6 +8,8 @@ Mandatory read order for any new or resumed chat/role:
 5. The assigned role's exact `STATE/NEXT/EVIDENCE/RESULT` lineage or global-control state.
 6. The exact source/RESULT corpus for the active CLAIM_ID.
 
+For any generic continuation prompt, resolve current status/owner first: `ACTIVE` -> own FIRST_MISSING_EDGE only; `PENDING` -> ingest/validate; `HOLD/BLOCKED` -> blocker only; `CLOSED/PROVEN/FALSIFIED/SUPERSEDED/DO_NOT_REPEAT` -> STOP that PRIMARY_FACT; `UNBOUND` -> COLD only; conflict -> adjudicate before mutation. Generic continuation never authorizes sibling-claim takeover or LIVE/build by itself.
+
 COLD material may narrow UNKNOWN/NEXT but may not silently rewrite protected transport/quality/replay baseline, executed PASS/FAIL, FALSIFIED closure or another role's proven claim.
 
 COLD and LIVE branches are never wholesale-merged into `main`; accepted facts return only through a fresh claim-scoped `promote/*` branch.
