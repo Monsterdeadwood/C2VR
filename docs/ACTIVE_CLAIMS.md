@@ -8,10 +8,13 @@ Canonical `ACTIVE / PENDING / QUEUED / PROVEN / FALSIFIED / SUPERSEDED` status i
 
 | ROLE | COLD_LANE | CANONICAL_BINDING | BRANCH | BASE_MAIN_SHA | PRIMARY FACT | SCOPE |
 |---|---|---|---|---|---|---|
+| R1 | `C2-R1-COPY-SIDECAR-LAST-HOP` | `UNBOUND_COLD_LANE` | `cold/r1/copy-sidecar-last-hop` | `82f8c8e29b2b6fb902197cdde4863fa1b26907fb` | close exact retail `CDeviceTexture+0x00 -> ID3D11Texture2D*` resource identity and the `CopyToStereo -> RT_EndFrame/Present` renderer/immediate-context transaction without replacing native stereo scheduling | COLD_ONLY |
 | R2 | `C2-R2-REPLAY-OWNERSHIP` | `UNBOUND_COLD_LANE` | `cold/r2/replay-ownership` | `c38a6bf2f9c61a6218ce3594757b0e84cf75973d` | close selective per-eye ownership/history under the one-RenderWorld same-frame replay architecture without reopening a second RenderWorld | COLD_ONLY |
 | R3 | `C2-R3-RENDER-GRAPH` | `UNBOUND_COLD_LANE` | `cold/r3/render-graph` | `c38a6bf2f9c61a6218ce3594757b0e84cf75973d` | classify CryEngine renderer domains as PAIR-SHARED, EYE-LOCAL and EYE-HISTORY using exact retail evidence while keeping execution substrate separate | COLD_ONLY |
 
-Global quality/scale control and the canonical claim currently marked ACTIVE in `CLAIM_GRAPH.json` are not silently absorbed into R2 or R3. `UNBOUND_COLD_LANE` has no canonical claim-status authority.
+Global quality/scale control and the canonical claim currently marked ACTIVE in `CLAIM_GRAPH.json` are not silently absorbed into R1, R2 or R3. `UNBOUND_COLD_LANE` has no canonical claim-status authority.
+
+R1 synchronization note: `cold/r1/copy-sidecar-last-hop` restores the already-existing late R1 research state around native `$StereoL/$StereoR`, `CopyToStereo`, `RC_CopyToStereoTex`/`RT_CopyToStereoTex`, and resource-export provenance. Registration here does not promote those COLD conclusions into `main` canonical claims.
 
 ## Claim collision law
 Before creating a new C2VR COLD branch, inspect both this registry and `CLAIM_GRAPH.json`. Same ROLE + PRIMARY FACT means REUSE / ADAPT / FIX / EXTEND. A future canonical binding requires explicit promotion.
