@@ -16,6 +16,11 @@ Global quality/scale control and the canonical claim currently marked ACTIVE in 
 
 R1 synchronization note: `cold/r1/copy-sidecar-last-hop` restores the already-existing late R1 research state around native `$StereoL/$StereoR`, `CopyToStereo`, `RC_CopyToStereoTex`/`RT_CopyToStereoTex`, and resource-export provenance. Registration here does not promote those COLD conclusions into `main` canonical claims.
 
+## Promotion provenance repair — 2026-09-08
+The R1 registry entry above was first written directly to `main` in commit `622fd866aa7355095762f658145c4315b92f9442`, which caused the repository's main-push provenance gate to reject that delivery route even though evidence integrity passed.
+
+This registry revision is therefore intentionally carried by `promote/meta/r1-registry-provenance-repair-20260908` with one promotion record. It changes **no research claim, result, baseline or COLD conclusion**; it makes the authoritative registry text itself arrive through the repository's required promotion path.
+
 ## Claim collision law
 Before creating a new C2VR COLD branch, inspect both this registry and `CLAIM_GRAPH.json`. Same ROLE + PRIMARY FACT means REUSE / ADAPT / FIX / EXTEND. A future canonical binding requires explicit promotion.
 
