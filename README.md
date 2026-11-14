@@ -10,16 +10,21 @@
 
 ![Project status](assets/vr-status.svg)
 
-Experience the original Crysis 2 in VR with tracked viewing, controller-directed weapons, physical melee and object interaction. The current community branch focuses on a readable HUD, spatial movie screens and reliable campaign transitions.
+Experience the original Crysis 2 in VR with tracked viewing, controller-directed weapons, physical melee and object interaction. Choose the R8.2 campaign preview or the separate R18 Downtown Rooftop Arsenal, with 48 test loadouts across 22 weapon models.
 
-**Current documented branch: R8.2 community preview.**
+**Current documented branch: R8.2 campaign preview / R18 Rooftop Arsenal.**
 
 ## Installation
 
-1. Get the current **Crysis 2 OpenXR** package in the Crysis 2 thread on Flat2VR. Use the **original PC game with its supported DX11 renderer**.
+| Package | Purpose | Supported game |
+| --- | --- | --- |
+| **R8.2** | Campaign / Battery Park transition test | Supported original retail and reported EA/Origin EXE + DX11 renderer families. |
+| **R18** | Downtown Rooftop Arsenal: 48 loadouts, 22 weapon models | Original supported retail DX11 build. Matching Steam EXE is recognized but needs field testing. EA/Origin is outside this rooftop package’s support. |
+
+1. Choose a **Crysis 2 OpenXR** package matching your game edition in the Crysis 2 thread on Flat2VR; compare the two package rows above.
 2. Extract the complete mod folder into the game directory, beside **bin32**.
-3. Connect PC VR and select your OpenXR runtime, then open **RUN.bat** inside the mod folder.
-4. Choose New Campaign or Load Game in the normal menu. Keep the launcher open. If detection needs help, set game_path in config/settings.json.
+3. Connect PC VR and select your 64-bit OpenXR runtime, then open **RUN.bat** inside the mod folder.
+4. R8.2 uses the normal campaign menu. R18 loads its included Downtown rooftop checkpoint directly. Keep the launcher open. If detection needs help, set game_path in config/settings.json.
 
 Current test-package availability is coordinated in Discord. Use the complete package for your supported game build; this project page is separate from a release download.
 
@@ -37,11 +42,16 @@ Current test-package availability is coordinated in Discord. Use the complete pa
 
 | Input | Action |
 | --- | --- |
+| Left stick / click | Head-relative move / sprint |
+| Right stick horizontal / click | Turn / crouch-stand |
+| Right stick up / down | Armor / cloak; return to center between activations |
+| Right trigger / right grip | Fire / reload |
+| Left trigger | Interact, pick up or enter a mounted gun; on the R18 roof, equip the weapon you look at |
+| Left grip | Pull/hold objects, or support the gun near its front grip; release a held object to throw |
+| A / Y | Jump / grenade |
+| B tap / hold | Ordinary weapon cycle / native weapon customization |
+| X tap / hold | Select heavy/explosive weapons / change fire mode; R18 DSG1 scope: X selects 4×/10× |
 | Left Menu tap / hold | Recenter / pause after 0.65 seconds |
-| Left stick in menus | Navigate |
-| A / right trigger in menus | Confirm |
-| B in menus | Back |
-| CONTROLS_EN.txt in the package | Full gameplay action map |
 
 The complete package control sheet takes precedence for its version and interaction profile.
 
@@ -54,7 +64,9 @@ The complete package control sheet takes precedence for its version and interact
 - This targets original Crysis 2; Crysis 2 Remastered is outside this package’s support.
 - Physical-headset comfort, the Battery Park headset retest and full campaign coverage remain open.
 
-Separate rooftop/loadout and independent weather branches are under development. The weather experiment drives native time-of-day, sky, rain and wind controls; it is separate from R8.2.
+R18 adds fitted sights, supporting-hand grip, supported manual magazine handling and a DSG1 4×/10× scope test on the rooftop. Its retail-game checks used XR Sim; physical comfort and Steam launch still need feedback.
+
+A separate independent weather experiment drives native time-of-day, sky, rain and wind controls. It is outside both documented test packages.
 
 [Detailed status and validation scope](docs/PROJECT_STATUS.md)
 
@@ -66,7 +78,6 @@ Post in the game’s [Flat2VR thread](https://discord.gg/P4q9zt7ek) with your **
 
 | Game / project | Focus | Visibility |
 | --- | --- | --- |
-| [Battlefield 3 VR](https://github.com/Monsterdeadwood/BF3VR) | Campaign, tracked weapons and hands | Private |
 | [Assassin’s Creed VR](https://github.com/Monsterdeadwood/AC1VR) | First-person exploration, climbing and sword interaction | Private |
 | [NOVA · CS:GO Legacy VR](https://github.com/Monsterdeadwood/CSGOVR) | CS:GO Legacy local matches with motion controls | Private |
 | [TimeShift VR](https://github.com/Monsterdeadwood/TimeShiftVR) | Time powers, nine weapons and roomscale posture | Private |
