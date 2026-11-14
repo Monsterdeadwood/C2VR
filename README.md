@@ -1,191 +1,90 @@
+> [!IMPORTANT]
+> **[TEST BUILDS & DISCUSSION · FLAT2VR DISCORD](https://discord.gg/P4q9zt7ek)**
+> Testing, build requests, feedback and discussion happen in the **Flat2VR Modding Discord**. Join the server and find the **Crysis 2 VR** thread.
+
+![Crysis 2 VR — Monsterdeadwood VR mods](assets/vr-banner.svg)
+
 # Crysis 2 VR
 
-Native VR integration research for **Crysis 2 retail 1.9 / CryEngine DX11**.
+[English](README.md) · [Русский](README_RU.md) · [Flat2VR Discord](https://discord.gg/P4q9zt7ek) · [All projects](PORTFOLIO.md)
 
-## CURRENT STATUS — PROMISING 220427 CONTROL / SCALE + QUALITY CLOSURE
+![Project status](assets/vr-status.svg)
 
-**WORKING BUILD FIRST. USER VISUAL VERDICT FIRST.**
+Experience the original Crysis 2 in VR with tracked viewing, controller-directed weapons, physical melee and object interaction. The current community branch focuses on a readable HUD, spatial movie screens and reliable campaign transitions.
 
-Current gate:
+**Current documented branch: R8.2 community preview.**
 
-`220427 PARTIAL VISUAL BASELINE -> CLEAN MONO QUALITY CONTROL -> SCALE / SOURCE-PROJECTION CONTRACT`
+## Installation
 
-Fresh direct user verdict:
-- scale is wrong/problematic;
-- otherwise the result is broadly normal/promising and worth finishing;
-- 220427 is not a whole-build visual HARD RED;
-- it is not yet FULL_USER_VISUAL_GREEN either.
+1. Get the current **Crysis 2 OpenXR** package in the Crysis 2 thread on Flat2VR. Use the **original PC game with its supported DX11 renderer**.
+2. Extract the complete mod folder into the game directory, beside **bin32**.
+3. Connect PC VR and select your OpenXR runtime, then open **RUN.bat** inside the mod folder.
+4. Choose New Campaign or Load Game in the normal menu. Keep the launcher open. If detection needs help, set game_path in config/settings.json.
 
-Read first:
-1. `docs/LATEST_OVERRIDE_20260825_V601_220427_LIVE.md`
-2. `docs/MONO_QUALITY_ANCHOR_20260818.md`
-3. `experiments/Z_REPROJECTION_V601_RESULT_20260825_220427.md`
-4. `docs/USER_VISUAL_ACCEPTANCE_LEDGER.md`
-5. `docs/VISUAL_BASELINE_RECOVERY_MATRIX.md`
-6. `docs/FALSIFIED.md`
-7. `docs/STATE.md`
-8. `docs/NEXT.md`
-9. `docs/SYNC.md`
-10. `experiments/NEXT_EXPERIMENT.md`
+Current test-package availability is coordinated in Discord. Use the complete package for your supported game build; this project page is separate from a release download.
 
-## LATEST LIVE — Z-REPROJECTION v6.0.1 / 220427
+## What this project brings to VR
 
-Result:
-`CRYSIS2VR_Z_REPROJECTION_RESULT_20260825_220427.zip`
+- Stereo VR viewing, tracked weapons and the existing motion-controller gameplay.
+- Physical melee and native object pulling, holding and throwing in the existing gameplay branch.
+- A compact translucent HUD with subtle delayed motion and preserved binocular depth.
+- A spatial movie screen you can look away from; tap Left Menu to recenter it.
+- FSR 1 image scaling and startup fixes for the supported retail and reported EA renderer families.
+- R8.2 addresses the reported Battery Park crash after the Prophet cinematic.
 
-SHA256:
-`483D8B2E96E4BFF766CE7252D888A629738896233D20683CF7DD08CDDB8E92A4`
+<details>
+<summary><b>Controller quick reference</b></summary>
 
-Raw result proves:
+| Input | Action |
+| --- | --- |
+| Left Menu tap / hold | Recenter / pause after 0.65 seconds |
+| Left stick in menus | Navigate |
+| A / right trigger in menus | Confirm |
+| B in menus | Back |
+| CONTROLS_EN.txt in the package | Full gameplay action map |
 
-```text
-XR session ran            = YES
-submit_count              = 4691
-ever_submitted            = 1
-eye_stage_ready           = 1,1
-eye_stage_copies          = 9382
-reproject_draws            = 9382
-xr_capture_count          = 33
-raw restore               = PASS
-```
+The complete package control sheet takes precedence for its version and interaction profile.
 
-The old `XR_RTV_CREATE_FAIL` blocker is mechanically closed.
+</details>
 
-Actual headset source remains:
+## Current status
 
-`CENTER RGB + inverse depth -> synthetic LEFT/RIGHT depth reprojection -> private eye RT -> XR swapchains`.
+**Experimental preview.** The main HUD changes and supported retail/EA startup paths were checked in the actual game with XR Sim.
 
-So:
+- This targets original Crysis 2; Crysis 2 Remastered is outside this package’s support.
+- Physical-headset comfort, the Battery Park headset retest and full campaign coverage remain open.
 
-```text
-PRIVATE_RTV_XR_BRIDGE          = MECHANICAL_GREEN
-MONO_DEPTH_SYNTHETIC_LR_OUTPUT = MECHANICAL_GREEN
-TRUE_PRIVATE_LR_SCENE_RENDER   = NO
-USER_HEADSET_VERDICT           = PARTIAL_ACCEPT / PROMISING
-WORLD_SCALE                    = FAIL
-FULL_USER_VISUAL_GREEN         = NO
-```
+Separate rooftop/loadout and independent weather branches are under development. The weather experiment drives native time-of-day, sky, rain and wind controls; it is separate from R8.2.
 
-Mono RGB+depth/Z reprojection is the current working/control path, not the assumed final renderer.
+[Detailed status and validation scope](docs/PROJECT_STATUS.md)
 
-## RECOVERED CLEAN-MONO QUALITY FACT
+## Testing & feedback
 
-Historical result:
-`CRYSIS2VR_FULL_POSE_WORLD_NEAR_RESULT_20260818_030228.zip`
-SHA256 `8EFAE73A7B6E30230D56FC3E66DC6BAE3D78E9118425C79F246748F0FBD26D72`.
+Post in the game’s [Flat2VR thread](https://discord.gg/P4q9zt7ek) with your **mod version, game/store version, headset, OpenXR runtime, GPU, reproduction steps and the package’s diagnostic ZIP**. A short video is helpful for visual or handling problems.
 
-Its contemporary council record explicitly says:
+## Other VR mods by Monsterdeadwood
 
-```text
-r_MotionBlur=0
-r_PostMSAA=0
-```
+| Game / project | Focus | Visibility |
+| --- | --- | --- |
+| [Battlefield 3 VR](https://github.com/Monsterdeadwood/BF3VR) | Campaign, tracked weapons and hands | Private |
+| [Assassin’s Creed VR](https://github.com/Monsterdeadwood/AC1VR) | First-person exploration, climbing and sword interaction | Private |
+| [NOVA · CS:GO Legacy VR](https://github.com/Monsterdeadwood/CSGOVR) | CS:GO Legacy local matches with motion controls | Private |
+| [TimeShift VR](https://github.com/Monsterdeadwood/TimeShiftVR) | Time powers, nine weapons and roomscale posture | Private |
+| [You Are Empty: Absolute Edition VR](https://github.com/Monsterdeadwood/YouAreEmptyAEVR) | Absolute Edition VR, weapons and hand interaction | Public |
+| [Alone in the Dark 2008 VR](https://github.com/Monsterdeadwood/AloneInTheDark2008VR) | Survival-horror VR and held-item interaction | Public |
+| [Rainbow Six Siege VR](https://github.com/Monsterdeadwood/SiegeVR) | Legacy Siege stereo and tracked weapon handling | Public |
+| [Burnout Paradise Remastered VR](https://github.com/Monsterdeadwood/BUrnOutPvr) | Stereo driving, vehicle menus and native effects | Private |
+| [Titanfall 1 VR](https://github.com/Monsterdeadwood/Titanfall1VR) | Pilot combat and Titan cockpit VR | Private |
+| [Metro 2033 VR](https://github.com/Monsterdeadwood/Metro2033VR) | Original Metro VR and native physics experiments | Public |
+| [Insurgency VR](https://github.com/Monsterdeadwood/InsurgencyVR) | Early VR integration research | Private |
+| [Counter-Strike: Source VR](https://github.com/Monsterdeadwood/CSSVR) | Counter-Strike: Source VR development | Private |
 
-were retained and corresponded to the cleaner image reported by the user.
+Private repository links are available to invited collaborators. Public project pages are marked above.
 
-Classification:
-`COMPONENT_VISUAL_GREEN: CLEAN_MONO_IMAGE_QUALITY_SETTINGS`.
+## Credits & development notes
 
-Fresh 220427 RESULT does not prove whether these two settings were active. Recover the exact current config before changing anything.
+Project maintained by [Monsterdeadwood](https://github.com/Monsterdeadwood). This is an independent fan VR project; you need your own supported copy of the original game.
 
-Important distinction: separate stock native-SBS tests showed MotionBlur OFF alone and SSAO OFF alone did not cure the stock RIGHT-eye softness. Do not turn the mono quality observation into a universal stereo-blur claim.
+[Previous repository overview, preserved as history](README_RESEARCH_ARCHIVE.md).
 
-## CURRENT SCALE EVIDENCE
-
-Fresh 220427:
-
-```text
-source_eye / game_texture = 1600x1200
-union_fov_deg             = 114.086
-union_ratio               = 0.963753
-```
-
-Historical 030228 already exposed a related contract mismatch:
-
-```text
-calculated source target ~= 2032x1968
-actual producer          = 1400x1050
-WORLD union projection   = 110.747 deg / 1.02737
-FOB_NEAREST              = 55 deg / 1.33333
-```
-
-The current scale problem is therefore treated first as a **projection/source-resolution/reprojection-rectangle contract** problem.
-
-Do not start with arbitrary `worldScale`, IPD or convergence grids.
-
-## NEXT
-
-1. Recover authoritative 220427 values for `r_MotionBlur` and `r_PostMSAA` from the exact package/config lineage.
-2. If already `0/0`, skip redundant quality mutation.
-3. If not, run one quality-only child changing only those two known historical settings.
-4. Freeze the cleaner state.
-5. Map actual producer size, center projection, packed-depth projection, XR eye FOV, reprojection sample rect, XR swapchain and submitted subImage rect.
-6. Correct the first proven scale mismatch only.
-7. Get direct headset verdict after every LIVE.
-
-Do not merge true-L/R, HEAD, weapon, NEAR, temporal, shadow or cadence work into this closure.
-
-## EVIDENCE LAW
-
-For visual/playability acceptance:
-
-`USER_HEADSET_VERDICT > XR/LR captures > raw LIVE RESULT/status > counters > generated analyzer summary > static validation > design intent`.
-
-Permanent guards:
-- `RESULT ZIP != LIVE`;
-- a broken analyzer summary does not erase a proven LIVE;
-- package names such as GOLD/GREEN/CLEAN/NO_BINOCULAR/ONE_WINDOW are not acceptance evidence;
-- bare `GREEN` is forbidden, qualify the exact property;
-- `VACUOUS_PASS` with missing/zero/None prerequisites is invalid;
-- unresolved historical bindings remain OPEN/UNBOUND rather than guessed.
-
-## CURRENT USER VISUAL HARD REDS
-
-Do not use as direct visual parents:
-- `C2VR_RC33_V1721_RESULT_20260825_063149.zip` lineage: catastrophic camera/world + moving/sliding light/shadow state;
-- T1 PosePair K0: visually worse;
-- R2 `201208`: binocular/telescope catastrophe;
-- GOODLINE v1.0.0: broken shadows + blurred RIGHT eye;
-- native/NVIDIA/monitor stereo as final VR renderer;
-- DualWorld black-headset family.
-
-## PARTIAL AUTHORITIES TO KEEP SEPARATE
-
-- **World stability / no flicker:** exact `CRYSIS2VR_CUSTOM_VR_OWNER_v6.0.1_NO_FLICKER_FUSIONLOCK_PORTABLE.zip`.
-- **Camera ownership:** `CRYSIS2VR_A1_NATIVE_REPAIR_RESULT_20260817_173053.zip` + single-source topology around `Crysis2.exe+0x0057AC76`.
-- **Quest/private-RTV bridge:** fresh 220427.
-- **Clean mono image quality:** `r_MotionBlur=0 + r_PostMSAA=0` from 030228 lineage.
-- **True private L/R mechanics:** `CUSTOM_DUAL_T1 v1.0.1 / 212003`, mechanical donor only.
-- **Weapon direction:** controller-directed firing donor only.
-- **Historical accepted one-window/good-scale/stable-head behavior:** useful profile, exact package identity still OPEN.
-
-## CANONICAL RENDERER FACTS THAT REMAIN USEFUL
-
-One prepared render-list may execute twice for two eyes. Do not add a second high-level `RenderWorld` / `EF_StartEf` merely to obtain stereo.
-
-`SetCamera(L) -> EF_Scene3D -> SetCamera(R) -> EF_Scene3D`
-
-RT transaction:
-`RC_PushRT +0x001C4190 -> eye render -> RC_PopRT +0x001C4200`.
-
-Pixels and the render pose/FOV/contract metadata that produced them are one atomic publication unit. Never relabel stale pixels with a newer pose.
-
-## WORKING MODEL
-
-`SYNC -> EXACT CURRENT CONTROL -> ONE MISSING FACT -> ONE MUTATION -> LIVE -> USER VERDICT -> KEEP / ADAPT / STOP`
-
-**PARALLELIZE EVIDENCE - SERIALIZE MUTATION.**
-
-## REPOSITORY MAP
-
-- `docs/` — canonical state, visual ledger, historical audit, quality/scale anchors, proven/falsified facts
-- `research/` — source/beta/mod/donor evidence and focused blocker research
-- `experiments/` — reproducible causal experiments and executed result records
-- `runtime/` — technical source authorities and selective donors
-- `tools/` — deterministic extraction/build/analysis tooling
-
-## EXACT RETAIL BASELINE
-
-- Game path: `C:\GOG Games\Crysis 2`
-- Crysis2.exe SHA256: `5D1FF6B52278F853CA32A2AA1553FA55B4AC143A5BB4A35A1468BD859572D6FE`
-- CryRenderD3D11.dll SHA256: `06BCCA733475A48A6BA8532336829FE0D9935073808CE8B84622C4119938693F`
+Documentation reviewed: **14 November 2026**.
