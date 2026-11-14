@@ -1,4 +1,4 @@
-# Crysis 2 VR — project status
+# Crysis 2: VRevamp — project status
 
 [← Project page](../README.md) · [Flat2VR testing & discussion](https://discord.gg/P4q9zt7ek)
 
