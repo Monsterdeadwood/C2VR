@@ -38,7 +38,7 @@ Current test-package availability is coordinated in Discord. Use the complete pa
 - R8.2 addresses the reported Battery Park crash after the Prophet cinematic.
 
 <details>
-<summary><b>Controller quick reference</b></summary>
+<summary><b>R18 Rooftop controller quick reference</b></summary>
 
 | Input | Action |
 | --- | --- |
@@ -54,6 +54,8 @@ Current test-package availability is coordinated in Discord. Use the complete pa
 | Left Menu tap / hold | Recenter / pause after 0.65 seconds |
 
 The complete package control sheet takes precedence for its version and interaction profile.
+
+This table describes the R18 layout. For R8.2, use the CONTROLS_EN.txt supplied in that campaign package; the two packages have separate gameplay revisions.
 
 </details>
 
