@@ -2,7 +2,9 @@
 > **[ТЕСТИРОВАНИЕ И ОБСУЖДЕНИЕ · FLAT2VR DISCORD](https://discord.gg/P4q9zt7ek)**
 > Тестирование, запрос сборок, отзывы и обсуждение проходят в **Flat2VR Modding Discord**. Перейди на сервер и найди тему **Crysis 2**.
 
-![Crysis 2: VRevamp — Monsterdeadwood VR mods](assets/vr-banner.svg)
+<p align="center">
+  <img src="assets/vr-banner.png" alt="Crysis 2: VRevamp — VR" width="790">
+</p>
 
 # Crysis 2: VRevamp
 
