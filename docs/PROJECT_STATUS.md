@@ -9,6 +9,14 @@ Reviewed **14 November 2026**. Documented branch: **R8.2 campaign preview / R18 
 - The main HUD changes and supported retail/EA startup paths were checked in the actual game with XR Sim.
 - R8.2 exercised the reported Battery Park transition with the supplied EA executable and DX11 renderer; retail startup with FSR was also checked.
 
+## Follow-up tests reviewed 16 November 2026
+
+The hand-ownership prototype used XR Sim packets and original game items. It exercised both pull/take directions, direct handoff, holster draw/stow, native support grip and two independently fired items. It uses button reloads. Recorded trigger cues cover the prototype route. Original host correlation and physical headset feel remain open. The campaign and Rooftop packages have their own handling and controls.
+
+Verification records used for this section
+
+- `C2VR_HANDS_BODY_HAPTICS_R5_20261115.json`
+
 ## Current limits
 
 - This targets original Crysis 2; Crysis 2 Remastered is outside this package’s support.

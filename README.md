@@ -14,7 +14,7 @@
 
 Experience the original Crysis 2 in VR with tracked viewing, controller-directed weapons, physical melee and object interaction. Choose the R8.2 campaign preview or the separate R18 Downtown Rooftop Arsenal, with 48 test loadouts across 22 weapon models.
 
-**Current documented branch: R8.2 campaign preview / R18 Rooftop Arsenal.**
+**Package baseline on this page: R8.2 campaign preview / R18 Rooftop Arsenal.**
 
 ## Installation
 
@@ -60,6 +60,12 @@ The complete package control sheet takes precedence for its version and interact
 This table describes the R18 layout. For R8.2, use the CONTROLS_EN.txt supplied in that campaign package; the two packages have separate gameplay revisions.
 
 </details>
+
+## Features in newer test builds
+
+- **Native weapon handling prototype.** The XR Sim test passed the same weapon between hands, pulled a weapon from the world with either hand and picked it up with the other. A supporting hand holds the game's grip point and can steer the weapon.
+- **Two independent weapons and body storage.** The same test exercised draws from body slots, separate firing and button reloads, and dropping a weapon into the game's physics. Visual alignment still needs a player test.
+- **Trigger feedback prototype.** The test route produced squeeze buildup, a break cue and confirmed-shot feedback. The original OpenXR host and physical headset feel still need their own checks.
 
 ## Current status
 
