@@ -42,10 +42,3 @@ This overview was reconciled against the project’s recorded package notes and 
 - `C2VR_INDEPENDENT_WEATHER_20261114.json`
 
 Game execution, simulator validation and physical-headset feedback are reported separately above. Features from a separate experimental branch are identified explicitly.
-
-## Кратко по-русски
-
-Оригинальная Crysis 2 в VR: обзор шлемом, оружие от контроллеров, физический ближний бой и взаимодействие с предметами. Есть кампанийная R8.2 и отдельный арсенал R18 на крыше Downtown: 48 тестовых наборов на 22 моделях оружия.
-
-- Эта сборка рассчитана на оригинальную Crysis 2; Remastered ею не поддерживается.
-- Удобство в физическом шлеме, повтор перехода Battery Park в шлеме и вся кампания ещё требуют проверки.
