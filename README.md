@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **TEST BUILDS & DISCUSSION**
+> **💬 TEST BUILDS & DISCUSSION**
 >
 > **[Join the Flat2VR Discord](https://discord.gg/P4q9zt7ek)** · **[Open the Crysis 2 thread](https://discord.com/channels/747967102895390741/1565752656134144040)**
 >
@@ -9,13 +9,17 @@
   <img src="assets/vr-banner.png" alt="Crysis 2: VRevamp" width="790">
 </p>
 
-## INSTALLATION
+<a name="installation"></a>
+
+## 📦 INSTALLATION
 
 1. Install the original **Crysis 2** and pick a test build for your edition. The campaign and rooftop builds have different requirements; see **Build details** below.
 2. Extract the entire mod folder into the game directory, next to **`bin32`**.
 3. Connect PC VR, select your 64-bit OpenXR runtime, and run **`RUN.bat`** in the mod folder.
 
-## FEATURES
+<a name="features"></a>
+
+## ⚡ FEATURES
 
 ### A ROOFTOP FULL OF WEAPONS
 
@@ -35,4 +39,28 @@ The HUD has depth and follows with a slight delay. Cutscenes play on a screen yo
 
 The rooftop and campaign packages cover different game builds. Crysis 2 Remastered requires its own mod.
 
-[Other VR mods](PORTFOLIO.md) · [Tester credits](TESTERS.md) · [Build details](docs/PROJECT_STATUS.md)
+<a name="screenshots"></a>
+
+## 📸 In-game screenshots
+
+<p align="center">
+  <a href="assets/gameplay/campaign-pistol.jpg"><img src="assets/gameplay/campaign-pistol.jpg" alt="Firing a tracked pistol in the campaign" width="48%" align="top"></a>
+  <a href="assets/gameplay/downtown-rooftop-arsenal.jpg"><img src="assets/gameplay/downtown-rooftop-arsenal.jpg" alt="Weapons laid out for testing on the Downtown rooftop" width="48%" align="top"></a>
+</p>
+
+[Tester credits](TESTERS.md) · [Build details](docs/PROJECT_STATUS.md)
+
+<a name="other-vr-mods"></a>
+
+## 🎮 Other VR mods
+
+- [Alone in the Dark (2008) VR](https://github.com/Monsterdeadwood/AloneInTheDark2008VR)
+- [Battlefield 3: VRevamp](https://github.com/Monsterdeadwood/Battlefield-3-VRevamp)
+- [Burnout Paradise Remastered VR](https://github.com/Monsterdeadwood/BUrnOutPvr)
+- [NOVA · CS:GO Legacy VR](https://github.com/Monsterdeadwood/CSGOVR)
+- [Metro 2033 VR](https://github.com/Monsterdeadwood/Metro2033VR)
+- [Rainbow Six Siege VR](https://github.com/Monsterdeadwood/SiegeVR)
+- [Star Wars: The Force Unleashed II VR](https://github.com/Monsterdeadwood/TFU2VR)
+- [TimeShift VR](https://github.com/Monsterdeadwood/TimeShiftVR)
+- [Titanfall 1 VR](https://github.com/Monsterdeadwood/Titanfall1VR)
+- [You Are Empty: Absolute Edition VR](https://github.com/Monsterdeadwood/YouAreEmptyAEVR)
