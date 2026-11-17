@@ -14,8 +14,8 @@
 ## 📦 INSTALLATION
 
 1. Install the original **Crysis 2** on PC.
-2. Extract the mod folder into your game folder, next to `bin32`.
-3. Connect your PC VR headset, select your OpenXR runtime, and run **`RUN.bat`** inside the mod folder.
+2. **Put the mod archive next to `Crysis2.exe`** in `bin32`. Extract the entire archive one level up, into the main Crysis 2 folder. The extracted mod folder should sit beside `bin32`.
+3. Connect your PC VR headset, select your OpenXR runtime, and run **`RUN.bat`** from the extracted mod folder.
 
 <a name="features"></a>
 
