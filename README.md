@@ -1,9 +1,9 @@
 > [!IMPORTANT]
 > **TEST BUILDS & DISCUSSION**
 >
-> **[Join the Flat2VR Discord](https://discord.gg/P4q9zt7ek)**
+> **[Join the Flat2VR Discord](https://discord.gg/P4q9zt7ek)** · **[Open the Crysis 2 thread](https://discord.com/channels/747967102895390741/1565752656134144040)**
 >
-> Ask for the matching test build and share feedback in the **Crysis 2: VRevamp** discussion.
+> Download the latest test build from the thread, or ask for a specific test variant. Share feedback in the same thread.
 
 <p align="center">
   <img src="assets/vr-banner.png" alt="Crysis 2: VRevamp" width="790">
@@ -11,7 +11,7 @@
 
 ## INSTALLATION
 
-1. Install the original **Crysis 2**. Use **R8.2** for the campaign preview or **R18** on a supported original DX11 build for the rooftop test.
+1. Install the original **Crysis 2** and pick a test build for your edition. The campaign and rooftop builds have different requirements; see **Build details** below.
 2. Extract the entire mod folder into the game directory, next to **`bin32`**.
 3. Connect PC VR, select your 64-bit OpenXR runtime, and run **`RUN.bat`** in the mod folder.
 
