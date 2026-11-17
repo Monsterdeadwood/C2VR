@@ -1,9 +1,9 @@
 > [!IMPORTANT]
-> **💬 TEST BUILDS & DISCUSSION**
+> **💬 DOWNLOAD & DISCUSSION**
 >
 > **[Join the Flat2VR Discord](https://discord.gg/P4q9zt7ek)** · **[Open the Crysis 2 thread](https://discord.com/channels/747967102895390741/1565752656134144040)**
 >
-> Download the latest test build from the thread, or ask for a specific test variant. Share feedback in the same thread.
+> Download the mod from the Crysis 2 thread and share feedback there.
 
 <p align="center">
   <img src="assets/vr-banner.png" alt="Crysis 2: VRevamp" width="790">
@@ -13,31 +13,25 @@
 
 ## 📦 INSTALLATION
 
-1. Install the original **Crysis 2** and pick a test build for your edition. The campaign and rooftop builds have different requirements; see **Build details** below.
-2. Extract the entire mod folder into the game directory, next to **`bin32`**.
-3. Connect PC VR, select your 64-bit OpenXR runtime, and run **`RUN.bat`** in the mod folder.
+1. Install the original **Crysis 2** on PC.
+2. Extract the mod folder into your game folder, next to `bin32`.
+3. Connect your PC VR headset, select your OpenXR runtime, and run **`RUN.bat`** inside the mod folder.
 
 <a name="features"></a>
 
 ## ⚡ FEATURES
 
-### A ROOFTOP FULL OF WEAPONS
+### TELEKINESIS
 
-R18 gives you 48 test loadouts across 22 original weapon models, with fitted sights, a supporting grip, and a 4×/10× DSG1 scope test.
+Pull objects toward you, hold them in the air, and throw them with a motion of your hand.
 
-### PULL, HOLD & THROW OBJECTS
+### RANDOM WEATHER, TIME OF DAY & ATMOSPHERE
 
-Use your tracked hand to pull a prop in, hold it, or throw it back into the scene. The campaign preview also adds physical melee.
+The mod randomizes weather and time of day. Changes in rain, wind, and lighting give the same streets a different atmosphere across runs.
 
-### BODY HOLSTERS & TWO INDEPENDENT GUNS
+### SWITCH WEAPON HANDS MID-FIGHT
 
-A separate development build tested drawing from body slots, passing a gun between hands and firing or reloading each hand independently.
-
-### A HUD AND MOVIES THAT SIT IN SPACE
-
-The HUD has depth and follows with a slight delay. Cutscenes play on a screen you can look away from and recenter.
-
-The rooftop and campaign packages cover different game builds. Crysis 2 Remastered requires its own mod.
+Pass the gun from right to left or left to right and keep your other hand free to interact with the world.
 
 <a name="screenshots"></a>
 
@@ -45,10 +39,10 @@ The rooftop and campaign packages cover different game builds. Crysis 2 Remaster
 
 <p align="center">
   <a href="assets/gameplay/campaign-pistol.jpg"><img src="assets/gameplay/campaign-pistol.jpg" alt="Firing a tracked pistol in the campaign" width="48%" align="top"></a>
-  <a href="assets/gameplay/downtown-rooftop-arsenal.jpg"><img src="assets/gameplay/downtown-rooftop-arsenal.jpg" alt="Weapons laid out for testing on the Downtown rooftop" width="48%" align="top"></a>
+  <a href="assets/gameplay/campaign-weather.jpg"><img src="assets/gameplay/campaign-weather.jpg" alt="Changing sky and lighting in the Crysis 2 campaign" width="48%" align="top"></a>
 </p>
 
-[Tester credits](TESTERS.md) · [Build details](docs/PROJECT_STATUS.md)
+[Tester credits](TESTERS.md)
 
 <a name="other-vr-mods"></a>
 
@@ -62,7 +56,7 @@ The rooftop and campaign packages cover different game builds. Crysis 2 Remaster
 | [NOVA · CS:GO Legacy VR](https://github.com/Monsterdeadwood/CSGOVR) | Controller aiming and working optics in local bot matches |
 | [Metro 2033 VR](https://github.com/Monsterdeadwood/Metro2033VR) | Telekinesis, hand lightning, and object physics |
 | [Rainbow Six Siege VR](https://github.com/Monsterdeadwood/SiegeVR) | Tracked weapons and two-handed foregrip handling |
-| [Star Wars: The Force Unleashed II VR](https://github.com/Monsterdeadwood/TFU2VR) | Two tracked lightsabers and independent Force grip |
+| [Star Wars: The Force Unleashed II VR](https://github.com/Monsterdeadwood/TFU2VR) | Independent sabers, limb cuts, Force powers, and crate flight |
 | [TimeShift VR](https://github.com/Monsterdeadwood/TimeShiftVR) | Randomized weather, day and night, and roomscale crouching |
 | [Titanfall 1 VR](https://github.com/Monsterdeadwood/Titanfall1VR) | Aim with the controller and look around a Titan cockpit |
 | [You Are Empty: Absolute Edition VR](https://github.com/Monsterdeadwood/YouAreEmptyAEVR) | Tracked weapons and melee with either hand |
